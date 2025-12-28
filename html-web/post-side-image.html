@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from varsha.layoutdrop.com/demo/post-side-image.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 May 2025 10:14:54 GMT -->
+<head>
+	
+	<!-- Meta Tags for SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Varsha">
+    <meta name="description" content="Discover a vibrant lifestyle blog that explores wellness, fashion, travel, and more. Get inspired with tips for health, beauty, home decor, and personal growth. Join our community and embrace a fulfilling lifestyle.">
+    <meta name="keywords" content="lifestyle blog, wellness, fashion, beauty, travel, food, health, fitness, home decor, self-care, relationships, personal development, parenting, hobbies, reviews, inspiration">
+    
+    <!-- Open Graph Meta Tags (for social sharing) -->
+    <meta property="og:title" content="Varsha: Personal Blog HTML5 Template">
+    <meta property="og:description" content="Discover a vibrant lifestyle blog that explores wellness, fashion, travel, and more. Get inspired with tips for health, beauty, home decor, and personal growth. Join our community and embrace a fulfilling lifestyle.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../varshablogger.netlify.app/preview.jpg"> <!-- Add a relevant image URL -->
+    <meta property="og:url" content="https://varshablogger.netlify.app/"> <!-- Add your website URL -->
+	
+	<!-- Favicon Meta Tags -->
+	<link rel="icon" type="image/png" href="assets/images/favicon.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+	
+	<!-- Website Page Title -->
+	<title>Varsha: Personal Blog HTML5 Template</title>
+	
+	<!-- CSS Stylesheet Links -->
+	<link rel="stylesheet" type="text/css" href="assets/libraries/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/libraries/feather-font/css/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="assets/libraries/swiper/swiper-bundle.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+	
+</head>
+<body>
+<div class="page-layout">
+	
+	<!-- This is a page header that includes the logo, navigation, search, contact, social icons, login, and other information. -->
+	<header class="header">
+		<!-- Menu Header -->
+		<div class="main-header fixed-header navbar-expand-lg">
+			<div class="menu-bar">
+				<div class="container">
+					
+					<div class="website-logo">
+						<a href="index.html" class="main-logo">
+							<img src="assets/images/logo.png" alt="Varsha">
+						</a>
+					</div>
+					
+					<button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+						<img src="assets/images/menu.svg" alt="">
+					</button>
+					
+					<!-- Secondary Menu -->
+					<div class="secondary-menu">
+						<ul>
+							<li>
+								<button type="button" class="btn-link search-btn" aria-label="Search"><i class="feather icon-search"></i></button>
+							</li>
+							<li class="d-none d-xl-inline-block">
+								<button type="button" data-bs-toggle="modal" data-bs-target="#modalSubscribe" class="btn btn-primary-light btn-line">SUBSCRIBE</button>
+							</li>
+							<li class="d-none d-lg-inline-block">
+								<button class="btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+									<img src="assets/images/menu.svg" alt="">
+								</button>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="search-modal" aria-hidden="true">
+						<form action="#">
+							<input type="text" class="form-control" placeholder="Type here...">
+							<button type="button" class="search-close"><i class="feather icon-x"></i></button>
+						</form>
+					</div>
+					
+					<!-- Navigation List -->
+					<nav class="navigation-list navbar-collapse collapse justify-content-center" id="navbarToggler" aria-label="Main">
+						<div class="website-logo">
+							<a href="index.html"><img src="assets/images/logo-light.png" alt=""></a>
+						</div>
+						<ul class="nav navbar-nav">	
+							<li><a href="index.html">Home</a></li>
+							<li class="menu-down-item">
+								<a href="javascript:void(0);">Pages</a>
+								<ul class="sub-menu">
+									<li><a href="about-us.html">About Us</a></li>
+									<li><a href="contact-us.html">Contact Us</a></li>
+									<li><a href="error-404.html">Error 404</a></li>
+								</ul>
+							</li>
+							<li class="menu-down-item">
+								<a href="javascript:void(0);">Post Layout</a>
+								<ul class="sub-menu">
+									<li><a href="post-standard.html">Post Standard</a></li>
+									<li><a href="post-left-sidebar.html">Post Left Sidebar</a></li>
+									<li><a href="post-header.html">Post With Header</a></li>
+									<li><a href="post-full-width.html">Post Full Width</a></li>
+									<li><a href="post-half-image.html">Post Half Image</a></li>
+									<li><a href="post-gallary.html">Post With Gallary</a></li>
+									<li><a href="post-link.html">Post With Link</a></li>
+									<li><a href="post-audio.html">Post With Audio</a></li>
+									<li><a href="post-video.html">Post With Video</a></li>
+									<li><a href="post-thumb-gallary.html">Post Thumb Gallary</a></li>
+									<li><a href="post-pagination.html">Post Pagination</a></li>
+									<li><a href="post-boxed-media.html">Post Boxed Media</a></li>
+									<li><a href="post-side-image.html">Post Side Image</a></li>
+								</ul>
+							</li>
+							<li class="menu-down-item mega-menu-down menu-down-category">
+								<a href="javascript:void(0);">Category</a>
+								<div class="mega-menu">
+									<div class="menu-category-wrapper">
+										<div class="menu-category-nav">
+											<ul>
+												<li><a data-name="linkALL" href="javascript:void(0);">ALL</a></li>
+												<li><a data-name="linkFashion" href="javascript:void(0);">FASHION</a></li>
+												<li><a data-name="linkFitness" href="javascript:void(0);">FITNESS</a></li>
+												<li><a data-name="linkLifestyle" href="javascript:void(0);">LIFESTYLE</a></li>
+												<li><a data-name="linkTravel" href="javascript:void(0);">TRAVEL</a></li>
+												<li><a data-name="linkBeauty" href="javascript:void(0);">BEAUTY</a></li>
+											</ul>
+										</div>
+										<div class="menu-category-item">
+											<div data-target="linkALL" class="swiper swiper-menu-category show">
+												<div class="swiper-wrapper">
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-standard.html"><img src="assets/images/posts/header/post.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-pagination.html">Exploring Life's Adventures and Trends</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-audio.html"><img src="assets/images/posts/header/post2.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-audio.html">Lifestyle changes to transform your life</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-boxed-media.html"><img src="assets/images/posts/header/post3.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Panache and Grace</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-full-width.html"><img src="assets/images/posts/header/post4.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-full-width.html">Embracing the Colors of Fashion</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-gallary.html"><img src="assets/images/posts/header/post5.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-gallary.html">Exploring the World with Varsha</a></h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div data-target="linkFashion" class="swiper swiper-menu-category">
+												<div class="swiper-wrapper">
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-audio.html"><img src="assets/images/posts/header/post2.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-audio.html">Lifestyle changes to transform your life</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-standard.html"><img src="assets/images/posts/header/post.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-pagination.html">Exploring Life's Adventures and Trends</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-boxed-media.html"><img src="assets/images/posts/header/post3.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Panache and Grace</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-gallary.html"><img src="assets/images/posts/header/post5.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-gallary.html">Exploring the World with Varsha</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-full-width.html"><img src="assets/images/posts/header/post4.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-full-width.html">Embracing the Colors of Fashion</a></h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div data-target="linkFitness" class="swiper swiper-menu-category">
+												<div class="swiper-wrapper">
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-standard.html"><img src="assets/images/posts/header/post.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-pagination.html">Exploring Life's Adventures and Trends</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-boxed-media.html"><img src="assets/images/posts/header/post3.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Panache and Grace</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-audio.html"><img src="assets/images/posts/header/post2.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-audio.html">Lifestyle changes to transform your life</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-gallary.html"><img src="assets/images/posts/header/post5.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-gallary.html">Exploring the World with Varsha</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-full-width.html"><img src="assets/images/posts/header/post4.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-full-width.html">Embracing the Colors of Fashion</a></h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div data-target="linkLifestyle" class="swiper swiper-menu-category">
+												<div class="swiper-wrapper">
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-audio.html"><img src="assets/images/posts/header/post2.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-audio.html">Lifestyle changes to transform your life</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-gallary.html"><img src="assets/images/posts/header/post5.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-gallary.html">Exploring the World with Varsha</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-boxed-media.html"><img src="assets/images/posts/header/post3.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Panache and Grace</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-full-width.html"><img src="assets/images/posts/header/post4.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-full-width.html">Embracing the Colors of Fashion</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-standard.html"><img src="assets/images/posts/header/post.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-pagination.html">Exploring Life's Adventures and Trends</a></h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div data-target="linkTravel" class="swiper swiper-menu-category">
+												<div class="swiper-wrapper">
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-boxed-media.html"><img src="assets/images/posts/header/post3.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Panache and Grace</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-full-width.html"><img src="assets/images/posts/header/post4.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-full-width.html">Embracing the Colors of Fashion</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-standard.html"><img src="assets/images/posts/header/post.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-pagination.html">Exploring Life's Adventures and Trends</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-audio.html"><img src="assets/images/posts/header/post2.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-audio.html">Lifestyle changes to transform your life</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-gallary.html"><img src="assets/images/posts/header/post5.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-gallary.html">Exploring the World with Varsha</a></h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div data-target="linkBeauty" class="swiper swiper-menu-category">
+												<div class="swiper-wrapper">
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-standard.html"><img src="assets/images/posts/header/post.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-pagination.html">Exploring Life's Adventures and Trends</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-full-width.html"><img src="assets/images/posts/header/post4.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-full-width.html">Embracing the Colors of Fashion</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-boxed-media.html"><img src="assets/images/posts/header/post3.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Panache and Grace</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-gallary.html"><img src="assets/images/posts/header/post5.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-gallary.html">Exploring the World with Varsha</a></h6>
+															</div>
+														</div>
+													</div>
+													<div class="swiper-slide">
+														<div class="menu-post-category">
+															<div class="post-thumb">
+																<a href="post-audio.html"><img src="assets/images/posts/header/post2.jpg" alt=""></a>
+															</div>
+															<div class="post-content">
+																<h6 class="post-title"><a href="post-audio.html">Lifestyle changes to transform your life</a></h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li><a href="contact-us.html">Contact Us</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	<!-- This is a  page sidebar -->
+	<div class="offcanvas offcanvas-end offcanvas-sidebar" tabindex="-1" id="offcanvasSidebar">
+		<div class="offcanvas-body">
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			
+			<div class="website-logo mb-30">
+				<a href="index.html"><img src="assets/images/logo.png" alt="Varsha"></a>
+			</div>
+			
+			<div class="widget widget-author">
+				<h5 class="widget-title">Owner</h5>
+				<img class="author-thumb" src="assets/images/widget-post/post-large/post1.jpg" alt="">
+				<h5 class="author-name">By Velma D. Sills</h5>
+				<span>Founder and CEO at varsha</span>
+				<ul class="widget-social">
+					<li><a target="_blank" href="https://www.facebook.com/" class="btn btn-social"><i class="feather icon-facebook"></i></a></li>
+					<li><a target="_blank" href="https://www.instagram.com/" class="btn btn-social"><i class="feather icon-instagram"></i></a></li>
+					<li><a target="_blank" href="https://www.youtube.com/" class="btn btn-social"><i class="feather icon-youtube"></i></a></li>
+					<li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-social"><i class="feather icon-linkedin"></i></a></li>
+				</ul>
+			</div>
+			
+			<div class="widget widget-about">
+				<h5 class="widget-title">About</h5>
+				<p>Hello! My name is Velma D. Sills and I'm author of Varsha. Varsha is a daily updated blog about travel, Fashion, everyday moments from all over the world.</p>
+				<a href="about-us.html">Read More</a>
+			</div>
+			
+			<div class="widget mb-0">
+				<h5 class="widget-title">Get in touch with us</h5>
+				<form action="#">
+					<input type="text" class="form-control mb-15" placeholder="Name">
+					<input type="email" class="form-control mb-15" placeholder="Email Address">
+					<textarea class="form-control mb-15" rows="5" placeholder="Message"></textarea>
+					<button type="button" class="btn btn-primary-light btn-line">SUBMIT</button>
+				</form>
+			</div>
+			
+		</div>
+	</div>
+
+	<!-- This is a Subscribe Modal -->
+	<div class="modal fade modal-subscribe" id="modalSubscribe" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body p-0">
+					<div class="row g-0">
+						<div class="col-sm-5 d-none d-sm-block">
+							<img class="object-cover" src="assets/images/subscribe.jpg" alt="">
+						</div>
+						<div class="col-sm-7">
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							<div class="subscribe-body">
+								<div class="mb-20">
+									<h4>Subscribe to our newsletter!</h4>
+									<p>We’ll send you the best of our blog just once a month. we promise.</p>
+								</div>
+								<form action="#">
+									<input type="email" class="form-control mb-15" placeholder="Email Address">
+									<button type="button" class="btn btn-primary-light btn-line w-100">SUBSCRIBE NOW</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<main class="main-wrapper">
+	
+		<section class="section-space3">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-9 col-lg-8">
+						<div class="content-wrapper left-side">
+							<div class="post-details post-sidebar">
+								<ul class="post-meta">
+									<li class="author"><img src="assets/images/posts/middle-post/middle-post1.jpg" alt="">By <a href="javascript:void(0);"> Velma D. Sills</a></li>
+									<li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+									<li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
+								</ul>							
+								<h1 class="post-title">The benefits of a healthy lifestyle how to live a fulfilling life</h1>
+								
+								<div class="post-main-media alignleft">
+									<img src="assets/images/posts/extra/image3.jpg" alt="">
+								</div>
+								
+								<div class="post-content">
+									<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose. Many desktop publishing packages and web page editors.</p>
+									
+									<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+									
+									<blockquote>
+										<p>Organizing is a practice of leadership whereby we define leadership as enabling others to achieve shared purpose under conditions of uncertainty.</p>
+										<cite>By Velma D. Sills</cite>
+									</blockquote>
+									
+									<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+									
+									<ul class="post-text-list">
+										<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+										<li>Mauris elementum ante at dapibus ullamcorper.</li>
+										<li>Curabitur semper tellus et felis sodales, non faucibus purus lacinia.</li>
+										<li>Fusce posuere mauris vel nibh ullamcorper, ac ornare ligula vulputate.</li>
+									</ul>
+									
+									<h4>Why Is Fashion So Popular?</h4>
+									<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+									
+								</div>
+								
+								<div class="post-footer">
+									<div class="tags-list">
+										<strong>Tags:</strong>
+										<ul>
+											<li><a href="javascript:void(0);">Fitness</a></li>
+											<li><a href="javascript:void(0);">Travel</a></li>
+											<li><a href="javascript:void(0);">Beauty</a></li>
+											<li><a href="javascript:void(0);">Lifestyle</a></li>
+											<li><a href="javascript:void(0);">Bags</a></li>
+										</ul>
+									</div>
+									<ul class="widget-social">
+										<li><a href="javascript:void(0);" class="btn btn-light btn-social"><i class="feather icon-facebook"></i></a></li>
+										<li><a href="javascript:void(0);" class="btn btn-light btn-social"><i class="feather icon-instagram"></i></a></li>
+										<li><a href="javascript:void(0);" class="btn btn-light btn-social"><i class="feather icon-youtube"></i></a></li>
+										<li><a href="javascript:void(0);" class="btn btn-light btn-social"><i class="feather icon-linkedin"></i></a></li>
+									</ul>
+								</div>
+								
+								<div class="post-pagination">
+									<a href="javascript:void(0);" class="prev-post">
+										<img src="assets/images/widget-post/post1.jpg" alt="">
+										<div class="pagination-title">
+											<span class="text"><i class="fa fa-angle-left"></i> Prev post</span>
+											<h6>Lifestyle changes to transform your life</h6>
+										</div>
+									</a>
+									<a href="javascript:void(0);" class="next-post">
+										<div class="pagination-title">
+											<span class="text">Next post <i class="fa fa-angle-right"></i></span>
+											<h6>The benefits of a healthy lifestyle how to live a fulfilling life</h6>
+										</div>
+										<img src="assets/images/widget-post/post2.jpg" alt="">
+									</a>
+								</div>
+								
+								<div class="post-comment-wrapper" id="postCommentWrapper">
+									
+									<!-- Comment List Wrapper -->
+									<div class="comment-list-wrapper">
+										<h5 class="widget-title">2 Comments</h5>
+										<div id="postCommentList">
+											<ul class="comment-list">
+												<li class="comment">
+													<div class="comment-body">
+														<div class="comment-media">
+															<img src="assets/images/media/media.jpg" alt="" class="media">
+														</div>
+														<div class="comment-content">
+															<cite class="name">Michel Poe <span class="comment-date">April 7, 2024</span></cite>
+															<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, ac elementum ligula blandit ac.</p>
+															<a class="reply" href="javascript:void(0);">Reply</a>
+														</div>
+													</div>
+													<ul class="inner-comment">
+														<li class="comment">
+															<div class="comment-body">
+																<div class="comment-media">
+																	<img src="assets/images/media/media2.jpg" alt="" class="media">
+																</div>
+																<div class="comment-content">
+																	<cite class="name">Bernadette <span class="comment-date">April 7, 2024</span></cite>
+																	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, ac elementum ligula blandit ac.</p>
+																	<a class="reply" href="javascript:void(0);"> Reply</a>
+																</div>
+															</div>
+														</li>
+													</ul>
+												</li>
+												<li class="comment">
+													<div class="comment-body">
+														<div class="comment-media">
+															<img src="assets/images/media/media3.jpg" alt="" class="media">
+														</div>
+														<div class="comment-content">
+															<cite class="name">Alexandra <span class="comment-date">April 7, 2024</span></cite>
+															<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, ac elementum ligula blandit ac.</p>
+															<a class="reply" href="javascript:void(0);"> Reply</a>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+									
+									<!-- Post Comments Respond -->
+									<div class="post-comments-respond" id="postRespond">
+										<h5 class="widget-title" id="postReply">Leave a Reply</h5>									
+										<div class="post-comments-wrapper">
+											<p class="post-comments-text">Your email address will not be published. Required fields are marked <span class="text-danger">*</span></p>
+											<form method="post" id="postCommentsForm" class="post-form">
+												<p class="post-author-input">
+													<input id="postAuthor" required="required" placeholder="Author" name="author" type="text">
+												</p>
+												<p class="post-email-input">
+													<input id="email" required="required" placeholder="Email" name="email" type="email">
+												</p>
+												<p class="post-website-input">
+													<input id="postWebsite" required="required" placeholder="Website" name="website" type="text">
+												</p>
+												<p class="post-comment-input">
+													<textarea id="postComments" placeholder="Type comments here..." class="form-control" name="comments" rows="7" required="required"></textarea>
+												</p>
+												<p class="post-submit-btn">
+													<button id="postSubmit" type="submit" class="submit btn btn-primary-light btn-line">POST COMMENT</button>
+												</p>
+											</form>
+										</div>
+									</div>
+									
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4">
+					
+						<aside class="aside-wrapper">
+							
+							<div class="widget widget-about">
+								<h5 class="widget-title">About Us</h5>
+								<p>Hello! My name is Velma D. Sills and I'm author of Varsha. Varsha is a daily updated blog about travel, Fashion, everyday moments from all over the world.</p>
+								<a href="about-us.html">Read More</a>
+							</div>
+							
+							<div class="widget widget-author">
+								<h5 class="widget-title">Owner</h5>
+								<img class="author-thumb" src="assets/images/widget-post/post-large/post1.jpg" alt="">
+								<h5 class="author-name">By Velma D. Sills</h5>
+								<span>Founder and CEO at varsha</span>
+								<ul class="widget-social">
+									<li><a target="_blank" href="https://www.facebook.com/" class="btn btn-social"><i class="feather icon-facebook"></i></a></li>
+									<li><a target="_blank" href="https://www.instagram.com/" class="btn btn-social"><i class="feather icon-instagram"></i></a></li>
+									<li><a target="_blank" href="https://www.youtube.com/" class="btn btn-social"><i class="feather icon-youtube"></i></a></li>
+									<li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-social"><i class="feather icon-linkedin"></i></a></li>
+								</ul>
+							</div>
+							
+							<div class="widget widget-categories">
+								<h5 class="widget-title">Category</h5>
+								<ul>
+									<li>
+										<a href="post-full-width.html" style="background-image: url(assets/images/category/category-list/category1.jpg);">
+											<span>Fitness</span>
+											<span class="num">15</span>
+										</a>	
+									</li>
+									<li>
+										<a href="post-half-image.html" style="background-image: url(assets/images/category/category-list/category2.jpg);">
+											<span>Travel</span>
+											<span class="num">07</span>
+										</a>	
+									</li>
+									<li>
+										<a href="post-left-sidebar.html" style="background-image: url(assets/images/category/category-list/category3.jpg);">
+											<span>Beauty</span>
+											<span class="num">12</span>
+										</a>	
+									</li>
+									<li>
+										<a href="post-thumb-gallary.html" style="background-image: url(assets/images/category/category-list/category4.jpg);">
+											<span>Lifestyle</span>
+											<span class="num">03</span>
+										</a>	
+									</li>
+									<li>
+										<a href="post-standard.html" style="background-image: url(assets/images/category/category-list/category5.jpg);">
+											<span>Fashion</span>
+											<span class="num">05</span>
+										</a>	
+									</li>
+								</ul>
+							</div>
+							
+							<div class="widget widget-post-wrapper">
+								<h5 class="widget-title">Latest Posts</h5>
+								<div class="widget-post-inner">
+									<div class="widget-post">
+										<div class="post-content">
+											<div class="post-header">
+												<h6 class="post-title"><a href="post-header.html">Lifestyle changes to transform your life</a></h6>
+											</div>
+											<ul class="post-meta">
+												<li class="date"><a href="javascript:void(0);">June 28, 2024</a></li>
+											</ul>
+										</div>
+										<div class="post-thumb">
+											<a href="post-header.html">
+												<img src="assets/images/widget-post/post1.jpg" alt="">
+											</a>
+										</div>
+									</div>
+									<div class="widget-post">
+										<div class="post-content">
+											<div class="post-header">
+												<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Varsha</a></h6>
+											</div>
+											<ul class="post-meta">
+												<li class="date"><a href="javascript:void(0);">July 01, 2024</a></li>
+											</ul>
+										</div>
+										<div class="post-thumb">
+											<a href="post-boxed-media.html">
+												<img src="assets/images/widget-post/post2.jpg" alt="">
+											</a>
+										</div>
+									</div>
+									<div class="widget-post">
+										<div class="post-content">
+											<div class="post-header">
+												<h6 class="post-title"><a href="post-audio.html">Celebrating Life's Simple Pleasures</a></h6>
+											</div>
+											<ul class="post-meta">
+												<li class="date"><a href="javascript:void(0);">May 22, 2024</a></li>
+											</ul>
+										</div>
+										<div class="post-thumb">
+											<a href="post-audio.html">
+												<img src="assets/images/widget-post/post3.jpg" alt="">
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</aside>
+							
+					</div>
+				</div> 
+			</div>
+		</section>
+		
+		<section class="instagram-wrapper">
+			<h5 class="main-title">Find Me On Instagram</h5>
+			<div class="swiper swiper-insta">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post1.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post2.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post3.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post4.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post5.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post6.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post7.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post8.jpg" alt=""></div></div>
+					<div class="swiper-slide"><div class="insta-media"><img src="assets/images/instagram/post1.jpg" alt=""></div></div>
+				</div>
+				<a target="_blank" href="https://www.instagram.com/" class="btn btn-light btn-insta"><i class="feather icon-instagram me-2"></i> Follow @Varsha</a>
+			</div>
+		</section>
+		
+	</main>
+	
+	<footer class="footer-wrapper">
+		<div class="footer-main">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3">
+						<div class="widget">
+							<div class="widget-logo mb-4">
+								<img src="assets/images/logo.png" alt="Varsha">
+							</div>
+							<p class="mb-4">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+							<ul class="widget-social">
+								<li><a target="_blank" href="https://www.facebook.com/" class="btn btn-light btn-social"><i class="feather icon-facebook"></i></a></li>
+								<li><a target="_blank" href="https://www.instagram.com/" class="btn btn-light btn-social"><i class="feather icon-instagram"></i></a></li>
+								<li><a target="_blank" href="https://www.youtube.com/" class="btn btn-light btn-social"><i class="feather icon-youtube"></i></a></li>
+								<li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-light btn-social"><i class="feather icon-linkedin"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="widget widget_link">
+							<h5 class="widget-title">Useful Links</h5>
+							<ul>
+								<li><a href="index.html">Home</a></li>
+								<li><a href="about-us.html">About Us</a></li>
+								<li><a href="post-standard.html">Blog</a></li>
+								<li><a href="post-left-sidebar.html">Blog Sidebar</a></li>
+								<li><a href="contact-us.html">Contact Us</a></li>
+								<li><a href="post-boxed-media.html">Post Category</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="widget widget_link">
+							<h5 class="widget-title">Blog Posts</h5>
+							<ul>
+								<li><a href="post-standard.html">Post Standard</a></li>
+								<li><a href="post-gallary.html">Post Gallary</a></li>
+								<li><a href="post-boxed-media.html">Post Boxed Media</a></li>
+								<li><a href="post-side-image.html">Post Side Image</a></li>
+								<li><a href="post-header.html">Post Header</a></li>
+								<li><a href="post-thumb-gallary.html">Post Thumb Gallary</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="widget widget-post-wrapper">
+							<h5 class="widget-title">Latest Posts</h5>
+							<div class="widget-post-inner">
+								<div class="widget-post">
+									<div class="post-content">
+										<div class="post-header">
+											<h6 class="post-title"><a href="post-header.html">Lifestyle changes to transform your life</a></h6>
+										</div>
+										<ul class="post-meta">
+											<li class="date"><a href="javascript:void(0);">June 28, 2024</a></li>
+										</ul>
+									</div>
+									<div class="post-thumb">
+										<a href="post-header.html">
+											<img src="assets/images/instagram/post1.jpg" alt="">
+										</a>
+									</div>
+								</div>
+								<div class="widget-post">
+									<div class="post-content">
+										<div class="post-header">
+											<h6 class="post-title"><a href="post-boxed-media.html">Exploring the World with Varsha</a></h6>
+										</div>
+										<ul class="post-meta">
+											<li class="date"><a href="javascript:void(0);">July 01, 2024</a></li>
+										</ul>
+									</div>
+									<div class="post-thumb">
+										<a href="post-boxed-media.html">
+											<img src="assets/images/instagram/post2.jpg" alt="">
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				<small>© <span class="year">2024</span> Varsha. Proudly powered by LayoutDrop.</small>
+			</div>
+		</div>
+	</footer>
+	
+</div>	
+<!-- Link to All JS -->
+<script src="assets/libraries/globle/main.js"></script>
+<script src="assets/js/silde-init.js"></script>
+<script src="assets/js/script.js"></script>
+</body>
+
+<!-- Mirrored from varsha.layoutdrop.com/demo/post-side-image.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 May 2025 10:14:54 GMT -->
+</html>

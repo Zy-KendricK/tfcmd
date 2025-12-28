@@ -1,0 +1,26 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <div class="text-blue-600 text-3xl font-bold mb-2">24</div>
+        <div class="text-gray-600">Charity Events</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <div class="text-purple-600 text-3xl font-bold mb-2">128</div>
+        <div class="text-gray-600">Posts</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <div class="text-green-600 text-3xl font-bold mb-2">8</div>
+        <div class="text-gray-600">Contacts</div>
+    </div>
+</div>
+<div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold mb-4">Recent Activity</h2>
+    <ul class="divide-y divide-gray-200">
+        <li class="py-2">New charity event added</li>
+        <li class="py-2">Post published: "Summer Gala"</li>
+        <li class="py-2">Contact form submitted by John Doe</li>
+    </ul>
+</div>

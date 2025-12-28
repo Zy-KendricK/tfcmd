@@ -1,0 +1,35 @@
+@* Gallery section partial view that can be included on pages that need it *@
+
+<section class="instagram-wrapper">
+    <h5 class="main-title">Gallery</h5>
+    <div class="swiper swiper-insta">
+        <div class="swiper-wrapper">
+            @for (int i = 1; i <= 8; i++)
+            {
+                <div class="swiper-slide">
+                    <div class="insta-media">
+                        <img src="~/images/instagram/post@(i).jpg" alt="Gallery Image @i">
+                    </div>
+                </div>
+            }
+        </div>
+        <a asp-controller="Pages" asp-action="Gallery" class="btn btn-light btn-insta">
+            <i class="feather icon-image me-2"></i> Go to Gallery
+        </a>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Initialize Swiper for gallery
+        new Swiper('.swiper-insta', {
+            slidesPerView: 2,
+            spaceBetween: 10,
+            breakpoints: {
+                640: { slidesPerView: 3 },
+                768: { slidesPerView: 4 },
+                1024: { slidesPerView: 6 }
+            }
+        });
+    </script>
+}

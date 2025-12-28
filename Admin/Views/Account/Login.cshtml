@@ -1,0 +1,44 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Admin Login";
+}
+<!-- Beehive-inspired login page using Tailwind CSS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-lg">
+        <div class="flex flex-col items-center mb-6">
+            <img src="/assets/images/favicon.png" alt="Logo" class="w-16 h-16 mb-2">
+            <h1 class="text-2xl font-bold text-gray-800">Admin Login</h1>
+            <p class="text-gray-500">Sign in to your dashboard</p>
+        </div>
+        <form method="post" asp-action="Login">
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2" for="Email">Email</label>
+                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" type="email" name="Email" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2" for="Password">Password</label>
+                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" type="password" name="Password" required>
+            </div>
+            <div class="flex items-center justify-between mb-6">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600">
+                    <span class="ml-2 text-gray-600">Remember me</span>
+                </label>
+                <a href="#" class="text-blue-500 hover:underline text-sm">Forgot password?</a>
+            </div>
+            <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">Sign In</button>
+        </form>
+        <div class="mt-6 text-center text-gray-500 text-sm">
+            &copy; 2025 TFC Admin. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>

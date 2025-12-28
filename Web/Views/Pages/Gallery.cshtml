@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Gallery";
+}
+
+<section class="section-space3">
+    <div class="container">
+        <div class="page-title text-center mb-5">
+            <h1>Gallery</h1>
+            <p class="lead">Capturing moments and memories from our community events</p>
+        </div>
+
+        <div class="row g-4">
+            @for (int i = 1; i <= 8; i++)
+            {
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="gallery-item">
+                        <img src="~/images/instagram/post@(i).jpg" alt="Gallery Image @i" class="img-fluid">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,117 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Web
+build_property.RootNamespace = Web
+build_property.ProjectDir = /Applications/Projects/Training/IE/tfcmd/Web/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = /Applications/Projects/Training/IE/tfcmd/Web
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Charity/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Contact/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ29udGFjdC9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Pages/About.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFnZXMvQWJvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Pages/Charity.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFnZXMvQ2hhcml0eS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Pages/ContactUs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFnZXMvQ29udGFjdFVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Pages/Gallery.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFnZXMvR2FsbGVyeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFnZXMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Pages/PostAudio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFnZXMvUG9zdEF1ZGlvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Post/_PostAudio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUG9zdC9fUG9zdEF1ZGlvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Post/_PostGallery.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUG9zdC9fUG9zdEdhbGxlcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Post/_PostPagination.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUG9zdC9fUG9zdFBhZ2luYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Post/_PostStandard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUG9zdC9fUG9zdFN0YW5kYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Post/_PostVideo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUG9zdC9fUG9zdFZpZGVvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/Components/LatestEvents/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvTGF0ZXN0RXZlbnRzL0RlZmF1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/Components/LatestPosts/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvTGF0ZXN0UG9zdHMvRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/_CachedGallerySection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19DYWNoZWRHYWxsZXJ5U2VjdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/_GallerySection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19HYWxsZXJ5U2VjdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Applications/Projects/Training/IE/tfcmd/Web/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-znl52p88st

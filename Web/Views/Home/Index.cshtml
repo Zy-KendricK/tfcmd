@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="section-space3-tp">
+    <div class="container">
+        <div class="row mb-md-30">
+            <div class="col-xl-5 col-md-12 order-xl-1 mb-50">
+                <div class="post-card post-card-large">
+                    <div class="post-thumb">
+                        <a asp-controller="Post" asp-action="Details" asp-route-id="1">
+                            <img src="~/images/posts/middle-post/middle-post1.jpg" alt="Featured Post">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">
+                            <a asp-controller="Post" asp-action="Details" asp-route-id="1">
+                                Welcome to Tema Friends Club of Maryland
+                            </a>
+                        </h3>
+                        <ul class="post-meta">
+                            <li class="author">
+                                <img src="~/images/avatar/admin.jpg" alt="">
+                                By <a href="javascript:void(0);">Admin</a>
+                            </li>
+                            <li class="date"><a href="javascript:void(0);">@DateTime.Now.ToString("MMMM dd, yyyy")</a>
+                            </li>
+                            <li class="tag"><a href="javascript:void(0);">Welcome</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-md-5 widget-post-separate mb-50">
+                <div class="widget widget-about">
+                    <h6 class="widget-title-lg text-primary">ABOUT</h6>
+                    <p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
+                        and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+                    <a asp-controller="Pages" asp-action="About">Read More</a>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-7 order-xl-2 mb-30">
+                <div class="widget widget-post-wrapper mb-30">
+                    <div class="widget-post-inner">
+                        @await Component.InvokeAsync("LatestPosts")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-space bg-white">
+    <div class="container">
+        <h5 class="widget-title mb-30">Our Groups
+            <a asp-controller="Pages" asp-action="Groups" class="btn-link float-end">View All Groups</a>
+        </h5>
+        <div class="swiper swiper-catogary swiper-mobile">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="card-catogary">
+                        <img class="media" src="~/images/category/category1.jpg" alt="">
+                        <a asp-controller="Charity" asp-action="Index" class="btn btn-light btn-tag">CHARITY</a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card-catogary">
+                        <img class="media" src="~/images/category/category2.jpg" alt="">
+                        <a href="javascript:void(0);" class="btn btn-light btn-tag">COMMUNITY</a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card-catogary">
+                        <img class="media" src="~/images/category/category3.jpg" alt="">
+                        <a href="javascript:void(0);" class="btn btn-light btn-tag">CULTURE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="section-space3">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8">
+                <div class="content-wrapper left-side">
+                    <h5 class="widget-title mb-30">What's New?</h5>
+                    <div class="row row-post" id="latest-posts">
+                        <!-- Latest posts will be loaded here -->
+                    </div>
+                    <div class="text-center mb-30">
+                        <a href="javascript:void(0);" class="btn btn-light btn-line" id="load-more">LOAD MORE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4">
+                <aside class="aside-wrapper">
+                    <div class="widget widget-newsletter text-center">
+                        <img class="mb-4" src="~/images/icons/envelope.svg" alt="">
+                        <h4 class="mb-1">Our Newsletter</h4>
+                        <p>Get every weekly update & insight feed</p>
+                        <form asp-controller="Newsletter" asp-action="Subscribe" method="post">
+                            <input type="email" class="form-control" placeholder="Your Email Address" name="Email"
+                                required>
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Subscribe Now</button>
+                        </form>
+                    </div>
+
+                    <div class="widget widget-categories">
+                        <h5 class="widget-title">Categories</h5>
+                        <ul>
+                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="charity">Charity
+                                    <span>(5)</span></a></li>
+                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="community">Community
+                                    <span>(3)</span></a></li>
+                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="culture">Culture
+                                    <span>(4)</span></a></li>
+                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="events">Events
+                                    <span>(7)</span></a></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space3 bg-white">
+    <div class="container">
+        <h5 class="widget-title mb-30">Upcoming Events
+            <a asp-controller="Post" asp-action="Events" class="btn-link float-end">View All Events</a>
+        </h5>
+        <div class="row post-grid-wrapper mb-30">
+            @await Component.InvokeAsync("LatestEvents")
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Initialize Swiper for categories
+        new Swiper('.swiper-catogary', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            breakpoints: {
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 3 }
+            }
+        });
+    </script>
+}

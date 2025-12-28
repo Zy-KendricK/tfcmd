@@ -1,0 +1,41 @@
+/* Additional custom styles */
+
+/* Gallery styles */
+.gallery-item {
+	position: relative;
+	overflow: hidden;
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+.gallery-item img {
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+	transform: scale(1.05);
+}
+
+/* Contact form styles */
+.contact-form {
+	background: #fff;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom button styles */
+.btn-primary-light {
+	background-color: #007bff;
+	border-color: #007bff;
+	color: #fff;
+}
+
+.btn-primary-light:hover {
+	background-color: #0056b3;
+	border-color: #0056b3;
+	color: #fff;
+}

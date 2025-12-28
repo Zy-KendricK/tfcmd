@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg flex flex-col">
+            <div class="p-6 flex items-center justify-center border-b">
+                <img src="/assets/images/favicon.png" alt="Logo" class="w-10 h-10 mr-2">
+                <span class="font-bold text-lg text-blue-700">TFC Admin</span>
+            </div>
+            <nav class="flex-1 p-4">
+                <a href="/Dashboard"
+                    class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700 font-semibold">Dashboard</a>
+                <a href="/Charity" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Charity</a>
+                <a href="/Post" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Posts</a>
+                <a href="/Contact" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Contact</a>
+            </nav>
+            <div class="p-4 border-t text-center text-gray-400 text-xs">&copy; 2025 TFC Admin</div>
+        </aside>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Topbar -->
+            <header class="bg-white shadow p-4 flex items-center justify-between">
+                <div class="font-semibold text-blue-700">@ViewData["Title"]</div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">Admin</span>
+                    <img src="/assets/images/favicon.png" class="w-8 h-8 rounded-full" alt="User">
+                </div>
+            </header>
+            <main class="flex-1 p-6">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>
