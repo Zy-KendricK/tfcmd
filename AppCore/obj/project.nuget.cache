@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "luJZaS21qds=",
+  "dgSpecHash": "4WICOz/Q3ks=",
   "success": true,
   "projectFilePath": "/Applications/Projects/Training/IE/tfcmd/AppCore/AppCore.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/oakwoodadvansio-bl/.nuget/packages/microsoft.netcore.app.ref/9.0.14/microsoft.netcore.app.ref.9.0.14.nupkg.sha512",
+    "/Users/oakwoodadvansio-bl/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.14/microsoft.aspnetcore.app.ref.9.0.14.nupkg.sha512"
+  ],
   "logs": []
 }
