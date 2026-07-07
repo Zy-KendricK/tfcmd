@@ -18,6 +18,16 @@ namespace Web.Controllers
         {
             return View();
         }
+
+        public IActionResult Gallery()
+        {
+            return View();
+        }
+
+        public IActionResult Groups()
+        {
+            return View();
+        }
         // Add more actions for other pages as needed
     }
 }

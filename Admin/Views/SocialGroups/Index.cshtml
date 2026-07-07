@@ -1,0 +1,132 @@
+@model IEnumerable<SocialGroup>
+@{
+    ViewData["Title"] = "Social Groups";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-user-plus"></i> Manage Social Groups
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="uil-plus"></i> Create Group
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
+                    placeholder="Search groups..." />
+            </div>
+            <div class="col-md-2">
+                <select name="type" class="form-admin-control">
+                    <option value="">All Types</option>
+                    <option value="Public">Public</option>
+                    <option value="Private">Private</option>
+                    <option value="Hidden">Hidden</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="uil-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var group in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="admin-card h-100" style="border: 1px solid var(--theme-color-border);">
+                        <!-- Group Cover -->
+                        <div
+                            style="height: 100px; background: linear-gradient(135deg, var(--theme-color-primary), var(--theme-color-primary-lightened)); border-radius: 8px 8px 0 0; position: relative;">
+                            @if (!string.IsNullOrEmpty(group.CoverImageUrl))
+                            {
+                                <img src="@group.CoverImageUrl" alt=""
+                                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;" />
+                            }
+                            <div style="position: absolute; bottom: -30px; left: 20px;">
+                                @if (!string.IsNullOrEmpty(group.AvatarUrl))
+                                {
+                                    <img src="@group.AvatarUrl" alt="@group.Name"
+                                        style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div
+                                        style="width: 60px; height: 60px; border-radius: 50%; background: var(--theme-color-primary); border: 3px solid #fff; display: flex; align-items: center; justify-content: center;">
+                                        <i class="uil-users-alt" style="color: #fff; font-size: 24px;"></i>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="p-3" style="padding-top: 40px !important;">
+                            <h5 class="mb-1">
+                                @group.Name
+                            </h5>
+
+                            <div class="mb-2">
+                                @{
+                                    var typeClass = group.Type switch
+                                    {
+                                        GroupType.Public => "status-published",
+                                        GroupType.Private => "status-pending",
+                                        GroupType.Hidden => "status-draft",
+                                        _ => "status-draft"
+                                                };
+                                }
+                                <span class="status-badge @typeClass">@group.Type</span>
+                            </div>
+
+                            <p class="text-muted small mb-3">
+                                @(group.Description?.Length > 80 ? group.Description.Substring(0, 80) + "..." :
+                                                        group.Description ?? "No description")
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted">
+                                    <i class="uil-users-alt"></i> @(group.Members?.Count ?? 0) members
+                                </span>
+                                <span class="text-muted">
+                                    <i class="uil-file-alt"></i> @(group.Posts?.Count ?? 0) posts
+                                </span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a asp-action="Edit" asp-route-id="@group.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-primary flex-grow-1">
+                                    <i class="uil-edit"></i> Edit
+                                </a>
+                                <a asp-action="Members" asp-route-id="@group.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-success">
+                                    <i class="uil-users-alt"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Delete this group?');">
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger">
+                                        <i class="uil-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <i class="uil-user-plus" style="font-size: 64px; color: #ddd;"></i>
+                <p class="text-muted mt-3">No social groups found.</p>
+                <a asp-action="Create" class="btn-admin btn-admin-primary">Create your first group</a>
+            </div>
+        }
+    </div>
+</div>

@@ -9,23 +9,22 @@
                 <div class="post-card post-card-large">
                     <div class="post-thumb">
                         <a asp-controller="Post" asp-action="Details" asp-route-id="1">
-                            <img src="~/images/posts/middle-post/middle-post1.jpg" alt="Featured Post">
+                            <img src="~/images/posts/middle-post/middle-post1.jpg" alt="">
                         </a>
                     </div>
                     <div class="post-content">
                         <h3 class="post-title">
                             <a asp-controller="Post" asp-action="Details" asp-route-id="1">
-                                Welcome to Tema Friends Club of Maryland
+                                The benefits of a healthy lifestyle how to live a fulfilling life
                             </a>
                         </h3>
                         <ul class="post-meta">
                             <li class="author">
-                                <img src="~/images/avatar/admin.jpg" alt="">
-                                By <a href="javascript:void(0);">Admin</a>
+                                <img src="~/images/posts/middle-post/middle-post1.jpg" alt="">
+                                By <a href="javascript:void(0);">Velma D. Sills</a>
                             </li>
-                            <li class="date"><a href="javascript:void(0);">@DateTime.Now.ToString("MMMM dd, yyyy")</a>
-                            </li>
-                            <li class="tag"><a href="javascript:void(0);">Welcome</a></li>
+                            <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                            <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
                         </ul>
                     </div>
                 </div>
@@ -41,7 +40,57 @@
             <div class="col-xl-4 col-lg-6 col-md-7 order-xl-2 mb-30">
                 <div class="widget widget-post-wrapper mb-30">
                     <div class="widget-post-inner">
-                        @await Component.InvokeAsync("LatestPosts")
+                        <div class="widget-post widget-post-large">
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <h5 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                            asp-route-id="2">Celebrating
+                                            Life's Simple Pleasures</a></h5>
+                                </div>
+                                <ul class="post-meta">
+                                    <li class="date"><a href="javascript:void(0);">June 28, 2024</a></li>
+                                </ul>
+                            </div>
+                            <div class="post-thumb">
+                                <a asp-controller="Post" asp-action="Details" asp-route-id="2">
+                                    <img src="~/images/widget-post/post-large/post1.jpg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="widget-post widget-post-large">
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <h5 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                            asp-route-id="3">Exploring the
+                                            World with Varsha</a></h5>
+                                </div>
+                                <ul class="post-meta">
+                                    <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                                </ul>
+                            </div>
+                            <div class="post-thumb">
+                                <a asp-controller="Post" asp-action="Details" asp-route-id="3">
+                                    <img src="~/images/widget-post/post-large/post2.jpg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="widget-post widget-post-large">
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <h5 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                            asp-route-id="4">Lifestyle changes
+                                            to transform your life</a></h5>
+                                </div>
+                                <ul class="post-meta">
+                                    <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                                </ul>
+                            </div>
+                            <div class="post-thumb">
+                                <a asp-controller="Post" asp-action="Details" asp-route-id="4">
+                                    <img src="~/images/widget-post/post-large/post3.jpg" alt="">
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,29 +98,44 @@
     </div>
 </section>
 
-<div class="section-space bg-white">
+<div class="section-space bg-white section-hidden">
     <div class="container">
-        <h5 class="widget-title mb-30">Our Groups
-            <a asp-controller="Pages" asp-action="Groups" class="btn-link float-end">View All Groups</a>
-        </h5>
+        <h5 class="widget-title mb-30">Groups</h5>
         <div class="swiper swiper-catogary swiper-mobile">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="card-catogary">
                         <img class="media" src="~/images/category/category1.jpg" alt="">
-                        <a asp-controller="Charity" asp-action="Index" class="btn btn-light btn-tag">CHARITY</a>
+                        <a asp-controller="Post" asp-action="Category" asp-route-id="lifestyle"
+                            class="btn btn-light btn-tag">LIFESTYLE</a>
                     </div>
                 </div>
                 <div class="swiper-slide">
                     <div class="card-catogary">
                         <img class="media" src="~/images/category/category2.jpg" alt="">
-                        <a href="javascript:void(0);" class="btn btn-light btn-tag">COMMUNITY</a>
+                        <a asp-controller="Post" asp-action="Category" asp-route-id="fitness"
+                            class="btn btn-light btn-tag">FITNESS</a>
                     </div>
                 </div>
                 <div class="swiper-slide">
                     <div class="card-catogary">
                         <img class="media" src="~/images/category/category3.jpg" alt="">
-                        <a href="javascript:void(0);" class="btn btn-light btn-tag">CULTURE</a>
+                        <a asp-controller="Post" asp-action="Category" asp-route-id="travel"
+                            class="btn btn-light btn-tag">TRAVEL</a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card-catogary">
+                        <img class="media" src="~/images/category/category4.jpg" alt="">
+                        <a asp-controller="Post" asp-action="Category" asp-route-id="beauty"
+                            class="btn btn-light btn-tag">BEAUTY</a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card-catogary">
+                        <img class="media" src="~/images/category/category5.jpg" alt="">
+                        <a asp-controller="Post" asp-action="Category" asp-route-id="fashion"
+                            class="btn btn-light btn-tag">FASHION</a>
                     </div>
                 </div>
             </div>
@@ -84,12 +148,80 @@
         <div class="row">
             <div class="col-xl-9 col-lg-8">
                 <div class="content-wrapper left-side">
-                    <h5 class="widget-title mb-30">What's New?</h5>
-                    <div class="row row-post" id="latest-posts">
-                        <!-- Latest posts will be loaded here -->
+                    <h5 class="widget-title mb-30">Whats New?</h5>
+                    <div class="row row-post">
+                        <div class="col-lg-12">
+                            <div class="post-card mb-50">
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="5"><img
+                                            src="~/images/posts/large-post/large-post1.jpg" alt=""></a>
+                                </div>
+                                <div class="post-content">
+                                    <ul class="post-meta">
+                                        <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                                        <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
+                                    </ul>
+                                    <h3 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                            asp-route-id="5">The Connection
+                                            Between Happiness and Health</a></h3>
+                                    <p>It is a long established fact that a reader will be distracted by the
+                                        readable content of a page when looking at its layout. The point of
+                                        using Lorem Ipsum is that it has a more-or-less normal distribution
+                                        of letters, as opposed to using 'Content here, content here', making
+                                        it look like readable English. Many desktop publishing packages and
+                                        web page.</p>
+                                    <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="5">READ
+                                        MORE <i class="feather icon-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="post-card mb-50">
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="6"><img
+                                            src="~/images/posts/img1.jpg" alt=""></a>
+                                </div>
+                                <div class="post-content">
+                                    <ul class="post-meta">
+                                        <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                                        <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
+                                    </ul>
+                                    <h4 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                            asp-route-id="6">Tips and Tricks
+                                            for Navigating the Parenthood Journey</a></h4>
+                                    <p>It is a long established fact that a reader will be distracted by the
+                                        readable content of a page when looking at its layout. The point of
+                                        using Lorem Ipsum is that it has.</p>
+                                    <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="6">READ
+                                        MORE <i class="feather icon-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="post-card mb-50">
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="7"><img
+                                            src="~/images/posts/img2.jpg" alt=""></a>
+                                </div>
+                                <div class="post-content">
+                                    <ul class="post-meta">
+                                        <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                                        <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
+                                    </ul>
+                                    <h4 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                            asp-route-id="7">Workout Outfits
+                                            that Combine Style and Function</a></h4>
+                                    <p>It is a long established fact that a reader will be distracted by the
+                                        readable content of a page when looking at its layout. The point of
+                                        using Lorem Ipsum is that it has.</p>
+                                    <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="7">READ
+                                        MORE <i class="feather icon-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="text-center mb-30">
-                        <a href="javascript:void(0);" class="btn btn-light btn-line" id="load-more">LOAD MORE</a>
+                        <a href="javascript:void(0);" class="btn btn-light btn-line">LOAD MORE</a>
                     </div>
                 </div>
             </div>
@@ -99,25 +231,108 @@
                         <img class="mb-4" src="~/images/icons/envelope.svg" alt="">
                         <h4 class="mb-1">Our Newsletter</h4>
                         <p>Get every weekly update & insight feed</p>
-                        <form asp-controller="Newsletter" asp-action="Subscribe" method="post">
-                            <input type="email" class="form-control" placeholder="Your Email Address" name="Email"
-                                required>
-                            <button type="submit" class="btn btn-primary w-100 mt-3">Subscribe Now</button>
+                        <form action="#">
+                            <input type="text" class="form-control" placeholder="Your Email Address">
+                            <button class="btn btn-primary w-100 mt-3">Subscribe Now</button>
                         </form>
                     </div>
 
                     <div class="widget widget-categories">
-                        <h5 class="widget-title">Categories</h5>
+                        <h5 class="widget-title">Category</h5>
                         <ul>
-                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="charity">Charity
-                                    <span>(5)</span></a></li>
-                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="community">Community
-                                    <span>(3)</span></a></li>
-                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="culture">Culture
-                                    <span>(4)</span></a></li>
-                            <li><a asp-controller="Post" asp-action="Category" asp-route-id="events">Events
-                                    <span>(7)</span></a></li>
+                            <li>
+                                <a asp-controller="Post" asp-action="Category" asp-route-id="fitness"
+                                    style="background-image: url(/images/category/category-list/category1.jpg);">
+                                    <span>Fitness</span>
+                                    <span class="num">15</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Post" asp-action="Category" asp-route-id="travel"
+                                    style="background-image: url(/images/category/category-list/category2.jpg);">
+                                    <span>Travel</span>
+                                    <span class="num">07</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Post" asp-action="Category" asp-route-id="beauty"
+                                    style="background-image: url(/images/category/category-list/category3.jpg);">
+                                    <span>Beauty</span>
+                                    <span class="num">12</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Post" asp-action="Category" asp-route-id="lifestyle"
+                                    style="background-image: url(/images/category/category-list/category4.jpg);">
+                                    <span>Lifestyle</span>
+                                    <span class="num">03</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Post" asp-action="Category" asp-route-id="fashion"
+                                    style="background-image: url(/images/category/category-list/category5.jpg);">
+                                    <span>Fashion</span>
+                                    <span class="num">05</span>
+                                </a>
+                            </li>
                         </ul>
+                    </div>
+
+                    <div class="widget widget-post-wrapper">
+                        <h5 class="widget-title">Latest Posts</h5>
+                        <div class="widget-post-inner">
+                            <div class="widget-post">
+                                <div class="post-content">
+                                    <div class="post-header">
+                                        <h6 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                                asp-route-id="8">Lifestyle changes
+                                                to transform your life</a></h6>
+                                    </div>
+                                    <ul class="post-meta">
+                                        <li class="date"><a href="javascript:void(0);">June 28, 2024</a></li>
+                                    </ul>
+                                </div>
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="8">
+                                        <img src="~/images/widget-post/post1.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-post">
+                                <div class="post-content">
+                                    <div class="post-header">
+                                        <h6 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                                asp-route-id="9">Exploring the
+                                                World with Varsha</a></h6>
+                                    </div>
+                                    <ul class="post-meta">
+                                        <li class="date"><a href="javascript:void(0);">July 01, 2024</a></li>
+                                    </ul>
+                                </div>
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="9">
+                                        <img src="~/images/widget-post/post2.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-post">
+                                <div class="post-content">
+                                    <div class="post-header">
+                                        <h6 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                                asp-route-id="10">Celebrating Life's
+                                                Simple Pleasures</a></h6>
+                                    </div>
+                                    <ul class="post-meta">
+                                        <li class="date"><a href="javascript:void(0);">May 22, 2024</a></li>
+                                    </ul>
+                                </div>
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="10">
+                                        <img src="~/images/widget-post/post3.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </aside>
             </div>
@@ -127,26 +342,122 @@
 
 <section class="section-space3 bg-white">
     <div class="container">
-        <h5 class="widget-title mb-30">Upcoming Events
-            <a asp-controller="Post" asp-action="Events" class="btn-link float-end">View All Events</a>
+        <h5 class="widget-title mb-30">Events
+            <a asp-controller="Post" asp-action="Events" class="btn-link float-end">View All Post</a>
         </h5>
         <div class="row post-grid-wrapper mb-30">
-            @await Component.InvokeAsync("LatestEvents")
+            <div class="col-lg-3 col-6 post-grid-column order-2">
+                <div class="post-card post-card-small">
+                    <div class="post-thumb">
+                        <a asp-controller="Post" asp-action="Details" asp-route-id="11">
+                            <img src="~/images/posts/popular-post/post1.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <h5 class="post-title">
+                            <a asp-controller="Post" asp-action="Details" asp-route-id="11">Exploring Passions and
+                                Unlocking
+                                Personal Potential
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+                <div class="post-card post-card-small">
+                    <div class="post-thumb">
+                        <a asp-controller="Post" asp-action="Details" asp-route-id="12"><img
+                                src="~/images/posts/popular-post/post2.jpg" alt=""></a>
+                    </div>
+                    <div class="post-content">
+                        <h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="12">Lifestyle
+                                changes to
+                                transform your life</a></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 post-grid-column order-2 order-lg-1">
+                <div class="post-card post-card-small">
+                    <div class="post-thumb">
+                        <a asp-controller="Post" asp-action="Details" asp-route-id="13"><img
+                                src="~/images/posts/popular-post/post3.jpg" alt=""></a>
+                    </div>
+                    <div class="post-content">
+                        <h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="13">Tips for
+                                Stunning Travel and
+                                Lifestyle Photography</a></h5>
+                    </div>
+                </div>
+                <div class="post-card post-card-small">
+                    <div class="post-thumb">
+                        <a asp-controller="Post" asp-action="Details" asp-route-id="14"><img
+                                src="~/images/posts/popular-post/post4.jpg" alt=""></a>
+                    </div>
+                    <div class="post-content">
+                        <h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="14">Workout
+                                Outfits that Combine
+                                Style and Function</a></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-1">
+                <div class="post-grid-center">
+                    <div class="post-card post-card-large">
+                        <div class="post-thumb">
+                            <a asp-controller="Post" asp-action="Details" asp-route-id="15"><img
+                                    src="~/images/posts/large-post/large-post2.jpg" alt=""></a>
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="15">Tips
+                                    for Stunning Travel and
+                                    Lifestyle Photography</a></h3>
+                            <ul class="post-meta">
+                                <li class="author">
+                                    <img src="~/images/posts/middle-post/middle-post1.jpg" alt="">By
+                                    <a href="javascript:void(0);"> Velma D. Sills</a>
+                                </li>
+                                <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
+                                <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-@section Scripts {
-    <script>
-        // Initialize Swiper for categories
-        new Swiper('.swiper-catogary', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            breakpoints: {
-                640: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 3 }
-            }
-        });
-    </script>
-}
+<section class="instagram-wrapper">
+    <h5 class="main-title">Gallery</h5>
+    <div class="swiper swiper-insta">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post2.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post3.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post4.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post5.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post6.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post7.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post8.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+            </div>
+        </div>
+        <a asp-controller="Pages" asp-action="Gallery" class="btn btn-light btn-insta"><i
+                class="feather icon-image me-2"></i> Go to Gallery</a>
+    </div>
+</section>

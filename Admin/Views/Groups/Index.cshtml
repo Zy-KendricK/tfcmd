@@ -1,0 +1,152 @@
+@model IEnumerable<UserGroup>
+@{
+    ViewData["Title"] = "User Groups";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-layer-group"></i> Manage User Groups
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="uil-plus"></i> Create Group
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Group Name</th>
+                    <th>Description</th>
+                    <th>Members</th>
+                    <th>Permissions</th>
+                    <th>System</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var group in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@group.Name</strong>
+                                @if (group.IsSystemGroup)
+                                {
+                                    <span class="status-badge status-approved">System</span>
+                                }
+                            </td>
+                            <td>
+                                <small class="text-muted">@(group.Description ?? "No description")</small>
+                            </td>
+                            <td>
+                                <span class="status-badge status-published">
+                                    <i class="uil-users-alt"></i> @(group.Members?.Count ?? 0)
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-pending">
+                                    <i class="uil-shield-check"></i> @(group.Permissions?.Count ?? 0)
+                                </span>
+                            </td>
+                            <td>
+                                @if (group.IsSystemGroup)
+                                {
+                                    <span class="text-success"><i class="uil-check-circle"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted"><i class="uil-minus-circle"></i></span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@group.Id" class="btn-admin btn-admin-sm btn-admin-primary"
+                                    title="Edit">
+                                    <i class="uil-edit"></i>
+                                </a>
+                                <a asp-action="Permissions" asp-route-id="@group.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-warning" title="Manage Permissions">
+                                    <i class="uil-shield-check"></i>
+                                </a>
+                                <a asp-action="Members" asp-route-id="@group.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-success" title="Manage Members">
+                                    <i class="uil-users-alt"></i>
+                                </a>
+                                @if (!group.IsSystemGroup)
+                                {
+                                    <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
+                                        onsubmit="return confirm('Delete this group?');">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                            <i class="uil-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <i class="uil-layer-group" style="font-size: 48px; color: #ddd;"></i>
+                            <p class="text-muted mt-2">No groups found.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Permission Categories Info -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">
+                    <i class="uil-info-circle"></i> About User Groups
+                </h5>
+            </div>
+            <p class="text-muted">
+                User groups allow you to organize users and assign them specific permissions.
+                Each user can belong to multiple groups, and their permissions are combined.
+            </p>
+            <ul class="mb-0">
+                <li><strong>Administrators</strong> - Full access to all features</li>
+                <li><strong>Reviewers</strong> - Can review and approve content</li>
+                <li><strong>Editors</strong> - Can create and edit content</li>
+                <li><strong>Members</strong> - Basic access to public features</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">
+                    <i class="uil-shield-check"></i> Permission Categories
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <ul class="mb-0">
+                        <li>User Management</li>
+                        <li>Group Management</li>
+                        <li>Content Management</li>
+                        <li>Blog Posts</li>
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <ul class="mb-0">
+                        <li>Jobs</li>
+                        <li>Adverts</li>
+                        <li>Products</li>
+                        <li>Settings</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

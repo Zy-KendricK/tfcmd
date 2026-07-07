@@ -2,18 +2,51 @@
     ViewData["Title"] = "Gallery";
 }
 
+<section class="instagram-wrapper">
+    <h5 class="main-title">Photo Gallery</h5>
+    <div class="swiper swiper-insta">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post2.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post3.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post4.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post5.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post6.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post7.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post8.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+            </div>
+        </div>
+        <a target="_blank" href="https://www.instagram.com/" class="btn btn-light btn-insta"><i
+                class="feather icon-image me-2"></i> Follow Us on Instagram</a>
+    </div>
+</section>
+
 <section class="section-space3">
     <div class="container">
-        <div class="page-title text-center mb-5">
-            <h1>Gallery</h1>
-            <p class="lead">Capturing moments and memories from our community events</p>
-        </div>
-
+        <h5 class="widget-title mb-30">All Photos</h5>
         <div class="row g-4">
             @for (int i = 1; i <= 8; i++)
             {
                 <div class="col-lg-3 col-md-4 col-6">
-                    <div class="gallery-item">
+                    <div class="insta-media">
                         <img src="~/images/instagram/post@(i).jpg" alt="Gallery Image @i" class="img-fluid">
                     </div>
                 </div>

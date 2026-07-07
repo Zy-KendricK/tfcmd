@@ -1,0 +1,140 @@
+@model IEnumerable<Post>
+@{
+    ViewData["Title"] = "Blog Posts";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-newspaper"></i> Manage Blog Posts
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="uil-plus"></i> New Post
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
+                    placeholder="Search posts..." />
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-admin-control">
+                    <option value="">All Status</option>
+                    <option value="Draft" selected="@(ViewBag.Status == "Draft")">Draft</option>
+                    <option value="PendingReview" selected="@(ViewBag.Status == "PendingReview")">Pending Review
+                    </option>
+                    <option value="Approved" selected="@(ViewBag.Status == "Approved")">Approved</option>
+                    <option value="Published" selected="@(ViewBag.Status == "Published")">Published</option>
+                    <option value="Rejected" selected="@(ViewBag.Status == "Rejected")">Rejected</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="uil-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Format</th>
+                    <th>Created</th>
+                    <th style="width: 200px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var post in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@post.Title</strong>
+                                @if (post.IsFeatured)
+                                {
+                                    <span class="status-badge" style="background: gold; color: #333;">
+                                        <i class="uil-star"></i> Featured
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                <small>@(post.Author?.DisplayName ?? "Unknown")</small>
+                            </td>
+                            <td>
+                                @{
+                                    var statusClass = post.Status switch
+                                    {
+                                        ContentStatus.Draft => "status-draft",
+                                        ContentStatus.PendingReview => "status-pending",
+                                        ContentStatus.Approved => "status-approved",
+                                        ContentStatus.Published => "status-published",
+                                        ContentStatus.Rejected => "status-rejected",
+                                        _ => "status-draft"
+                                    };
+                                }
+                                <span class="status-badge @statusClass">@post.Status</span>
+                            </td>
+                            <td>@post.Format</td>
+                            <td>@post.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@post.Id" class="btn-admin btn-admin-sm btn-admin-primary"
+                                    title="Edit">
+                                    <i class="uil-edit"></i>
+                                </a>
+
+                                @if (post.Status == ContentStatus.PendingReview)
+                                {
+                                    <form asp-action="Approve" asp-route-id="@post.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success" title="Approve">
+                                            <i class="uil-check"></i>
+                                        </button>
+                                    </form>
+                                    <form asp-action="Reject" asp-route-id="@post.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning" title="Reject">
+                                            <i class="uil-times"></i>
+                                        </button>
+                                    </form>
+                                }
+
+                                @if (post.Status == ContentStatus.Approved)
+                                {
+                                    <form asp-action="Publish" asp-route-id="@post.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success" title="Publish">
+                                            <i class="uil-globe"></i>
+                                        </button>
+                                    </form>
+                                }
+
+                                <form asp-action="Delete" asp-route-id="@post.Id" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                        <i class="uil-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <i class="uil-newspaper" style="font-size: 48px; color: #ddd;"></i>
+                            <p class="text-muted mt-2">No posts found.</p>
+                            <a asp-action="Create" class="btn-admin btn-admin-primary">Create your first post</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

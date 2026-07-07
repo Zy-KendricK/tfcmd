@@ -1,0 +1,149 @@
+@model IEnumerable<Advert>
+@{
+    ViewData["Title"] = "Adverts";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-tv-retro"></i> Manage Adverts
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="uil-plus"></i> Post Advert
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
+                    placeholder="Search adverts..." />
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-admin-control">
+                    <option value="">All Status</option>
+                    <option value="Draft">Draft</option>
+                    <option value="PendingReview">Pending</option>
+                    <option value="Published">Published</option>
+                    <option value="Sold">Sold</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="uil-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;"></th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Views</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var advert in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (advert.Images?.Any() == true)
+                                {
+                                    <img src="@advert.Images.First().Url" alt=""
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />
+                                }
+                                else
+                                {
+                                    <div
+                                        style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="uil-image" style="font-size: 24px; color: #ccc;"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <strong>@advert.Title</strong>
+                                @if (advert.IsFeatured)
+                                {
+                                    <span class="status-badge" style="background: gold; color: #333;">
+                                        <i class="uil-star"></i>
+                                    </span>
+                                }
+                            </td>
+                            <td>@(advert.Category?.Name ?? "Uncategorized")</td>
+                            <td>
+                                @switch (advert.PriceType)
+                                {
+                                    case PriceType.Fixed:
+                                        <strong>$@advert.Price?.ToString("N2")</strong>
+                                        break;
+                                    case PriceType.Negotiable:
+                                        <span>$@advert.Price?.ToString("N2") <small>(Neg.)</small></span>
+                                        break;
+                                    case PriceType.Free:
+                                        <span class="text-success">Free</span>
+                                        break;
+                                    case PriceType.ContactForPrice:
+                                        <span class="text-muted">Contact</span>
+                                        break;
+                                }
+                            </td>
+                            <td><small>@advert.Location</small></td>
+                            <td>
+                                @{
+                                    var statusClass = advert.Status switch
+                                    {
+                                        ContentStatus.Draft => "status-draft",
+                                        ContentStatus.PendingReview => "status-pending",
+                                        ContentStatus.Published => "status-published",
+                                        _ => "status-draft"
+                                                };
+                                }
+                                <span class="status-badge @statusClass">@advert.Status</span>
+                            </td>
+                            <td>@advert.ViewCount</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@advert.Id" class="btn-admin btn-admin-sm btn-admin-primary">
+                                    <i class="uil-edit"></i>
+                                </a>
+                                @if (advert.Status == ContentStatus.PendingReview)
+                                {
+                                    <form asp-action="Publish" asp-route-id="@advert.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success">
+                                            <i class="uil-check"></i>
+                                        </button>
+                                    </form>
+                                }
+                                <form asp-action="Delete" asp-route-id="@advert.Id" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Delete this advert?');">
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger">
+                                        <i class="uil-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <i class="uil-tv-retro" style="font-size: 48px; color: #ddd;"></i>
+                            <p class="text-muted mt-2">No adverts found.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

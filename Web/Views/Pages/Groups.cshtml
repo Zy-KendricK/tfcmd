@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Our Groups";
+}
+
+<section class="section-space3">
+    <div class="container">
+        <div class="page-title text-center mb-5">
+            <h1>Our Groups</h1>
+            <p class="lead">Explore the different groups within Tema Friends Club of Maryland</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card-catogary group-card">
+                    <img class="media" src="~/images/category/category1.jpg" alt="Charity">
+                    <div class="group-info">
+                        <h4>Charity</h4>
+                        <p>Making a difference through charitable initiatives and community support programs.</p>
+                        <a asp-controller="Charity" asp-action="Index" class="btn btn-primary-light btn-line">Learn
+                            More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card-catogary group-card">
+                    <img class="media" src="~/images/category/category2.jpg" alt="Community">
+                    <div class="group-info">
+                        <h4>Community</h4>
+                        <p>Building connections and fostering relationships within our community.</p>
+                        <a href="#" class="btn btn-primary-light btn-line">Coming Soon</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card-catogary group-card">
+                    <img class="media" src="~/images/category/category3.jpg" alt="Culture">
+                    <div class="group-info">
+                        <h4>Culture</h4>
+                        <p>Preserving and celebrating Ghanaian heritage and traditions.</p>
+                        <a href="#" class="btn btn-primary-light btn-line">Coming Soon</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .group-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .group-card .group-info {
+        padding: 20px;
+        background: white;
+    }
+
+    .group-card h4 {
+        margin-bottom: 10px;
+    }
+
+    .group-card p {
+        margin-bottom: 15px;
+        color: #666;
+    }
+</style>

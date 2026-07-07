@@ -1,0 +1,147 @@
+@model Post
+@{
+    ViewData["Title"] = Model == null ? "Create Post" : "Edit Post";
+    var isEdit = Model?.Id > 0;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="uil-newspaper"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" enctype="multipart/form-data">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="Enter post title" required />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Slug" class="form-admin-label">Slug</label>
+                    <input asp-for="Slug" class="form-admin-control" placeholder="url-friendly-slug" />
+                    <small class="text-muted">Leave empty to auto-generate from title</small>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Excerpt" class="form-admin-label">Excerpt</label>
+                    <textarea asp-for="Excerpt" class="form-admin-control" rows="3"
+                        placeholder="Brief summary of the post..."></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Content" class="form-admin-label">Content *</label>
+                    <textarea asp-for="Content" class="form-admin-control" rows="15"
+                        placeholder="Write your post content here..." required></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Publish Settings</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Status" class="form-admin-label">Status</label>
+                        <select asp-for="Status" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<ContentStatus>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Format" class="form-admin-label">Post Format</label>
+                        <select asp-for="Format" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<PostFormat>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured Post
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="AllowComments" type="checkbox" style="margin-right: 10px;" checked />
+                            Allow Comments
+                        </label>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Featured Image</h5>
+
+                    <div class="form-admin-group">
+                        <input asp-for="FeaturedImageUrl" class="form-admin-control"
+                            placeholder="Image URL or upload" />
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model?.FeaturedImageUrl))
+                    {
+                        <div class="mt-2">
+                            <img src="@Model.FeaturedImageUrl" alt="Featured"
+                                style="max-width: 100%; border-radius: 8px;" />
+                        </div>
+                    }
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">SEO Settings</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="MetaTitle" class="form-admin-label">Meta Title</label>
+                        <input asp-for="MetaTitle" class="form-admin-control" placeholder="SEO Title" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="MetaDescription" class="form-admin-label">Meta Description</label>
+                        <textarea asp-for="MetaDescription" class="form-admin-control" rows="2"
+                            placeholder="SEO Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="uil-save"></i> @(isEdit ? "Update Post" : "Create Post")
+            </button>
+
+            @if (!isEdit)
+            {
+                <button type="submit" name="status" value="PendingReview" class="btn-admin btn-admin-warning">
+                    <i class="uil-file-check-alt"></i> Save & Submit for Review
+                </button>
+            }
+
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="uil-arrow-left"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-generate slug from title
+        document.getElementById('Title').addEventListener('blur', function () {
+            var slugField = document.getElementById('Slug');
+            if (!slugField.value) {
+                slugField.value = this.value
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim();
+            }
+        });
+    </script>
+}

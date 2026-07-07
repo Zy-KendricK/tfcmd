@@ -1,0 +1,170 @@
+@model Job
+@{
+    ViewData["Title"] = Model?.Id > 0 ? "Edit Job" : "Post New Job";
+    var isEdit = Model?.Id > 0;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="uil-briefcase-alt"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Job Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="e.g. Senior Software Developer"
+                        required />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="CompanyName" class="form-admin-label">Company Name *</label>
+                            <input asp-for="CompanyName" class="form-admin-control" placeholder="Company name"
+                                required />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="CompanyLogoUrl" class="form-admin-label">Company Logo URL</label>
+                            <input asp-for="CompanyLogoUrl" class="form-admin-control"
+                                placeholder="https://company.com/logo.png" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Job Description *</label>
+                    <textarea asp-for="Description" class="form-admin-control" rows="10"
+                        placeholder="Full job description..." required></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="RequiredSkills" class="form-admin-label">Required Skills</label>
+                    <textarea asp-for="RequiredSkills" class="form-admin-control" rows="5"
+                        placeholder="Required skills (comma-separated)..."></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Benefits" class="form-admin-label">Benefits</label>
+                    <textarea asp-for="Benefits" class="form-admin-control" rows="4"
+                        placeholder="Benefits and perks..."></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="ApplicationUrl" class="form-admin-label">Application URL / Email</label>
+                    <input asp-for="ApplicationUrl" class="form-admin-control"
+                        placeholder="URL or email for applications" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Job Details</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Status" class="form-admin-label">Status</label>
+                        <select asp-for="Status" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<ContentStatus>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Type" class="form-admin-label">Job Type</label>
+                        <select asp-for="Type" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<JobType>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="RemoteOption" class="form-admin-label">Work Location</label>
+                        <select asp-for="RemoteOption" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<RemoteOption>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="ExperienceLevel" class="form-admin-label">Experience Level</label>
+                        <select asp-for="ExperienceLevel" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<ExperienceLevel>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Location" class="form-admin-label">Location</label>
+                        <input asp-for="Location" class="form-admin-control" placeholder="e.g. New York, NY" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="ApplicationDeadline" class="form-admin-label">Application Deadline</label>
+                        <input asp-for="ApplicationDeadline" type="date" class="form-admin-control" />
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Salary</h5>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-admin-group">
+                                <label asp-for="SalaryMin" class="form-admin-label">Min</label>
+                                <input asp-for="SalaryMin" type="number" class="form-admin-control" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-admin-group">
+                                <label asp-for="SalaryMax" class="form-admin-label">Max</label>
+                                <input asp-for="SalaryMax" type="number" class="form-admin-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="SalaryPeriod" class="form-admin-label">Period</label>
+                        <select asp-for="SalaryPeriod" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<SalaryPeriod>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="ShowSalary" type="checkbox" checked style="margin-right: 10px;" />
+                            Show salary to public
+                        </label>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Visibility</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured Job
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsUrgent" type="checkbox" style="margin-right: 10px;" />
+                            Urgent Hiring
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="uil-save"></i> @(isEdit ? "Update Job" : "Post Job")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="uil-arrow-left"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>

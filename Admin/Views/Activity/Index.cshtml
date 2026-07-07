@@ -1,0 +1,118 @@
+@model IEnumerable<Activity>
+@{
+    ViewData["Title"] = "Activity Feed";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-notebooks"></i> Activity Feed
+        </h4>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-3">
+                <select name="type" class="form-admin-control">
+                    <option value="">All Activity Types</option>
+                    <option value="StatusUpdate">Status Updates</option>
+                    <option value="PhotoUpload">Photo Uploads</option>
+                    <option value="VideoUpload">Video Uploads</option>
+                    <option value="NewPost">New Posts</option>
+                    <option value="Comment">Comments</option>
+                    <option value="Like">Likes</option>
+                    <option value="Share">Shares</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="date" class="form-admin-control" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="uil-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="activity-list">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var activity in Model)
+            {
+                <div class="activity-item d-flex mb-4 pb-4" style="border-bottom: 1px solid var(--theme-color-border);">
+                    <div class="activity-avatar me-3">
+                        <img src="@(activity.User?.AvatarUrl ?? "/wp-content/uploads/2020/07/logo-icon.svg")"
+                            alt="@activity.User?.DisplayName"
+                            style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
+                    </div>
+                    <div class="activity-content flex-grow-1">
+                        <div class="activity-header d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>@(activity.User?.DisplayName ?? "Unknown User")</strong>
+                                <span class="status-badge status-approved"
+                                    style="margin-left: 5px;">@activity.ActivityType</span>
+                            </div>
+                            <small class="text-muted">@activity.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                        </div>
+
+                        <div class="activity-body mt-2">
+                            @if (!string.IsNullOrEmpty(activity.Content))
+                            {
+                                <p class="mb-2">@activity.Content</p>
+                            }
+                        </div>
+
+                        <div class="activity-meta mt-2 d-flex gap-3">
+                            <span class="text-muted">
+                                <i class="uil-heart"></i> @(activity.Likes?.Count ?? 0) likes
+                            </span>
+                            <span class="text-muted">
+                                <i class="uil-comment"></i> @(activity.Comments?.Count ?? 0) comments
+                            </span>
+                            @if (activity.Privacy == ActivityPrivacy.Public)
+                            {
+                                <span class="text-success"><i class="uil-globe"></i> Public</span>
+                            }
+                            else
+                            {
+                                <span class="text-warning"><i class="uil-lock"></i> @activity.Privacy</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="activity-actions ms-3">
+                        <form asp-action="Delete" asp-route-id="@activity.Id" method="post"
+                            onsubmit="return confirm('Delete this activity?');">
+                            <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                <i class="uil-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="uil-notebooks" style="font-size: 64px; color: #ddd;"></i>
+                <p class="text-muted mt-3">No activity to display.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

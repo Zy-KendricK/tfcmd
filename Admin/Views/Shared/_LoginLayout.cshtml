@@ -1,0 +1,308 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Login</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&family=Quicksand:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- Beehive Theme CSS -->
+    <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/ionicons.min.css" />
+    <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/unicons.min.css" />
+    <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/beehive.min.css" />
+
+    <style>
+        :root {
+            --theme-body-font-family: 'Nunito Sans', sans-serif;
+            --theme-heading-font-family: 'Quicksand', sans-serif;
+            --theme-color-primary: #8224E3;
+            --theme-color-primary-rgb: 130, 36, 227;
+            --theme-color-primary-lightened: #a84aff;
+            --theme-color-primary-darkened: #7d1fde;
+            --social-template-top-bg: #383A45;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body {
+            font-family: var(--theme-body-font-family);
+            background-color: #383A45 !important;
+            min-height: 100vh;
+        }
+
+        .login-section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #383A45;
+            background-image: linear-gradient(135deg, #383A45 0%, #2a2b33 100%);
+        }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.03)"/></svg>') repeat;
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .login-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-content h2 {
+            font-family: var(--theme-heading-font-family);
+            font-weight: 700;
+            color: #fff;
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .login-content .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Beehive Login Element */
+        .beehive-login-element {
+            background: transparent;
+        }
+
+        .login-form-wrapper {
+            padding: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .user-name,
+        .pass {
+            position: relative;
+        }
+
+        .user-name .icon,
+        .pass .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .username-control,
+        .password-control {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-family: var(--theme-body-font-family);
+            transition: all 0.3s ease;
+        }
+
+        .username-control::placeholder,
+        .password-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .username-control:focus,
+        .password-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--theme-color-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(130, 36, 227, 0.3);
+        }
+
+        .form-options {
+            margin-bottom: 20px;
+        }
+
+        .forgetmenot {
+            text-align: left;
+        }
+
+        .forgetmenot label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .forgetmenot input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: var(--theme-color-primary);
+        }
+
+        .forgot-password {
+            text-align: right;
+        }
+
+        .forgot-password a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: var(--theme-color-primary-lightened);
+        }
+
+        .submit-login {
+            width: 100%;
+            padding: 14px 30px;
+            background: var(--theme-color-primary);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: var(--theme-body-font-family);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-login:hover {
+            background: var(--theme-color-primary-darkened);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(130, 36, 227, 0.4);
+        }
+
+        .beehive-login-result .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .beehive-login-result .alert-danger {
+            background: rgba(255, 0, 0, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .field-validation-error {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .screen-reader-text {
+            position: absolute !important;
+            clip: rect(1px, 1px, 1px, 1px);
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+        }
+
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+
+        .fadeInDown {
+            animation-name: fadeInDown;
+        }
+
+        .fadeInUp {
+            animation-name: fadeInUp;
+        }
+
+        @@keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -30px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 30px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="login-section">
+        <div class="login-content">
+            @RenderBody()
+        </div>
+    </section>
+
+    <script src="/wp-includes/js/jquery/jquery.min.js"></script>
+    <script src="/wp-content/themes/beehive/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

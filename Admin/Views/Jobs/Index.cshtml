@@ -1,0 +1,159 @@
+@model IEnumerable<Job>
+@{
+    ViewData["Title"] = "Jobs";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-briefcase-alt"></i> Manage Jobs
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="uil-plus"></i> Post Job
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
+                    placeholder="Search jobs..." />
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-admin-control">
+                    <option value="">All Status</option>
+                    <option value="Draft">Draft</option>
+                    <option value="PendingReview">Pending</option>
+                    <option value="Published">Published</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="type" class="form-admin-control">
+                    <option value="">All Types</option>
+                    <option value="FullTime">Full Time</option>
+                    <option value="PartTime">Part Time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Internship">Internship</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="uil-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Applications</th>
+                    <th>Expires</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var job in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@job.Title</strong>
+                                @if (job.IsFeatured)
+                                {
+                                    <span class="status-badge" style="background: gold; color: #333;">
+                                        <i class="uil-star"></i>
+                                    </span>
+                                }
+                                @if (job.IsUrgent)
+                                {
+                                    <span class="status-badge status-rejected">Urgent</span>
+                                }
+                            </td>
+                            <td>@job.CompanyName</td>
+                            <td>
+                                <small>@job.Location</small>
+                                @if (job.RemoteOption != RemoteOption.NoRemote)
+                                {
+                                    <br />
+                        
+                                    <span class="text-muted">@job.RemoteOption</span>
+                                }
+                            </td>
+                            <td><span class="status-badge status-approved">@job.Type</span></td>
+                            <td>
+                                @{
+                                    var statusClass = job.Status switch
+                                    {
+                                        ContentStatus.Draft => "status-draft",
+                                        ContentStatus.PendingReview => "status-pending",
+                                        ContentStatus.Published => "status-published",
+                                        _ => "status-draft"
+                                    };
+                                }
+                                <span class="status-badge @statusClass">@job.Status</span>
+                            </td>
+                            <td>
+                                <a asp-action="Applications" asp-route-id="@job.Id" class="text-decoration-none">
+                                    <i class="uil-file-alt"></i> @(job.Applications?.Count ?? 0)
+                                </a>
+                            </td>
+                            <td>
+                                @if (job.ApplicationDeadline.HasValue)
+                                {
+                                    var isExpired = job.ApplicationDeadline.Value < DateTime.UtcNow;
+                                    <span class="@(isExpired ? "text-danger" : "")">
+                                        @job.ApplicationDeadline.Value.ToString("MMM dd, yyyy")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No expiry</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@job.Id" class="btn-admin btn-admin-sm btn-admin-primary"
+                                    title="Edit">
+                                    <i class="uil-edit"></i>
+                                </a>
+                                @if (job.Status == ContentStatus.PendingReview)
+                                {
+                                    <form asp-action="Publish" asp-route-id="@job.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success" title="Publish">
+                                            <i class="uil-check"></i>
+                                        </button>
+                                    </form>
+                                }
+                                <form asp-action="Delete" asp-route-id="@job.Id" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Delete this job listing?');">
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                        <i class="uil-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <i class="uil-briefcase-alt" style="font-size: 48px; color: #ddd;"></i>
+                            <p class="text-muted mt-2">No jobs found.</p>
+                            <a asp-action="Create" class="btn-admin btn-admin-primary">Post a job</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

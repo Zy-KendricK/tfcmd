@@ -3,23 +3,60 @@
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<section class="section-space3 section-error section-hidden">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-xl-6 col-md-6 text-center mb-30">
+                <img src="~/images/error.png" alt="">
+            </div>
+            <div class="col-xl-4 col-md-6 mb-30">
+                <h1><span class="text-primary">404</span> <br>NOT FOUND</h1>
+                <p class="warning-text">Woops. Looks like this page doesn't exist.</p>
+                <p class="back-btn-text">back to <a class="btn-link" asp-controller="Home" asp-action="Index">home</a>
+                </p>
+                <img class="er-arrow" src="~/images/arrow.svg" alt="">
+                @if (Model?.ShowRequestId ?? false)
+                {
+                    <p class="mt-3"><small><strong>Request ID:</strong> <code>@Model.RequestId</code></small></p>
+                }
+            </div>
+        </div>
+    </div>
+</section>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
-
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+<section class="instagram-wrapper">
+    <h5 class="main-title">Find Us On Instagram</h5>
+    <div class="swiper swiper-insta">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post2.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post3.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post4.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post5.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post6.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post7.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post8.jpg" alt=""></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+            </div>
+        </div>
+        <a target="_blank" href="https://www.instagram.com/" class="btn btn-light btn-insta"><i
+                class="feather icon-instagram me-2"></i> Follow @@TFCMaryland</a>
+    </div>
+</section>

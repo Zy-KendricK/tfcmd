@@ -17,7 +17,8 @@ namespace Admin.Controllers
         // }
 
         [HttpPost]
-        public IActionResult Create(/* CharityModel model */)
+        public IActionResult Create( /* CharityModel model */
+        )
         {
             // Save new charity
             // TODO: Add model binding and validation
@@ -31,7 +32,9 @@ namespace Admin.Controllers
         // }
 
         [HttpPost]
-        public IActionResult Edit(int id /*, CharityModel model */)
+        public IActionResult Edit(
+            int id /*, CharityModel model */
+        )
         {
             // Update charity
             // TODO: Add model binding and validation

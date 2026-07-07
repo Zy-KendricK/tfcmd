@@ -1,0 +1,80 @@
+@model UserGroup
+@{
+    ViewData["Title"] = "Manage Permissions - " + Model.Name;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="uil-shield-check"></i> Permissions for @Model.Name
+        </h4>
+        <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+            <i class="uil-arrow-left"></i> Back to Groups
+        </a>
+    </div>
+
+    <form asp-action="UpdatePermissions" method="post">
+        <input type="hidden" name="groupId" value="@Model.Id" />
+
+        @{
+            var permissions = ViewBag.AllPermissions as IEnumerable<Permission>;
+            var assignedPermissions = Model.Permissions?.Select(gp => gp.PermissionId).ToList() ?? new List<int>();
+            var categories = permissions?.GroupBy(p => p.Category).OrderBy(g => g.Key);
+        }
+
+        @if (categories != null)
+        {
+            @foreach (var category in categories)
+            {
+                <div class="admin-card mb-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">
+                        <i class="uil-folder"></i> @category.Key
+                    </h5>
+
+                    <div class="row">
+                        @foreach (var permission in category)
+                        {
+                            <div class="col-md-4 mb-2">
+                                <label class="d-flex align-items-center" style="cursor: pointer;">
+                                    <input type="checkbox" name="permissionIds" value="@permission.Id"
+                                        checked="@assignedPermissions.Contains(permission.Id)" style="margin-right: 10px;" />
+                                    <div>
+                                        <strong>@permission.Name</strong>
+                                        @if (!string.IsNullOrEmpty(permission.Description))
+                                        {
+                                            <br />
+                            
+                                            <small class="text-muted">@permission.Description</small>
+                                        }
+                                    </div>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="uil-save"></i> Save Permissions
+            </button>
+            <button type="button" onclick="selectAll(true)" class="btn-admin btn-admin-success">
+                <i class="uil-check-square"></i> Select All
+            </button>
+            <button type="button" onclick="selectAll(false)" class="btn-admin" style="background: #e0e0e0;">
+                <i class="uil-square"></i> Deselect All
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function selectAll(checked) {
+            document.querySelectorAll('input[name="permissionIds"]').forEach(function (cb) {
+                cb.checked = checked;
+            });
+        }
+    </script>
+}

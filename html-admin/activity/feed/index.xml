@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Beehive Preview | Site-Wide Activity</title>
+	<link>https://mythemestore.com/beehive-preview/activity/</link>
+	<atom:link href="https://mythemestore.com/beehive-preview/activity/feed/" rel="self" type="application/rss+xml" />
+	<description>Activity feed for the entire site.</description>
+	<lastBuildDate>Sat, 27 Dec 2025 16:29:22 +0000</lastBuildDate>
+	<generator>https://buddypress.org/?v=</generator>
+	<language>en-US</language>
+	<ttl>30</ttl>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>2</sy:updateFrequency>
+	
+						<item>
+				<guid isPermaLink="false">5cbdc103230e2ed4528e7d47715c84f6</guid>
+				<title>Froy posted an update: the best</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17293/</link>
+				<pubDate>Sat, 27 Dec 2025 07:23:31 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>the best </p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">f9ec7d618485b503a787fef5b3367ebf</guid>
+				<title>Froy joined the group Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17292/</link>
+				<pubDate>Sat, 27 Dec 2025 04:18:48 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">1ed945b6e35edbf30ddbe0414c64c75e</guid>
+				<title>Froy joined the group Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17291/</link>
+				<pubDate>Tue, 23 Dec 2025 23:24:12 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">c9da464641b6f20c5b55db3c5f37ad56</guid>
+				<title>Froy posted an update: Hola</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17285/</link>
+				<pubDate>Mon, 22 Dec 2025 16:01:16 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>Hola </p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">6661d129431cea4bdbd805b43e50bb57</guid>
+				<title>Froy posted an update</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17284/</link>
+				<pubDate>Mon, 22 Dec 2025 07:49:30 +0000</pubDate>
+
+									<content:encoded><![CDATA[<div class="rtmedia-activity-container">
+<ul class="rtmedia-list rtm-activity-media-list rtmedia-activity-media-length-1 rtm-activity-video-list">
+<li class="rtmedia-list-item media-type-video">
+<div class="rtmedia-item-thumbnail">
+						<video src="https://mythemestore.com/beehive-preview/wp-content/uploads/rtMedia/users/3/2025/12/Cute-animal-videos-Bumblebee-SonMark-Company.mp4" width="320" height="240" class="wp-video-shortcode" id="rt_media_video_3738" controls="controls" preload="metadata"></video>
+					</div>
+<div class="rtmedia-item-title" style='max-width:320px;' >
+<p>							<a href="https://mythemestore.com/beehive-preview/members/user/media/3738/" rel="nofollow ugc"><br />
+								Cute animal videos, Bumblebee &#8211; SonMark Company<br />
+							</a></p></div>
+</li>
+</ul>
+</div>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">f845375b1e0c6ba3c59427e392502fe9</guid>
+				<title>Froy posted an update: test</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17283/</link>
+				<pubDate>Sun, 21 Dec 2025 23:42:31 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>test</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">a8e014968beb146b02a0015d67e9939e</guid>
+				<title>Froy posted an update in the group Photography</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17280/</link>
+				<pubDate>Fri, 19 Dec 2025 08:47:05 +0000</pubDate>
+
+									<content:encoded><![CDATA[<div class="rtmedia-activity-container">
+<div class="rtmedia-activity-text">
+					<span>New Photo</span>
+				</div>
+<ul class="rtmedia-list rtm-activity-media-list rtmedia-activity-media-length-1 rtm-activity-photo-list">
+<li class="rtmedia-list-item media-type-photo"><a href="https://mythemestore.com/beehive-preview/groups/photography/media/3737/" rel="nofollow ugc">
+<div class="rtmedia-item-thumbnail">
+							<img loading="lazy" alt="cheetah-002" src="https://mythemestore.com/beehive-preview/wp-content/uploads/rtMedia/groups/6/2025/12/cheetah-002-450x320.jpg" />
+						</div>
+<div class="rtmedia-item-title" style='max-width:320px;' >
+<p>								cheetah-002</p></div>
+<p>					</a></li>
+</ul>
+</div>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">3a1ae9cc53d883d0e303119572773714</guid>
+				<title>Froy posted an update</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17279/</link>
+				<pubDate>Fri, 19 Dec 2025 08:44:44 +0000</pubDate>
+
+									<content:encoded><![CDATA[<div class="rtmedia-activity-container">
+<div class="rtmedia-activity-text">
+					<span>Good Evening&#8230;.</span>
+				</div>
+<ul class="rtmedia-list rtm-activity-media-list rtmedia-activity-media-length-1 rtm-activity-photo-list">
+<li class="rtmedia-list-item media-type-photo"><a href="https://mythemestore.com/beehive-preview/members/user/media/3736/" rel="nofollow ugc">
+<div class="rtmedia-item-thumbnail">
+							<img loading="lazy" alt="download" src="https://mythemestore.com/beehive-preview/wp-content/uploads/rtMedia/users/3/2025/12/download.jpg" />
+						</div>
+<div class="rtmedia-item-title" style='max-width:320px;' >
+<p>								download</p></div>
+<p>					</a></li>
+</ul>
+</div>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">98b33e72de160d919ea9408d56a3f692</guid>
+				<title>Froy posted an update: fsdfsdfsfd</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17277/</link>
+				<pubDate>Wed, 17 Dec 2025 20:54:29 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>fsdfsdfsfd</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">802ab7914dfb8b8c8ee19933ab9219b4</guid>
+				<title>Froy&#039;s profile was updated</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17275/</link>
+				<pubDate>Mon, 15 Dec 2025 16:26:14 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">8d5f1aab078708b9eb44e88d68ba097a</guid>
+				<title>Froy joined the group Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17273/</link>
+				<pubDate>Sat, 13 Dec 2025 13:53:10 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">6963fd5c8da35ca56ff03e555b6e6cba</guid>
+				<title>Froy joined the group Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17272/</link>
+				<pubDate>Wed, 10 Dec 2025 22:37:31 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">70422d859a945f2f726a9e51c5e7736e</guid>
+				<title>Froy posted an update: am lost</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17271/</link>
+				<pubDate>Thu, 04 Dec 2025 17:16:10 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>am lost</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">524640521bb35233e94b7a37993cbc73</guid>
+				<title>Froy posted an update: https://mythemestore.com/beehive-preview/activity/</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17270/</link>
+				<pubDate>Thu, 04 Dec 2025 05:02:03 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p><a href="https://mythemestore.com/beehive-preview/activity/" rel="nofollow ugc">https://mythemestore.com/beehive-preview/activity/</a></p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">5a299177580e1420b3abc2c6820d65c8</guid>
+				<title>Froy joined the group Programmers</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17269/</link>
+				<pubDate>Wed, 03 Dec 2025 16:03:13 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">ec6b92b65d01b1a61bebe320333b7d73</guid>
+				<title>Froy posted an update in the group Photography: dsadsa</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17268/</link>
+				<pubDate>Tue, 02 Dec 2025 00:40:33 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>dsadsa</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">ae90ef26e9241436ac7e6ad461db47f7</guid>
+				<title>Froy joined the group Photography</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17267/</link>
+				<pubDate>Sat, 29 Nov 2025 23:00:39 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">16b7c69c9527014f00ddca0933d7f60f</guid>
+				<title>Froy posted an update: This is a cool website!</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17266/</link>
+				<pubDate>Fri, 28 Nov 2025 13:44:21 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>This is a cool website!</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">d75c79d7497b156aead5c17b16b00ea1</guid>
+				<title>Froy replied to the topic trying that forum... in the forum Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/groups/backpakers-club/forum/topic/trying-that-forum/page/2/#post-6712</link>
+				<pubDate>Fri, 21 Nov 2025 06:32:17 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>asdasdsa</p>
+]]></content:encoded>
+				
+									<slash:comments>1</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">0df8c01a5a6dd1c052b2987b1226f194</guid>
+				<title>Froy changed their profile picture</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17259/</link>
+				<pubDate>Thu, 20 Nov 2025 09:13:20 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">2480583a717af8fcbb45da62f8120b2f</guid>
+				<title>Froy&#039;s profile was updated</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17258/</link>
+				<pubDate>Thu, 20 Nov 2025 09:12:03 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">63681d937c9de50dba2c55c8fda80de5</guid>
+				<title>Froy posted an update: Quuiero que mi vida sea mas feliz</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17257/</link>
+				<pubDate>Thu, 20 Nov 2025 08:59:31 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>Quuiero que mi vida sea mas feliz</p>
+]]></content:encoded>
+				
+									<slash:comments>1</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">c612ce77f4428e46d77c21ac821b4cc9</guid>
+				<title>Froy posted an update: fsfsd</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17256/</link>
+				<pubDate>Wed, 19 Nov 2025 07:02:32 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>fsfsd</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">c96671fa9653e8ccfaeaa333399bf8c9</guid>
+				<title>Tanya Silver shared a post</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17255/</link>
+				<pubDate>Tue, 18 Nov 2025 16:21:00 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">b56a1c20f6c6ed2ed699e30d45bdeaf1</guid>
+				<title>Froy replied to the topic 独立屋二楼1个房间出租 $900 in the forum General Discussions</title>
+				<link>https://mythemestore.com/beehive-preview/forums/topic/%e7%8b%ac%e7%ab%8b%e5%b1%8b%e4%ba%8c%e6%a5%bc1%e4%b8%aa%e6%88%bf%e9%97%b4%e5%87%ba%e7%a7%9f-900/#post-6709</link>
+				<pubDate>Fri, 14 Nov 2025 13:56:35 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p><a href="https://youtu.be/2q4RwTIkYk0?si=KlN3dtHwInnuzhdU" rel="noopener" rel="nofollow ugc">Who&#8217;s Crying Now</a></p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">9ac68b9f6d531bd570ce11722a0dd4c9</guid>
+				<title>Froy&#039;s profile was updated</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17252/</link>
+				<pubDate>Fri, 14 Nov 2025 13:42:26 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">d6d8f18900e7acaca397c2daef0e6afd</guid>
+				<title>Froy posted an update</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17251/</link>
+				<pubDate>Fri, 14 Nov 2025 08:11:21 +0000</pubDate>
+
+									<content:encoded><![CDATA[<div class="rtmedia-activity-container">
+<div class="rtmedia-activity-text">
+					<span>If You Can Manage These 7 Tasks at Seventy, You’re Defying the Odds of Aging</p>
+<p>Most articles about aging are about numbers: cholesterol, BMI, blood pressure. But those don&#8217;t tell the full story.</p>
+<p>Longevity isn&#8217;t just about avoiding illness; it&#8217;s about maintaining quality of life. What if we measured aging differently?</p>
+<p>Not by what you&#8217;ve lost, but by what you&#8217;ve kept. If you&#8217;re still doing these seven things at 70, science says you&#8217;re well ahead of the curve. They might seem ordinary, but that&#8217;s exactly why they matter.</span>
+				</div>
+<ul class="rtmedia-list rtm-activity-media-list rtmedia-activity-media-length-1 rtm-activity-photo-list">
+<li class="rtmedia-list-item media-type-photo"><a href="https://mythemestore.com/beehive-preview/members/user/media/3733/" rel="nofollow ugc">
+<div class="rtmedia-item-thumbnail">
+							<img loading="lazy" alt="dreamstime_xxl_78548804" src="https://mythemestore.com/beehive-preview/wp-content/uploads/rtMedia/users/3/2025/11/dreamstime_xxl_78548804-450x320.jpg" />
+						</div>
+<div class="rtmedia-item-title" style='max-width:320px;' >
+<p>								dreamstime_xxl_78548804</p></div>
+<p>					</a></li>
+</ul>
+</div>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">ee8436821fa878235c1bbda7320dd232</guid>
+				<title>Froy changed their profile picture</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17250/</link>
+				<pubDate>Fri, 14 Nov 2025 07:30:46 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">129da0644afb5a35af27fe5ea51100ba</guid>
+				<title>Froy posted an update in the group Backpakers Club: xhfhhhdsh</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17246/</link>
+				<pubDate>Thu, 13 Nov 2025 13:38:46 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>xhfhhhdsh</p>
+]]></content:encoded>
+				
+									<slash:comments>4</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">482e07984214ee3d926b78c173ef26ca</guid>
+				<title>Froy replied to the topic 独立屋二楼1个房间出租 $900 in the forum General Discussions</title>
+				<link>https://mythemestore.com/beehive-preview/forums/topic/%e7%8b%ac%e7%ab%8b%e5%b1%8b%e4%ba%8c%e6%a5%bc1%e4%b8%aa%e6%88%bf%e9%97%b4%e5%87%ba%e7%a7%9f-900/#post-6707</link>
+				<pubDate>Thu, 13 Nov 2025 03:15:13 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>Ok</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">1dc4b86a9114042d2492ae09873e5acb</guid>
+				<title>Froy joined the group Climate Change</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17244/</link>
+				<pubDate>Thu, 13 Nov 2025 00:35:09 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">c9fb9d772ed8faf2eac0cb0f78b1865b</guid>
+				<title>Froy joined the group Programmers</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17242/</link>
+				<pubDate>Sun, 09 Nov 2025 17:21:54 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">5ad6a9aa886539c949dd6df99ebd3dd8</guid>
+				<title>Froy joined the group Climate Change</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17241/</link>
+				<pubDate>Sun, 09 Nov 2025 04:20:47 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">20224c02b8ac2c91ef91e7061a1d333e</guid>
+				<title>Froy posted an update: hello</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17237/</link>
+				<pubDate>Fri, 07 Nov 2025 13:42:12 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>hello</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">5a973223e29d327cdb63f7cdd40f2045</guid>
+				<title>Froy posted an update: Changed my last name to Cooper</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17235/</link>
+				<pubDate>Fri, 07 Nov 2025 11:40:49 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>Changed my last name to Cooper</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">834bfffe06362fcd3b852de4961ea920</guid>
+				<title>Froy posted an update in the group Gamers: hello my name</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17232/</link>
+				<pubDate>Fri, 07 Nov 2025 11:30:25 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>hello my name</p>
+]]></content:encoded>
+				
+									<slash:comments>3</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">b043281e61402ef80bb4c678bc336708</guid>
+				<title>Froy joined the group Gamers</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17231/</link>
+				<pubDate>Fri, 07 Nov 2025 11:30:00 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">2dc84fd75a611342f931996a5292d56f</guid>
+				<title>Froy joined the group Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17230/</link>
+				<pubDate>Thu, 06 Nov 2025 09:21:44 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">9f1b972ed98ba0cf2ffedca043e90050</guid>
+				<title>Alice shared a post</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17228/</link>
+				<pubDate>Mon, 03 Nov 2025 15:42:55 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">bfebde1cdf504b5b1ff75752b6b89d49</guid>
+				<title>Froy posted an update: asdasd</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17224/</link>
+				<pubDate>Sun, 02 Nov 2025 18:04:33 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>asdasd</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">f933ca66a13fbe985f5616e17359da2c</guid>
+				<title>Froy joined the group Backpakers Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17220/</link>
+				<pubDate>Sat, 01 Nov 2025 22:29:39 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">0700b785715b8dfd63a72b2e7848dbda</guid>
+				<title>Froy joined the group Gamers</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17217/</link>
+				<pubDate>Sat, 01 Nov 2025 19:36:14 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">e9ac257216a04d7dc0852b1f2f9785c3</guid>
+				<title>Froy posted an update in the group Gamers: @jonathon g</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17216/</link>
+				<pubDate>Sat, 01 Nov 2025 19:34:07 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p><a href='https://mythemestore.com/beehive-preview/members/jonathon/' rel="nofollow ugc">@jonathon</a> g</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">4ae590f16b92af3b08434b40faffd53e</guid>
+				<title>Alice shared a post</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17215/</link>
+				<pubDate>Sat, 01 Nov 2025 19:28:00 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">76d72783b49cac48423717d1254ab1bd</guid>
+				<title>Froy joined the group Programmers</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17208/</link>
+				<pubDate>Thu, 30 Oct 2025 00:54:06 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">4e71e0080ef2d6e48669a4230c13888d</guid>
+				<title>Froy posted an update: hi 4$ @alexis</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17206/</link>
+				<pubDate>Wed, 29 Oct 2025 04:29:05 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>hi 4$ <a href='https://mythemestore.com/beehive-preview/members/alexis/' rel="nofollow ugc">@alexis</a> </p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">f4d69750015aaed0d5d2c940e08bb4c0</guid>
+				<title>Froy posted an update in the group Cycling Club: fffff fgg #aaa</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17198/</link>
+				<pubDate>Mon, 27 Oct 2025 14:20:29 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>fffff fgg <a href="https://mythemestore.com/beehive-preview/activity/?activity_search=%23aaa" class="hashtag" rel="nofollow">#aaa</a></p>
+]]></content:encoded>
+				
+									<slash:comments>1</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">47bb171098acc89149db66f69b41456c</guid>
+				<title>Froy posted an update: uybuhbiujoik</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17194/</link>
+				<pubDate>Fri, 24 Oct 2025 09:04:48 +0000</pubDate>
+
+									<content:encoded><![CDATA[<p>uybuhbiujoik</p>
+]]></content:encoded>
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">c29cb973c02da05110b2fe3282eab19e</guid>
+				<title>Froy joined the group Cycling Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17193/</link>
+				<pubDate>Wed, 22 Oct 2025 03:19:01 +0000</pubDate>
+
+				
+									<slash:comments>1</slash:comments>
+				
+							</item>
+					<item>
+				<guid isPermaLink="false">624b5ede08e0fa76ae8a1337445208d5</guid>
+				<title>Froy joined the group Cycling Club</title>
+				<link>https://mythemestore.com/beehive-preview/activity/p/17190/</link>
+				<pubDate>Sat, 18 Oct 2025 20:31:29 +0000</pubDate>
+
+				
+									<slash:comments>0</slash:comments>
+				
+							</item>
+		
+	</channel>
+</rss>

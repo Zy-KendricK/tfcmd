@@ -1,26 +1,197 @@
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Dashboard";
 }
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-        <div class="text-blue-600 text-3xl font-bold mb-2">24</div>
-        <div class="text-gray-600">Charity Events</div>
+
+<!-- Stats Row -->
+<div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="stat-card">
+            <div class="stat-number">@(ViewBag.TotalMembers ?? 0)</div>
+            <div class="stat-label"><i class="uil-users-alt"></i> Total Members</div>
+        </div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-        <div class="text-purple-600 text-3xl font-bold mb-2">128</div>
-        <div class="text-gray-600">Posts</div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="stat-card success">
+            <div class="stat-number">@(ViewBag.TotalPosts ?? 0)</div>
+            <div class="stat-label"><i class="uil-newspaper"></i> Blog Posts</div>
+        </div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-        <div class="text-green-600 text-3xl font-bold mb-2">8</div>
-        <div class="text-gray-600">Contacts</div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="stat-card warning">
+            <div class="stat-number">@(ViewBag.TotalJobs ?? 0)</div>
+            <div class="stat-label"><i class="uil-briefcase-alt"></i> Active Jobs</div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="stat-card info">
+            <div class="stat-number">@(ViewBag.TotalProducts ?? 0)</div>
+            <div class="stat-label"><i class="uil-shopping-trolley"></i> Products</div>
+        </div>
     </div>
 </div>
-<div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-bold mb-4">Recent Activity</h2>
-    <ul class="divide-y divide-gray-200">
-        <li class="py-2">New charity event added</li>
-        <li class="py-2">Post published: "Summer Gala"</li>
-        <li class="py-2">Contact form submitted by John Doe</li>
-    </ul>
+
+<div class="row">
+    <!-- Recent Activity -->
+    <div class="col-lg-8 mb-4">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h4 class="admin-card-title">
+                    <i class="uil-clock-three"></i> Recent Activity
+                </h4>
+            </div>
+            <div class="activity-list">
+                @if (ViewBag.RecentActivities != null)
+                {
+                    @foreach (var activity in ViewBag.RecentActivities)
+                    {
+                        <div class="activity-item d-flex align-items-start mb-3 pb-3"
+                            style="border-bottom: 1px solid var(--theme-color-border);">
+                            <div class="activity-avatar me-3">
+                                <img src="@(activity.User?.AvatarUrl ?? "/wp-content/uploads/2020/07/logo-icon.svg")" alt=""
+                                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                            </div>
+                            <div class="activity-content flex-grow-1">
+                                <p class="mb-1">
+                                    <strong>@(activity.User?.DisplayName ?? "System")</strong>
+                                    @activity.Content
+                                </p>
+                                <small class="text-muted">
+                                    <i class="uil-clock"></i> @activity.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                </small>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted text-center py-4">
+                        <i class="uil-info-circle"></i> No recent activity to display.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-lg-4 mb-4">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h4 class="admin-card-title">
+                    <i class="uil-bolt-alt"></i> Quick Actions
+                </h4>
+            </div>
+            <div class="quick-actions">
+                <a asp-controller="Blog" asp-action="Create" class="btn-admin btn-admin-primary d-block mb-2">
+                    <i class="uil-plus"></i> New Blog Post
+                </a>
+                <a asp-controller="Jobs" asp-action="Create" class="btn-admin btn-admin-success d-block mb-2">
+                    <i class="uil-plus"></i> Post New Job
+                </a>
+                <a asp-controller="Adverts" asp-action="Create" class="btn-admin btn-admin-warning d-block mb-2">
+                    <i class="uil-plus"></i> Create Advert
+                </a>
+                <a asp-controller="Shop" asp-action="Create" class="btn-admin btn-admin-primary d-block mb-2">
+                    <i class="uil-plus"></i> Add Product
+                </a>
+            </div>
+        </div>
+
+        <!-- Pending Reviews -->
+        <div class="admin-card mt-4">
+            <div class="admin-card-header">
+                <h4 class="admin-card-title">
+                    <i class="uil-clipboard-notes"></i> Pending Reviews
+                </h4>
+            </div>
+            <div class="pending-list">
+                @if (ViewBag.PendingCount > 0)
+                {
+                    <div class="pending-item d-flex justify-content-between align-items-center mb-2">
+                        <span>Blog Posts</span>
+                        <span class="status-badge status-pending">@ViewBag.PendingPosts</span>
+                    </div>
+                    <div class="pending-item d-flex justify-content-between align-items-center mb-2">
+                        <span>Jobs</span>
+                        <span class="status-badge status-pending">@ViewBag.PendingJobs</span>
+                    </div>
+                    <div class="pending-item d-flex justify-content-between align-items-center mb-2">
+                        <span>Adverts</span>
+                        <span class="status-badge status-pending">@ViewBag.PendingAdverts</span>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center py-3">
+                        <i class="uil-check-circle"></i> No pending reviews
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Status Overview -->
+<div class="row">
+    <div class="col-12">
+        <div class="admin-card">
+            <div class="admin-card-header d-flex justify-content-between align-items-center">
+                <h4 class="admin-card-title">
+                    <i class="uil-chart-bar"></i> Content Overview
+                </h4>
+            </div>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Content Type</th>
+                            <th>Draft</th>
+                            <th>Pending</th>
+                            <th>Published</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="uil-newspaper"></i> Blog Posts</td>
+                            <td><span class="status-badge status-draft">@(ViewBag.PostsDraft ?? 0)</span></td>
+                            <td><span class="status-badge status-pending">@(ViewBag.PostsPending ?? 0)</span></td>
+                            <td><span class="status-badge status-published">@(ViewBag.PostsPublished ?? 0)</span></td>
+                            <td><strong>@(ViewBag.TotalPosts ?? 0)</strong></td>
+                            <td><a asp-controller="Blog" asp-action="Index"
+                                    class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
+                        </tr>
+                        <tr>
+                            <td><i class="uil-briefcase-alt"></i> Jobs</td>
+                            <td><span class="status-badge status-draft">@(ViewBag.JobsDraft ?? 0)</span></td>
+                            <td><span class="status-badge status-pending">@(ViewBag.JobsPending ?? 0)</span></td>
+                            <td><span class="status-badge status-published">@(ViewBag.JobsPublished ?? 0)</span></td>
+                            <td><strong>@(ViewBag.TotalJobs ?? 0)</strong></td>
+                            <td><a asp-controller="Jobs" asp-action="Index"
+                                    class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
+                        </tr>
+                        <tr>
+                            <td><i class="uil-tv-retro"></i> Adverts</td>
+                            <td><span class="status-badge status-draft">@(ViewBag.AdvertsDraft ?? 0)</span></td>
+                            <td><span class="status-badge status-pending">@(ViewBag.AdvertsPending ?? 0)</span></td>
+                            <td><span class="status-badge status-published">@(ViewBag.AdvertsPublished ?? 0)</span></td>
+                            <td><strong>@(ViewBag.TotalAdverts ?? 0)</strong></td>
+                            <td><a asp-controller="Adverts" asp-action="Index"
+                                    class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
+                        </tr>
+                        <tr>
+                            <td><i class="uil-shopping-trolley"></i> Products</td>
+                            <td><span class="status-badge status-draft">@(ViewBag.ProductsDraft ?? 0)</span></td>
+                            <td><span class="status-badge status-pending">@(ViewBag.ProductsPending ?? 0)</span></td>
+                            <td><span class="status-badge status-published">@(ViewBag.ProductsPublished ?? 0)</span>
+                            </td>
+                            <td><strong>@(ViewBag.TotalProducts ?? 0)</strong></td>
+                            <td><a asp-controller="Shop" asp-action="Index"
+                                    class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

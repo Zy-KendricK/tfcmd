@@ -1,48 +1,511 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
     Layout = null;
+    var user = await UserManager.GetUserAsync(User);
+    var displayName = user?.DisplayName ?? user?.UserName ?? "Admin";
+    var avatar = user?.AvatarUrl ?? "/wp-content/uploads/2020/07/logo-icon.svg";
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     <title>@ViewData["Title"] - Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Beehive Theme CSS -->
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/ionicons.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/unicons.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/mscrollbar.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/animate.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/hiraku.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/beehive.min.css' />
+    <link rel='stylesheet' href='~/wp-includes/css/dashicons.min.css' />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700|Quicksand:700" rel="stylesheet">
+
+    <style>
+        :root {
+            --theme-body-font-family: Nunito Sans;
+            --theme-body-font-size: 14px;
+            --theme-body-font-weight: 400;
+            --theme-body-line-height: 26px;
+            --theme-heading-font-family: Quicksand;
+            --theme-heading-font-weight: 700;
+            --theme-color-primary: #8224E3;
+            --theme-color-primary-rgb: 130, 36, 227;
+            --theme-color-primary-lightened: #a84aff;
+            --theme-color-primary-darkened: #7d1fde;
+            --theme-color-text: #626276;
+            --theme-color-heading: #4f515b;
+            --theme-color-anchor: #29292d;
+            --theme-color-border: #e7edf2;
+            --theme-color-success: #2ED573;
+            --theme-color-warn: #FFA500;
+            --theme-color-error: #FF0000;
+            --social-template-top-bg: #383A45;
+        }
+
+        .admin-content-wrapper {
+            padding: 20px;
+            background: #f5f5f5;
+            min-height: calc(100vh - 60px);
+        }
+
+        .admin-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-card-header {
+            border-bottom: 1px solid var(--theme-color-border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-card-title {
+            font-family: var(--theme-heading-font-family);
+            font-weight: var(--theme-heading-font-weight);
+            color: var(--theme-color-heading);
+            margin: 0;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--theme-color-heading);
+            border-bottom: 2px solid var(--theme-color-border);
+        }
+
+        .admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--theme-color-border);
+            color: var(--theme-color-text);
+        }
+
+        .admin-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-admin {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-admin-primary {
+            background: var(--theme-color-primary);
+            color: #fff;
+        }
+
+        .btn-admin-primary:hover {
+            background: var(--theme-color-primary-darkened);
+            color: #fff;
+        }
+
+        .btn-admin-success {
+            background: var(--theme-color-success);
+            color: #fff;
+        }
+
+        .btn-admin-warning {
+            background: var(--theme-color-warn);
+            color: #fff;
+        }
+
+        .btn-admin-danger {
+            background: var(--theme-color-error);
+            color: #fff;
+        }
+
+        .btn-admin-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+
+        .form-admin-group {
+            margin-bottom: 20px;
+        }
+
+        .form-admin-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--theme-color-heading);
+        }
+
+        .form-admin-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--theme-color-border);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-admin-control:focus {
+            border-color: var(--theme-color-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(130, 36, 227, 0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-published {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--theme-color-primary), var(--theme-color-primary-lightened));
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, var(--theme-color-success), #48ef8d);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, var(--theme-color-warn), #ffcb26);
+        }
+
+        .stat-card.info {
+            background: linear-gradient(135deg, #17a2b8, #4dc9e6);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            font-family: var(--theme-heading-font-family);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .panel-menu .nav-link-text {
+            margin-left: 10px;
+        }
+
+        .panel-menu i {
+            font-size: 18px;
+        }
+
+        .navbar-panel li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--theme-color-text);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-panel li a:hover,
+        .navbar-panel li.active a {
+            background: rgba(130, 36, 227, 0.1);
+            color: var(--theme-color-primary);
+        }
+
+        .navbar-panel li.active a {
+            background: var(--theme-color-primary);
+            color: #fff;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg flex flex-col">
-            <div class="p-6 flex items-center justify-center border-b">
-                <img src="/assets/images/favicon.png" alt="Logo" class="w-10 h-10 mr-2">
-                <span class="font-bold text-lg text-blue-700">TFC Admin</span>
-            </div>
-            <nav class="flex-1 p-4">
-                <a href="/Dashboard"
-                    class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700 font-semibold">Dashboard</a>
-                <a href="/Charity" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Charity</a>
-                <a href="/Post" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Posts</a>
-                <a href="/Contact" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Contact</a>
-            </nav>
-            <div class="p-4 border-t text-center text-gray-400 text-xs">&copy; 2025 TFC Admin</div>
-        </aside>
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-            <!-- Topbar -->
-            <header class="bg-white shadow p-4 flex items-center justify-between">
-                <div class="font-semibold text-blue-700">@ViewData["Title"]</div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-gray-600">Admin</span>
-                    <img src="/assets/images/favicon.png" class="w-8 h-8 rounded-full" alt="User">
-                </div>
-            </header>
-            <main class="flex-1 p-6">
-                @RenderBody()
-            </main>
+<body class="buddypress bp-nouveau theme-beehive beehive-social-layout panel-expanded has-page-sidebar">
+    <!-- Preloader -->
+    <div class="beehive-preloader preloader-2" style="display: none;">
+        <div class="loader-wrapper">
+            <img src="~/wp-content/uploads/2020/07/logo-icon.svg" alt="" />
+            <div class="loader-bar"></div>
+            <div class="loading-text">Loading...</div>
         </div>
     </div>
+
+    <!-- Side Panel -->
+    <div id="beehive-social-panel" class="beehive-social-panel">
+        <div class="inner-panel ass-scrollbar">
+            <div class="panel-block dark">
+                <a href="~/Dashboard" class="panel-logo item">
+                    <img src="~/wp-content/themes/beehive/assets/images/logo-vertical.svg" alt="Admin Panel" />
+                </a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="my-card item">
+                        <div class="user-avatar" style="text-align: center; margin-bottom: 15px;">
+                            <img src="@avatar" alt="@displayName"
+                                style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--theme-color-primary);" />
+                        </div>
+                        <h5 style="text-align: center; color: #fff; margin-bottom: 5px;">@displayName</h5>
+                        <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px;">
+                            @if (user?.IsSuperAdmin == true)
+                            {
+                                <span class="status-badge" style="background: var(--theme-color-primary);">Super Admin</span>
+                            }
+                            else
+                            {
+                                <span>Administrator</span>
+                            }
+                        </p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm">
+                                    <i class="uil-sign-out-alt"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="panel-block light">
+                <div class="panel-menu item">
+                    <ul class="navbar-panel">
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                            <a asp-controller="Dashboard" asp-action="Index">
+                                <i class="uil-estate"></i>
+                                <span class="nav-link-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Members" ? "active" : "")">
+                            <a asp-controller="Members" asp-action="Index">
+                                <i class="uil-users-alt"></i>
+                                <span class="nav-link-text">Members</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Groups" ? "active" : "")">
+                            <a asp-controller="Groups" asp-action="Index">
+                                <i class="uil-layer-group"></i>
+                                <span class="nav-link-text">User Groups</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" ? "active" : "")">
+                            <a asp-controller="Activity" asp-action="Index">
+                                <i class="uil-notebooks"></i>
+                                <span class="nav-link-text">Activity</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "SocialGroups" ? "active" : "")">
+                            <a asp-controller="SocialGroups" asp-action="Index">
+                                <i class="uil-user-plus"></i>
+                                <span class="nav-link-text">Social Groups</span>
+                            </a>
+                        </li>
+                        <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Blog" ? "active" : "")">
+                            <a asp-controller="Blog" asp-action="Index">
+                                <i class="uil-newspaper"></i>
+                                <span class="nav-link-text">Blog Posts</span>
+                            </a>
+                        </li>
+                        <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Jobs" ? "active" : "")">
+                            <a asp-controller="Jobs" asp-action="Index">
+                                <i class="uil-briefcase-alt"></i>
+                                <span class="nav-link-text">Jobs</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Adverts" ? "active" : "")">
+                            <a asp-controller="Adverts" asp-action="Index">
+                                <i class="uil-tv-retro"></i>
+                                <span class="nav-link-text">Adverts</span>
+                            </a>
+                        </li>
+                        <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Shop" ? "active" : "")">
+                            <a asp-controller="Shop" asp-action="Index">
+                                <i class="uil-shopping-trolley"></i>
+                                <span class="nav-link-text">Shop</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Charity" ? "active" : "")">
+                            <a asp-controller="Charity" asp-action="Index">
+                                <i class="uil-heart"></i>
+                                <span class="nav-link-text">Charity</span>
+                            </a>
+                        </li>
+                        <li
+                            class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active" : "")">
+                            <a asp-controller="Contact" asp-action="Index">
+                                <i class="uil-envelope"></i>
+                                <span class="nav-link-text">Messages</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="beehive-page" class="site">
+        <!-- Header -->
+        <header id="sochead" class="site-header social-header user-nav-active">
+            <nav class="navbar beehive-navbar social fixed-top">
+                <div class="container">
+                    <div class="admin-header-title" style="color: #fff; font-weight: 600;">
+                        <i class="uil-apps" style="margin-right: 10px;"></i>
+                        @ViewData["Title"]
+                    </div>
+
+                    <ul id="navbar-user" class="navbar-nav navbar-user">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    <img src="@avatar" style="width: 32px; height: 32px; border-radius: 50%;"
+                                        alt="@displayName" />
+                                    <span style="margin-left: 8px;">@displayName</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" asp-controller="Dashboard" asp-action="Profile">
+                                        <i class="uil-user"></i> Profile
+                                    </a>
+                                    <a class="dropdown-item" asp-controller="Dashboard" asp-action="Settings">
+                                        <i class="uil-cog"></i> Settings
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="uil-sign-out-alt"></i> Logout
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a href="~/Account/Login" class="nav-link login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div id="content" class="site-content">
+            <div id="primary" class="content-area">
+                <div class="layout social">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-main">
+                                <main id="main" class="main-content">
+                                    <div class="admin-content-wrapper">
+                                        <!-- Flash Messages -->
+                                        @if (TempData["Success"] != null)
+                                        {
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <i class="uil-check-circle"></i> @TempData["Success"]
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        }
+                                        @if (TempData["Error"] != null)
+                                        {
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <i class="uil-times-circle"></i> @TempData["Error"]
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        }
+
+                                        @RenderBody()
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer"
+            style="background: #383A45; color: rgba(255,255,255,0.7); padding: 20px; text-align: center;">
+            <p style="margin: 0;">&copy; @DateTime.Now.Year Admin Dashboard. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/wp-includes/js/jquery/jquery.min.js"></script>
+    <script src="~/wp-content/themes/beehive/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="~/wp-content/themes/beehive/assets/js/mscrollbar/mscrollbar.min.js"></script>
+    <script src="~/wp-content/themes/beehive/assets/js/beehive.min.js"></script>
+
+    <script>
+        // Hide preloader
+        $(document).ready(function () {
+            $('.beehive-preloader').fadeOut();
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            $('.alert').fadeOut();
+        }, 5000);
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 
 </html>
