@@ -45,8 +45,9 @@
 
             <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
                 <h5 class="mb-0">Causes (@(Model.Projects?.Count ?? 0))</h5>
-                <a asp-action="CreateProject" asp-route-charityId="@Model.Id" class="btn-admin btn-admin-sm btn-admin-primary">
-                    <i class="hgi-add-square"></i> Add Cause
+                <a asp-action="CreateProject" asp-route-charityId="@Model.Id"
+                   class="btn-admin btn-admin-sm btn-admin-primary">
+                    <i class="hgi-add-02"></i> Add Cause
                 </a>
             </div>
             <div class="table-responsive">
@@ -75,113 +76,124 @@
                                             <span class="status-badge" style="background: gold; color: #333;">Featured</span>
                                         }
                                     </td>
-                                    <td>@(project.GoalAmount.HasValue ? $"{project.Currency} {project.GoalAmount:N0}" : "—")</td>
-                                    <td>@(project.CurrentAmount.HasValue ? $"{project.Currency} {project.CurrentAmount:N0}" : "—")</td>
-                                    <td>@project.DonorCount</td>
-                                    <td><span class="status-badge status-@project.Status.ToString().ToLower()">@project.Status</span></td>
-                                    <td>
-                                        @if (project.IsPublishedToWeb)
-                                        {
-                                            <span class="status-badge status-approved">Live</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">Hidden</span>
-                                        }
+                                    <td>@(project.GoalAmount.HasValue ? $"{project.Currency} {project.GoalAmount:N0}" : "—")
                                     </td>
-                                    <td>
-                                        <a asp-action="EditProject" asp-route-id="@project.Id"
-                                           class="btn-admin btn-admin-sm btn-admin-primary" title="Edit">
-                                            <i class="hgi-edit-01"></i>
-                                        </a>
-                                        @if (project.IsPublishedToWeb)
-                                        {
-                                            <form asp-action="UnpublishProject" asp-route-id="@project.Id" method="post" style="display: inline;">
+                                    <td>@(project.CurrentAmount.HasValue ? $"{project.Currency} {project.CurrentAmount:N0}" :
+                                                                                                               "—")</td>
+                                        <td>@project.DonorCount</td>
+                                        <td><span
+                                            class="status-badge status-@project.Status.ToString().ToLower()">@project.Status</span>
+                                        </td>
+                                        <td>
+                                            @if (project.IsPublishedToWeb)
+                                            {
+                                                <span class="status-badge status-approved">Live</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Hidden</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-action="EditProject" asp-route-id="@project.Id"
+                                               class="btn-admin btn-admin-sm btn-admin-primary" title="Edit">
+                                                <i class="hgi-edit-01"></i>
+                                            </a>
+                                            @if (project.IsPublishedToWeb)
+                                            {
+                                                <form asp-action="UnpublishProject" asp-route-id="@project.Id" method="post"
+                                                      style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn-admin btn-admin-sm" style="background: #ffc107;"
+                                                            title="Remove from website">
+                                                        <i class="hgi-stroke hgi-no-internet"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form asp-action="PublishProject" asp-route-id="@project.Id" method="post"
+                                                      style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn-admin btn-admin-sm"
+                                                            style="background: var(--theme-color-success); color: #fff;"
+                                                            title="Publish to website">
+                                                        <i class="hgi-globe"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            <form asp-action="DeleteProject" asp-route-id="@project.Id" method="post"
+                                                  style="display: inline;" onsubmit="return confirm('Delete this cause?');">
                                                 @Html.AntiForgeryToken()
-                                                <button type="submit" class="btn-admin btn-admin-sm" style="background: #ffc107;" title="Remove from website">
-                                                    <i class="hgi-stroke-left hgi-no-internet"></i>
+                                                <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger"
+                                                        title="Delete">
+                                                    <i class="hgi-delete-01"></i>
                                                 </button>
                                             </form>
-                                        }
-                                        else
-                                        {
-                                            <form asp-action="PublishProject" asp-route-id="@project.Id" method="post" style="display: inline;">
-                                                @Html.AntiForgeryToken()
-                                                <button type="submit" class="btn-admin btn-admin-sm" style="background: var(--theme-color-success); color: #fff;" title="Publish to website">
-                                                    <i class="hgi-globe"></i>
-                                                </button>
-                                            </form>
-                                        }
-                                        <form asp-action="DeleteProject" asp-route-id="@project.Id" method="post" style="display: inline;"
-                                              onsubmit="return confirm('Delete this cause?');">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
-                                                <i class="hgi-delete-01"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
                         else
-                        {
-                            <tr>
-                                <td colspan="7" class="text-center text-muted py-4">No causes yet. Add one to show it on the website charity page.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4">No causes yet. Add one to show it on the
+                                        website charity page.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-@section Sidebar {
-    <div class="widget">
-        <h5 class="widget-title">Contact</h5>
-        <ul class="item-list">
-            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
-                <span><i class="hgi-globe"></i> Website</span>
-                <strong>@(Model.Website ?? "—")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
-                <span><i class="hgi-mail-01"></i> Email</span>
-                <strong>@(Model.Email ?? "—")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
-                <span><i class="hgi-call-locked"></i> Phone</span>
-                <strong>@(Model.Phone ?? "—")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
-                <span><i class="hgi-location-01"></i> Address</span>
-                <strong>@(Model.Address ?? "—")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
-                <span><i class="hgi-calendar-01"></i> Created</span>
-                <strong>@Model.CreatedAt.ToString("MMM dd, yyyy")</strong>
-            </li>
-        </ul>
-    </div>
+        @section Sidebar {
+            <div class="widget">
+                <h5 class="widget-title">Contact</h5>
+                <ul class="item-list">
+                    <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                        <span><i class="hgi-globe"></i> Website</span>
+                        <strong>@(Model.Website ?? "—")</strong>
+                    </li>
+                    <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                        <span><i class="hgi-mail-01"></i> Email</span>
+                        <strong>@(Model.Email ?? "—")</strong>
+                    </li>
+                    <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                        <span><i class="hgi-call-locked"></i> Phone</span>
+                        <strong>@(Model.Phone ?? "—")</strong>
+                    </li>
+                    <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                        <span><i class="hgi-location-01"></i> Address</span>
+                        <strong>@(Model.Address ?? "—")</strong>
+                    </li>
+                    <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                        <span><i class="hgi-calendar-01"></i> Created</span>
+                        <strong>@Model.CreatedAt.ToString("MMM dd, yyyy")</strong>
+                    </li>
+                </ul>
+            </div>
 
-    <div class="widget">
-        <h5 class="widget-title">Website Review</h5>
-        @if (Model.IsPublishedToWeb)
-        {
-            <form asp-action="Unpublish" asp-route-id="@Model.Id" method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn-admin btn-admin-warning w-100">
-                    <i class="hgi-stroke-left hgi-no-internet"></i> Unpublish
-                </button>
-            </form>
+            <div class="widget">
+                <h5 class="widget-title">Website Review</h5>
+                @if (Model.IsPublishedToWeb)
+                {
+                    <form asp-action="Unpublish" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-admin btn-admin-warning w-100">
+                            <i class="hgi-stroke hgi-no-internet"></i> Unpublish
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="Publish" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-admin btn-admin-success w-100">
+                            <i class="hgi-globe"></i> Publish
+                        </button>
+                    </form>
+                }
+            </div>
         }
-        else
-        {
-            <form asp-action="Publish" asp-route-id="@Model.Id" method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn-admin btn-admin-success w-100">
-                    <i class="hgi-globe"></i> Publish
-                </button>
-            </form>
-        }
-    </div>
-}

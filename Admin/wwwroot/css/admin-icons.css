@@ -1,16 +1,17 @@
 /* Admin icon set — official Hugeicons "stroke rounded" font (https://hugeicons.com/icons).
    Self-hosted so icons render identically on every OS/browser.
-   Existing markup keeps working: the uil-* classes below are mapped to Hugeicons glyphs.
-   New markup can use any of the 4,126 Hugeicons directly: <i class="hgi-stroke hgi-home-01"></i>
-   (full class list: /fonts/hugeicons/hgi-stroke-rounded.css) */
+   Existing markup keeps working: the legacy uil-* classes below are mapped to Hugeicons glyphs,
+   and the shorter hgi-* classes are also supported by appending the required hgi-stroke class.
+   New markup can use any of the 4,126 Hugeicons directly: <i class="hgi-stroke hgi-home-01"></i> */
 
 @font-face {
-    font-family: "hgi-stroke-rounded";
-    src: url("../fonts/hugeicons/hgi-stroke-rounded.woff2") format("woff2"),
-         url("../fonts/hugeicons/hgi-stroke-rounded.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-    font-display: block;
+  font-family: "hgi-stroke-rounded";
+  src:
+    url("../fonts/hugeicons/hgi-stroke-rounded.woff2") format("woff2"),
+    url("../fonts/hugeicons/hgi-stroke-rounded.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
 }
 
 .hgi,
@@ -18,79 +19,281 @@ i[class^="hgi-"],
 i[class*=" hgi-"],
 i[class^="uil-"],
 i[class*=" uil-"] {
-    font-family: "hgi-stroke-rounded" !important;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    display: inline-block;
-    speak: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: "hgi-stroke-rounded" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Support the existing markup with short classes like hgi-user and hgi-lock */
+i.hgi-user,
+i.hgi-lock,
+i.hgi-home-01,
+i.hgi-mail-01,
+i.hgi-mail-open,
+i.hgi-news,
+i.hgi-rss,
+i.hgi-settings,
+i.hgi-arrow-right-01,
+i.hgi-plus,
+i.hgi-check,
+i.hgi-star,
+i.hgi-briefcase-01,
+i.hgi-globe,
+i.hgi-image-01,
+i.hgi-image-02,
+i.hgi-image-add-01,
+i.hgi-video-01,
+i.hgi-play-circle,
+i.hgi-folder-01,
+i.hgi-edit-01,
+i.hgi-eye,
+i.hgi-delete-01,
+i.hgi-calendar-01,
+i.hgi-clock-01,
+i.hgi-search-01,
+i.hgi-flash,
+i.hgi-shield-user,
+i.hgi-user-group,
+i.hgi-group-layers,
+i.hgi-heart-add,
+i.hgi-dashboard-square-setting,
+i.hgi-cursor-in-window,
+i.hgi-shopping-basket-01,
+i.hgi-no-internet,
+i.hgi-note-02,
+i.hgi-megaphone-01,
+i.hgi-megaphone-02 {
+  font-family: "hgi-stroke-rounded" !important;
+}
+
+/* Make the font rules apply to icons that only use the short hgi-* classes */
+i.hgi-user:before,
+i.hgi-lock:before,
+i.hgi-home-01:before,
+i.hgi-mail-01:before,
+i.hgi-mail-open:before,
+i.hgi-news:before,
+i.hgi-rss:before,
+i.hgi-settings:before,
+i.hgi-arrow-right-01:before,
+i.hgi-plus:before,
+i.hgi-check:before,
+i.hgi-star:before,
+i.hgi-briefcase-01:before,
+i.hgi-globe:before,
+i.hgi-image-01:before,
+i.hgi-image-02:before,
+i.hgi-image-add-01:before,
+i.hgi-video-01:before,
+i.hgi-play-circle:before,
+i.hgi-folder-01:before,
+i.hgi-edit-01:before,
+i.hgi-eye:before,
+i.hgi-delete-01:before,
+i.hgi-calendar-01:before,
+i.hgi-clock-01:before,
+i.hgi-search-01:before,
+i.hgi-flash:before,
+i.hgi-shield-user:before,
+i.hgi-user-group:before,
+i.hgi-group-layers:before,
+i.hgi-heart-add:before,
+i.hgi-dashboard-square-setting:before,
+i.hgi-cursor-in-window:before,
+i.hgi-shopping-basket-01:before,
+i.hgi-no-internet:before,
+i.hgi-note-02:before,
+i.hgi-megaphone-01:before,
+i.hgi-megaphone-02:before {
+  font-family: "hgi-stroke-rounded" !important;
 }
 
 /* ---- Legacy class -> Hugeicons glyph map ---- */
 
-.uil-apps:before { content: "\40fa"; }               /* grid-view */
-.uil-arrow-left:before { content: "\3b6b"; }         /* arrow-left-02 */
+.uil-apps:before {
+  content: "\40fa";
+} /* grid-view */
+.uil-arrow-left:before {
+  content: "\3b6b";
+} /* arrow-left-02 */
 .uil-bolt:before,
-.uil-bolt-alt:before { content: "\4049"; }           /* flash */
-.uil-briefcase-alt:before { content: "\3ca1"; }      /* briefcase-01 */
-.uil-chart-bar:before { content: "\3d88"; }          /* chart-column */
-.uil-check:before { content: "\4908"; }              /* tick-02 */
-.uil-check-circle:before { content: "\3da7"; }       /* checkmark-circle-02 */
-.uil-check-square:before { content: "\3dab"; }       /* checkmark-square-02 */
-.uil-clipboard-notes:before { content: "\48a0"; }    /* task-01 */
-.uil-calendar-alt:before { content: "\3ce4"; }       /* calendar-01 */
+.uil-bolt-alt:before {
+  content: "\4049";
+} /* flash */
+.uil-briefcase-alt:before {
+  content: "\3ca1";
+} /* briefcase-01 */
+.uil-chart-bar:before {
+  content: "\3d88";
+} /* chart-column */
+.uil-check:before {
+  content: "\4908";
+} /* tick-02 */
+.uil-check-circle:before {
+  content: "\3da7";
+} /* checkmark-circle-02 */
+.uil-check-square:before {
+  content: "\3dab";
+} /* checkmark-square-02 */
+.uil-clipboard-notes:before {
+  content: "\48a0";
+} /* task-01 */
+.uil-calendar-alt:before {
+  content: "\3ce4";
+} /* calendar-01 */
 .uil-clock:before,
-.uil-clock-three:before { content: "\3e05"; }        /* clock-01 */
-.uil-cloud-upload:before { content: "\3e1e"; }       /* cloud-upload */
-.uil-cog:before { content: "\46c2"; }                /* settings-02 */
-.uil-comment:before { content: "\3e3f"; }            /* comment-01 */
-.uil-database:before { content: "\3ef6"; }           /* database */
-.uil-edit:before { content: "\3fb2"; }               /* edit-02 */
-.uil-ellipsis-h:before { content: "\43ff"; }         /* more-horizontal */
-.uil-envelope:before { content: "\42ee"; }           /* mail-01 */
-.uil-envelope-open:before { content: "\4305"; }      /* mail-open */
+.uil-clock-three:before {
+  content: "\3e05";
+} /* clock-01 */
+.uil-cloud-upload:before {
+  content: "\3e1e";
+} /* cloud-upload */
+.uil-cog:before {
+  content: "\46c2";
+} /* settings-02 */
+.uil-comment:before {
+  content: "\3e3f";
+} /* comment-01 */
+.uil-database:before {
+  content: "\3ef6";
+} /* database */
+.uil-edit:before {
+  content: "\3fb2";
+} /* edit-02 */
+.uil-ellipsis-h:before {
+  content: "\43ff";
+} /* more-horizontal */
+.uil-envelope:before {
+  content: "\42ee";
+} /* mail-01 */
+.uil-envelope-open:before {
+  content: "\4305";
+} /* mail-open */
 .uil-estate:before,
-.uil-home:before { content: "\4159"; }               /* home-01 */
-.uil-exclamation-triangle:before { content: "\3b02"; } /* alert-02 */
-.uil-eye:before { content: "\4a03"; }                /* view */
-.uil-file-alt:before { content: "\3ff9"; }           /* file-01 */
-.uil-file-check-alt:before { content: "\401d"; }     /* file-validation */
-.uil-file-shield-alt:before { content: "\46aa"; }    /* security-check (audit) */
-.uil-filter:before { content: "\4031"; }             /* filter */
-.uil-folder:before { content: "\4061"; }             /* folder-01 */
-.uil-globe:before { content: "\40ca"; }              /* globe-02 */
-.uil-heart:before { content: "\3ff2"; }              /* favourite */
-.uil-image:before { content: "\4197"; }              /* image-01 */
-.uil-info-circle:before { content: "\41be"; }        /* information-circle */
-.uil-key-skeleton-alt:before { content: "\41fe"; }   /* key-01 */
-.uil-layer-group:before { content: "\424f"; }        /* layers-01 */
-.uil-lock:before { content: "\42c4"; }               /* lock */
-.uil-lock-alt:before { content: "\47ca"; }           /* square-lock-02 */
-.uil-minus-circle:before { content: "\43ae"; }       /* minus-sign-circle */
-.uil-newspaper:before { content: "\446d"; }          /* news */
-.uil-notebooks:before { content: "\448b"; }          /* notebook */
-.uil-plus:before { content: "\3aa9"; }               /* add-01 */
-.uil-refresh:before { content: "\45ec"; }            /* refresh */
-.uil-save:before { content: "\4055"; }               /* floppy-disk */
-.uil-search:before { content: "\4695"; }             /* search-01 */
-.uil-shield-check:before { content: "\46aa"; }       /* security-check */
-.uil-shopping-bag:before { content: "\46ef"; }       /* shopping-bag-02 */
-.uil-shopping-trolley:before { content: "\470d"; }   /* shopping-cart-01 */
-.uil-sign-out-alt:before { content: "\42d2"; }       /* logout-03 */
-.uil-sliders-v:before { content: "\4747"; }          /* sliders-vertical */
-.uil-square:before { content: "\47d8"; }             /* square */
-.uil-star:before { content: "\47e3"; }               /* star */
-.uil-sync:before { content: "\45f2"; }               /* reload */
-.uil-tag-alt:before { content: "\488c"; }            /* tag-01 */
-.uil-times:before { content: "\3d42"; }              /* cancel-01 */
-.uil-times-circle:before { content: "\3d45"; }       /* cancel-circle */
-.uil-trash-alt:before { content: "\3efa"; }          /* delete-02 */
-.uil-tv-retro:before { content: "\4981"; }           /* tv-01 */
-.uil-user:before { content: "\49ec"; }               /* user */
-.uil-user-plus:before { content: "\49c2"; }          /* user-add-01 */
-.uil-user-times:before { content: "\49da"; }         /* user-remove-01 */
-.uil-users-alt:before { content: "\49d7"; }          /* user-multiple */
+.uil-home:before {
+  content: "\4159";
+} /* home-01 */
+.uil-exclamation-triangle:before {
+  content: "\3b02";
+} /* alert-02 */
+.uil-eye:before {
+  content: "\4a03";
+} /* view */
+.uil-file-alt:before {
+  content: "\3ff9";
+} /* file-01 */
+.uil-file-check-alt:before {
+  content: "\401d";
+} /* file-validation */
+.uil-file-shield-alt:before {
+  content: "\46aa";
+} /* security-check (audit) */
+.uil-filter:before {
+  content: "\4031";
+} /* filter */
+.uil-folder:before {
+  content: "\4061";
+} /* folder-01 */
+.uil-globe:before {
+  content: "\40ca";
+} /* globe-02 */
+.uil-heart:before {
+  content: "\3ff2";
+} /* favourite */
+.uil-image:before {
+  content: "\4197";
+} /* image-01 */
+.uil-info-circle:before {
+  content: "\41be";
+} /* information-circle */
+.uil-key-skeleton-alt:before {
+  content: "\41fe";
+} /* key-01 */
+.uil-layer-group:before {
+  content: "\424f";
+} /* layers-01 */
+.uil-lock:before {
+  content: "\42c4";
+} /* lock */
+.uil-lock-alt:before {
+  content: "\47ca";
+} /* square-lock-02 */
+.uil-minus-circle:before {
+  content: "\43ae";
+} /* minus-sign-circle */
+.uil-newspaper:before {
+  content: "\446d";
+} /* news */
+.uil-notebooks:before {
+  content: "\448b";
+} /* notebook */
+.uil-plus:before {
+  content: "\3aa9";
+} /* add-01 */
+.uil-refresh:before {
+  content: "\45ec";
+} /* refresh */
+.uil-save:before {
+  content: "\4055";
+} /* floppy-disk */
+.uil-search:before {
+  content: "\4695";
+} /* search-01 */
+.uil-shield-check:before {
+  content: "\46aa";
+} /* security-check */
+.uil-shopping-bag:before {
+  content: "\46ef";
+} /* shopping-bag-02 */
+.uil-shopping-trolley:before {
+  content: "\470d";
+} /* shopping-cart-01 */
+.uil-sign-out-alt:before {
+  content: "\42d2";
+} /* logout-03 */
+.uil-sliders-v:before {
+  content: "\4747";
+} /* sliders-vertical */
+.uil-square:before {
+  content: "\47d8";
+} /* square */
+.uil-star:before {
+  content: "\47e3";
+} /* star */
+.uil-sync:before {
+  content: "\45f2";
+} /* reload */
+.uil-tag-alt:before {
+  content: "\488c";
+} /* tag-01 */
+.uil-times:before {
+  content: "\3d42";
+} /* cancel-01 */
+.uil-times-circle:before {
+  content: "\3d45";
+} /* cancel-circle */
+.uil-trash-alt:before {
+  content: "\3efa";
+} /* delete-02 */
+.uil-tv-retro:before {
+  content: "\4981";
+} /* tv-01 */
+.uil-user:before {
+  content: "\49ec";
+} /* user */
+.uil-user-plus:before {
+  content: "\49c2";
+} /* user-add-01 */
+.uil-user-times:before {
+  content: "\49da";
+} /* user-remove-01 */
+.uil-users-alt:before {
+  content: "\49d7";
+} /* user-multiple */

@@ -49,7 +49,7 @@
         @if (HasPermission("jobs.create"))
         {
             <a asp-action="Create" class="bh-btn bh-btn-primary">
-                <i class="hgi-add-square"></i> Post Job
+                <i class="hgi-add-02"></i> Post Job
             </a>
         }
     </div>
@@ -77,11 +77,12 @@
     <form asp-action="Index" method="get" class="bh-filterbar">
         <input type="hidden" name="tab" value="@tab" />
         <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
-            placeholder="Search jobs, companies, locations..." />
+               placeholder="Search jobs, companies, locations..." />
         <select name="status" class="form-admin-control">
             <option value="">All Status</option>
             <option value="Draft" selected="@(Model.Status == ContentStatus.Draft)">Draft</option>
-            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review</option>
+            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review
+            </option>
             <option value="Approved" selected="@(Model.Status == ContentStatus.Approved)">Approved</option>
             <option value="Published" selected="@(Model.Status == ContentStatus.Published)">Published</option>
             <option value="Rejected" selected="@(Model.Status == ContentStatus.Rejected)">Rejected</option>
@@ -96,7 +97,7 @@
             <option value="Temporary" selected="@(Model.Type == JobType.Temporary)">Temporary</option>
         </select>
         <select name="categoryId" class="form-admin-control"
-            asp-items="@(ViewBag.Categories as Microsoft.AspNetCore.Mvc.Rendering.SelectList)">
+                asp-items="@(ViewBag.Categories as Microsoft.AspNetCore.Mvc.Rendering.SelectList)">
             <option value="">All Categories</option>
         </select>
         <button type="submit" class="bh-btn bh-btn-primary">
@@ -133,174 +134,177 @@
                             }
                             @if (job.IsFeatured)
                             {
-                                <span class="bh-badge bh-badge-web" style="margin-left:4px;"><i class="hgi-star"></i> Featured</span>
-                            }
-                        </h5>
-                        <div class="bh-job-meta">
-                            @if (!string.IsNullOrEmpty(job.CompanyName))
+                                <span class="bh-badge bh-badge-web" style="margin-left:4px;"><i class="hgi-star"></i>
+                                    Featured</span>
+                                }
+                            </h5>
+                            <div class="bh-job-meta">
+                                @if (!string.IsNullOrEmpty(job.CompanyName))
+                                {
+                                    <span><i class="hgi-building-01"></i> @job.CompanyName</span>
+                                }
+                                @if (!string.IsNullOrEmpty(job.Location))
+                                {
+                                    <span><i class="hgi-location-01"></i> @job.Location</span>
+                                }
+                                @if (!string.IsNullOrEmpty(salary))
+                                {
+                                    <span><i class="hgi-dollar-circle"></i> @salary</span>
+                                }
+                                <span><i class="hgi-file-01"></i> @job.ApplicationCount applications</span>
+                                @if (job.ApplicationDeadline.HasValue)
+                                {
+                                    <span class="@(isExpired ? "text-danger" : "")">
+                                        <i class="hgi-hourglass"></i>
+                                        @(isExpired ? "Expired" : $"Closes {job.ApplicationDeadline.Value:MMM dd, yyyy}")
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="bh-job-type">
+                            <span class="bh-jobtype @chip.Css">@chip.Label</span>
+                        </div>
+                        <div class="bh-forum-actions">
+                            <div class="bh-actions">
+                                <span class="bh-badge @StatusBadge(job.Status)">@job.Status</span>
+                                @if (job.IntendedForWeb)
+                                {
+                                    <span class="bh-badge bh-badge-web" title="Intended for the public website"><i
+                                        class="hgi-globe"></i> Web</span>
+                                    }
+                            else
+                                    {
+                                        <span class="bh-badge bh-badge-internal" title="Internal to the member portal"><i
+                                            class="hgi-lock"></i> Internal</span>
+                                        }
+                                    </div>
+                                    <div class="bh-actions">
+                                        @if (HasPermission("jobs.edit"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@job.Id" class="bh-btn" title="Edit">
+                                                <i class="hgi-edit-01"></i>
+                                            </a>
+                                            @if (job.IntendedForWeb && (job.Status == ContentStatus.Draft || job.Status ==
+                                ContentStatus.Rejected))
+                                            {
+                                                <form asp-action="RequestPublish" asp-route-id="@job.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="bh-btn bh-btn-warn" title="Submit for review">
+                                                        <i class="hgi-file-upload"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                        }
+                                        @if (HasPermission("jobs.publish"))
+                                        {
+                                            @if (job.Status == ContentStatus.PendingReview)
+                                            {
+                                                <form asp-action="Approve" asp-route-id="@job.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="bh-btn bh-btn-success" title="Approve">
+                                                        <i class="hgi-checkmark-circle-01"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            @if (job.Status == ContentStatus.Approved && !job.IsPublishedToWeb && job.IntendedForWeb)
+                                            {
+                                                <form asp-action="PublishToWeb" asp-route-id="@job.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="bh-btn bh-btn-success" title="Publish to website">
+                                                        <i class="hgi-globe"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            @if (job.IsPublishedToWeb)
+                                            {
+                                                <form asp-action="Unpublish" asp-route-id="@job.Id" method="post" style="display:inline;"
+                                                      onsubmit="return confirm('Remove this job from the website?');">
+                                                    <button type="submit" class="bh-btn bh-btn-warn" title="Unpublish">
+                                                        <i class="hgi-cloud"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                        }
+                                        @if (HasPermission("jobs.delete"))
+                                        {
+                                            <form asp-action="Delete" asp-route-id="@job.Id" method="post" style="display:inline;"
+                                                  onsubmit="return confirm('Are you sure you want to delete this job?');">
+                                                <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
+                                                    <i class="hgi-delete-01"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+        else
+                    {
+                        <div class="bh-empty">
+                            <i class="hgi-briefcase-01"></i>
+                            <p>No jobs found.</p>
+                            @if (HasPermission("jobs.create"))
                             {
-                                <span><i class="hgi-building-01"></i> @job.CompanyName</span>
-                            }
-                            @if (!string.IsNullOrEmpty(job.Location))
-                            {
-                                <span><i class="hgi-location-01"></i> @job.Location</span>
-                            }
-                            @if (!string.IsNullOrEmpty(salary))
-                            {
-                                <span><i class="hgi-dollar-circle"></i> @salary</span>
-                            }
-                            <span><i class="hgi-file-01"></i> @job.ApplicationCount applications</span>
-                            @if (job.ApplicationDeadline.HasValue)
-                            {
-                                <span class="@(isExpired ? "text-danger" : "")">
-                                    <i class="hgi-hourglass"></i>
-                                    @(isExpired ? "Expired" : $"Closes {job.ApplicationDeadline.Value:MMM dd, yyyy}")
-                                </span>
+                                <a asp-action="Create" class="bh-btn bh-btn-primary">Post your first job</a>
                             }
                         </div>
-                    </div>
-                    <div class="bh-job-type">
-                        <span class="bh-jobtype @chip.Css">@chip.Label</span>
-                    </div>
-                    <div class="bh-forum-actions">
-                        <div class="bh-actions">
-                            <span class="bh-badge @StatusBadge(job.Status)">@job.Status</span>
-                            @if (job.IntendedForWeb)
+                    }
+                </div>
+
+                @if (Model.TotalPages > 1)
+                {
+                    <div class="bh-pagination">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.CurrentPage)
                             {
-                                <span class="bh-badge bh-badge-web" title="Intended for the public website"><i class="hgi-globe"></i> Web</span>
+                                <span class="current">@i</span>
                             }
                             else
                             {
-                                <span class="bh-badge bh-badge-internal" title="Internal to the member portal"><i class="hgi-lock"></i> Internal</span>
+                                <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                                   asp-route-categoryId="@Model.CategoryId" asp-route-type="@Model.Type" asp-route-tab="@tab">@i</a>
                             }
-                        </div>
-                        <div class="bh-actions">
-                            @if (HasPermission("jobs.edit"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@job.Id" class="bh-btn" title="Edit">
-                                    <i class="hgi-edit-01"></i>
-                                </a>
-                                @if (job.IntendedForWeb && (job.Status == ContentStatus.Draft || job.Status == ContentStatus.Rejected))
-                                {
-                                    <form asp-action="RequestPublish" asp-route-id="@job.Id" method="post" style="display:inline;">
-                                        <button type="submit" class="bh-btn bh-btn-warn" title="Submit for review">
-                                            <i class="hgi-file-upload"></i>
-                                        </button>
-                                    </form>
-                                }
-                            }
-                            @if (HasPermission("jobs.publish"))
-                            {
-                                @if (job.Status == ContentStatus.PendingReview)
-                                {
-                                    <form asp-action="Approve" asp-route-id="@job.Id" method="post" style="display:inline;">
-                                        <button type="submit" class="bh-btn bh-btn-success" title="Approve">
-                                            <i class="hgi-checkmark-circle-01"></i>
-                                        </button>
-                                    </form>
-                                }
-                                @if (job.Status == ContentStatus.Approved && !job.IsPublishedToWeb && job.IntendedForWeb)
-                                {
-                                    <form asp-action="PublishToWeb" asp-route-id="@job.Id" method="post" style="display:inline;">
-                                        <button type="submit" class="bh-btn bh-btn-success" title="Publish to website">
-                                            <i class="hgi-globe"></i>
-                                        </button>
-                                    </form>
-                                }
-                                @if (job.IsPublishedToWeb)
-                                {
-                                    <form asp-action="Unpublish" asp-route-id="@job.Id" method="post" style="display:inline;"
-                                        onsubmit="return confirm('Remove this job from the website?');">
-                                        <button type="submit" class="bh-btn bh-btn-warn" title="Unpublish">
-                                            <i class="hgi-cloud"></i>
-                                        </button>
-                                    </form>
-                                }
-                            }
-                            @if (HasPermission("jobs.delete"))
-                            {
-                                <form asp-action="Delete" asp-route-id="@job.Id" method="post" style="display:inline;"
-                                    onsubmit="return confirm('Are you sure you want to delete this job?');">
-                                    <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
-                                        <i class="hgi-delete-01"></i>
-                                    </button>
-                                </form>
-                            }
-                        </div>
+                        }
                     </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="bh-empty">
-                <i class="hgi-briefcase-01"></i>
-                <p>No jobs found.</p>
-                @if (HasPermission("jobs.create"))
-                {
-                    <a asp-action="Create" class="bh-btn bh-btn-primary">Post your first job</a>
                 }
             </div>
-        }
-    </div>
 
-    @if (Model.TotalPages > 1)
-    {
-        <div class="bh-pagination">
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                if (i == Model.CurrentPage)
+            @section Sidebar {
+                <div class="widget">
+                    <h5 class="widget-title">Jobs Overview</h5>
+                    <ul class="item-list">
+                        <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                            <span><i class="hgi-briefcase-01"></i> Total jobs</span>
+                            <strong>@totalJobs.ToString("N0")</strong>
+                        </li>
+                        <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                            <span><i class="hgi-globe"></i> Live on website</span>
+                            <strong>@publishedJobs.ToString("N0")</strong>
+                        </li>
+                        <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                            <span><i class="hgi-clock-01"></i> Pending review</span>
+                            <strong>@pendingCount.ToString("N0")</strong>
+                        </li>
+                        <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                            <span><i class="hgi-hourglass"></i> Expired</span>
+                            <strong>@expiredJobs.ToString("N0")</strong>
+                        </li>
+                    </ul>
+                </div>
+                @if (HasPermission("jobs.create"))
                 {
-                    <span class="current">@i</span>
-                }
-                else
-                {
-                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
-                        asp-route-status="@Model.Status" asp-route-categoryId="@Model.CategoryId"
-                        asp-route-type="@Model.Type" asp-route-tab="@tab">@i</a>
+                    <div class="widget widget_nav_menu">
+                        <h5 class="widget-title">Job Actions</h5>
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <a asp-action="Create"><i class="hgi-add-02"></i> Post Job</a>
+                            </li>
+                            <li class="menu-item">
+                                <a asp-action="Categories"><i class="hgi-layers-01"></i> Categories</a>
+                            </li>
+                            <li class="menu-item">
+                                <a asp-action="Index" asp-route-tab="pending"><i class="hgi-clock-01"></i> Pending Review</a>
+                            </li>
+                        </ul>
+                    </div>
                 }
             }
-        </div>
-    }
-</div>
-
-@section Sidebar {
-    <div class="widget">
-        <h5 class="widget-title">Jobs Overview</h5>
-        <ul class="item-list">
-            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
-                <span><i class="hgi-briefcase-01"></i> Total jobs</span>
-                <strong>@totalJobs.ToString("N0")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
-                <span><i class="hgi-globe"></i> Live on website</span>
-                <strong>@publishedJobs.ToString("N0")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
-                <span><i class="hgi-clock-01"></i> Pending review</span>
-                <strong>@pendingCount.ToString("N0")</strong>
-            </li>
-            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
-                <span><i class="hgi-hourglass"></i> Expired</span>
-                <strong>@expiredJobs.ToString("N0")</strong>
-            </li>
-        </ul>
-    </div>
-    @if (HasPermission("jobs.create"))
-    {
-        <div class="widget widget_nav_menu">
-            <h5 class="widget-title">Job Actions</h5>
-            <ul class="menu">
-                <li class="menu-item">
-                    <a asp-action="Create"><i class="hgi-add-square"></i> Post Job</a>
-                </li>
-                <li class="menu-item">
-                    <a asp-action="Categories"><i class="hgi-layers-01"></i> Categories</a>
-                </li>
-                <li class="menu-item">
-                    <a asp-action="Index" asp-route-tab="pending"><i class="hgi-clock-01"></i> Pending Review</a>
-                </li>
-            </ul>
-        </div>
-    }
-}

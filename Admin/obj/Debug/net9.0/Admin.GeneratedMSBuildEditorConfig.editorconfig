@@ -17,324 +17,323 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v9.0
-build_property.EntryPointFilePath = 
 build_property.RootNamespace = Admin
 build_property.RootNamespace = Admin
-build_property.ProjectDir = C:\Users\kenzy\Source\Ience\tfcmd\Admin\
+build_property.ProjectDir = /Applications/Projects/Training/IE/tfcmd/Admin/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\kenzy\Source\Ience\tfcmd\Admin
+build_property.MSBuildProjectDirectory = /Applications/Projects/Training/IE/tfcmd/Admin
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Account/AccessDenied.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Account/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9BY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Account/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Activity/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlcRGV0YWlscy5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Activity/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWN0aXZpdHkvRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Activity/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlcSW5kZXguY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Activity/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWN0aXZpdHkvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Adverts/Categories.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWR2ZXJ0c1xDYXRlZ29yaWVzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Adverts/Categories.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWR2ZXJ0cy9DYXRlZ29yaWVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Adverts/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWR2ZXJ0c1xDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Adverts/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWR2ZXJ0cy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Adverts/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWR2ZXJ0c1xEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Adverts/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWR2ZXJ0cy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Adverts/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWR2ZXJ0c1xFZGl0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Adverts/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWR2ZXJ0cy9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Adverts/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWR2ZXJ0c1xJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Adverts/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWR2ZXJ0cy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Announcements/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Announcements/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQW5ub3VuY2VtZW50cy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Announcements/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Announcements/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQW5ub3VuY2VtZW50cy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Announcements/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Announcements/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQW5ub3VuY2VtZW50cy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Announcements/_ListItems.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xfTGlzdEl0ZW1zLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Announcements/_ListItems.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQW5ub3VuY2VtZW50cy9fTGlzdEl0ZW1zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Audit/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXVkaXRcRGV0YWlscy5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Audit/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXVkaXQvRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Audit/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXVkaXRcSW5kZXguY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Audit/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXVkaXQvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Blog/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Blog/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmxvZy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Blog/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Blog/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmxvZy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Blog/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xFZGl0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Blog/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmxvZy9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Blog/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Blog/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmxvZy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Blog/Tags.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xUYWdzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Blog/Tags.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmxvZy9UYWdzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Blog/_ListItems.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xfTGlzdEl0ZW1zLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Blog/_ListItems.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmxvZy9fTGlzdEl0ZW1zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Charity/Charities.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhcml0eVxDaGFyaXRpZXMuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Charity/Charities.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9DaGFyaXRpZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Charity/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhcml0eVxDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Charity/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Charity/CreateProject.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhcml0eVxDcmVhdGVQcm9qZWN0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Charity/CreateProject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9DcmVhdGVQcm9qZWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Charity/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhcml0eVxEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Charity/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Charity/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhcml0eVxFZGl0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Charity/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Charity/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhcml0eVxJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Charity/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2hhcml0eS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Contact/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Contact/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ29udGFjdC9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Contact/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Contact/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ29udGFjdC9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Dashboard/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFzaGJvYXJkL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Dashboard/Profile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFByb2ZpbGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Dashboard/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFzaGJvYXJkL1Byb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Dashboard/Settings.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFNldHRpbmdzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Dashboard/Settings.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFzaGJvYXJkL1NldHRpbmdzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Gallery/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FsbGVyeVxJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Gallery/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR2FsbGVyeS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Gallery/UploadPhoto.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FsbGVyeVxVcGxvYWRQaG90by5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Gallery/UploadPhoto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR2FsbGVyeS9VcGxvYWRQaG90by5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Gallery/UploadVideo.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FsbGVyeVxVcGxvYWRWaWRlby5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Gallery/UploadVideo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR2FsbGVyeS9VcGxvYWRWaWRlby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Groups/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBzXENyZWF0ZS5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Groups/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR3JvdXBzL0NyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Groups/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBzXERldGFpbHMuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Groups/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR3JvdXBzL0RldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Groups/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBzXEVkaXQuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Groups/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR3JvdXBzL0VkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Groups/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBzXEluZGV4LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Groups/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR3JvdXBzL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Groups/Permissions.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBzXFBlcm1pc3Npb25zLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Groups/Permissions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR3JvdXBzL1Blcm1pc3Npb25zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Jobs/Categories.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9ic1xDYXRlZ29yaWVzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Jobs/Categories.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9icy9DYXRlZ29yaWVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Jobs/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9ic1xDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Jobs/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9icy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Jobs/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9ic1xEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Jobs/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9icy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Jobs/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9ic1xFZGl0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Jobs/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9icy9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Jobs/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9ic1xJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Jobs/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9icy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Jobs/PendingReview.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9ic1xQZW5kaW5nUmV2aWV3LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Jobs/PendingReview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9icy9QZW5kaW5nUmV2aWV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Maintenance/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpbnRlbmFuY2VcSW5kZXguY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Maintenance/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWFpbnRlbmFuY2UvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Members/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Members/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVycy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Members/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Members/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVycy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Members/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xFZGl0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Members/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVycy9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Members/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Members/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVycy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Members/_ListItems.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xfTGlzdEl0ZW1zLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Members/_ListItems.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVycy9fTGlzdEl0ZW1zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/News/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/News/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTmV3cy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/News/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/News/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTmV3cy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/News/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/News/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTmV3cy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/News/_ListItems.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xfTGlzdEl0ZW1zLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/News/_ListItems.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTmV3cy9fTGlzdEl0ZW1zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/_LoginLayout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/_LoginLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19Mb2dpbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/_MembersWidget.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9NZW1iZXJzV2lkZ2V0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/_MembersWidget.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19NZW1iZXJzV2lkZ2V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/_UserAvatar.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Vc2VyQXZhdGFyLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/_UserAvatar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19Vc2VyQXZhdGFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/_WysiwygScripts.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9XeXNpd3lnU2NyaXB0cy5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/_WysiwygScripts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19XeXNpd3lnU2NyaXB0cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shop/Categories.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcFxDYXRlZ29yaWVzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shop/Categories.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hvcC9DYXRlZ29yaWVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shop/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcFxDcmVhdGUuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shop/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hvcC9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shop/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcFxEZXRhaWxzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shop/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hvcC9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shop/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcFxFZGl0LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shop/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hvcC9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shop/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcFxJbmRleC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shop/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hvcC9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/SocialGroups/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsR3JvdXBzXENyZWF0ZS5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/SocialGroups/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWFsR3JvdXBzL0NyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/SocialGroups/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsR3JvdXBzXERldGFpbHMuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/SocialGroups/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWFsR3JvdXBzL0RldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/SocialGroups/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsR3JvdXBzXEVkaXQuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/SocialGroups/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWFsR3JvdXBzL0VkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/SocialGroups/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsR3JvdXBzXEluZGV4LmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/SocialGroups/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWFsR3JvdXBzL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/SocialGroups/Members.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsR3JvdXBzXE1lbWJlcnMuY3NodG1s
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/SocialGroups/Members.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWFsR3JvdXBzL01lbWJlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kenzy/Source/Ience/tfcmd/Admin/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-7xb81emaud
+[/Applications/Projects/Training/IE/tfcmd/Admin/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-cynhs8w82v

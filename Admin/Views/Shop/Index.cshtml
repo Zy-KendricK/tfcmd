@@ -88,7 +88,7 @@
             </a>
         </li>
         <li class="menu-item">
-            <a asp-action="Create"><i class="hgi-add-square"></i> Add product</a>
+            <a asp-action="Create"><i class="hgi-add-02"></i> Add product</a>
         </li>
     </ul>
 </nav>
@@ -99,8 +99,8 @@
         <div class="search beehive-shop-search">
             <form role="search" method="get" class="woocommerce-product-search" asp-action="Index">
                 <label class="screen-reader-text" for="product-search-field">Search for:</label>
-                <input type="search" id="product-search-field" class="search-field" placeholder="Search products&hellip;"
-                       value="@Model.Search" name="search" />
+                <input type="search" id="product-search-field" class="search-field"
+                       placeholder="Search products&hellip;" value="@Model.Search" name="search" />
                 <button type="submit" value="Search"><i class="hgi-search-list-01"></i></button>
                 @if (Model.Status.HasValue)
                 {
@@ -114,8 +114,8 @@
         </div>
         <div class="wrap-collapse-button">
             <button class="button button-filter" type="button" data-bs-toggle="collapse" data-toggle="collapse"
-                    data-bs-target="#shop_filter_widgets" data-target="#shop_filter_widgets"
-                    aria-expanded="false" aria-controls="shop_filter_widgets">
+                    data-bs-target="#shop_filter_widgets" data-target="#shop_filter_widgets" aria-expanded="false"
+                    aria-controls="shop_filter_widgets">
                 <i class="hgi-sliders-vertical"></i>
                 Filter
             </button>
@@ -140,7 +140,8 @@
             <div class="widget woocommerce widget_layered_nav">
                 <h5 class="widget-title">Filter by</h5>
                 <form method="get" asp-action="Index" class="woocommerce-widget-layered-nav-dropdown">
-                    <select class="woocommerce-widget-layered-nav-dropdown" name="categoryId" onchange="this.form.submit()"
+                    <select class="woocommerce-widget-layered-nav-dropdown" name="categoryId"
+                            onchange="this.form.submit()"
                             asp-items="@(ViewBag.Categories as Microsoft.AspNetCore.Mvc.Rendering.SelectList)">
                         <option value="">Any category</option>
                     </select>
@@ -203,7 +204,8 @@
             var positionClass = i % columns == 0 ? "first" : (i % columns == columns - 1 ? "last" : "");
             var stockClass = !product.TrackInventory || (product.StockQuantity ?? 0) > 0 ? "instock" : "outofstock";
 
-            <li class="animate-item animated slideInUp beehive-post product @positionClass @stockClass @(onSale ? "sale" : "") has-post-thumbnail">
+            <li
+                class="animate-item animated slideInUp beehive-post product @positionClass @stockClass @(onSale ? "sale" : "") has-post-thumbnail">
                 <div class="item-product">
                     @if (onSale)
                     {
@@ -253,145 +255,150 @@
                             {
                                 <del aria-hidden="true">
                                     <span class="woocommerce-Price-amount amount">
-                                        <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.CompareAtPrice!.Value.ToString("N2")</bdi>
-                                    </span>
-                                </del>
-                                <ins aria-hidden="true">
-                                    <span class="woocommerce-Price-amount amount">
-                                        <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.Price.ToString("N2")</bdi>
-                                    </span>
-                                </ins>
-                            }
+                                        <bdi><span
+                                            class="woocommerce-Price-currencySymbol">$</span>@product.CompareAtPrice!.Value.ToString("N2")</bdi>
+                                        </span>
+                                    </del>
+                                    <ins aria-hidden="true">
+                                        <span class="woocommerce-Price-amount amount">
+                                            <bdi><span
+                                                class="woocommerce-Price-currencySymbol">$</span>@product.Price.ToString("N2")</bdi>
+                                            </span>
+                                        </ins>
+                                    }
                             else
-                            {
-                                <span class="woocommerce-Price-amount amount">
-                                    <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.Price.ToString("N2")</bdi>
+                                    {
+                                        <span class="woocommerce-Price-amount amount">
+                                            <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.Price.ToString("N2")</bdi>
+                                        </span>
+                                    }
                                 </span>
-                            }
-                        </span>
-                    </div>
-                </div>
-            </li>
-        }
-    </ul>
-
-    @if (Model.TotalPages > 1)
-    {
-        <nav class="woocommerce-pagination" aria-label="Product pagination">
-            <ul class="page-numbers">
-                @if (Model.CurrentPage > 1)
-                {
-                    <li>
-                        <a class="prev page-numbers" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)"
-                           asp-route-search="@Model.Search" asp-route-status="@Model.Status"
-                           asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">&larr;</a>
-                    </li>
-                }
-                @for (var p = 1; p <= Model.TotalPages; p++)
-                {
-                    <li>
-                        @if (p == Model.CurrentPage)
-                        {
-                            <span aria-current="page" class="page-numbers current">@p</span>
-                        }
-                        else
-                        {
-                            <a class="page-numbers" asp-action="Index" asp-route-page="@p"
-                               asp-route-search="@Model.Search" asp-route-status="@Model.Status"
-                               asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">@p</a>
-                        }
-                    </li>
-                }
-                @if (Model.CurrentPage < Model.TotalPages)
-                {
-                    <li>
-                        <a class="next page-numbers" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)"
-                           asp-route-search="@Model.Search" asp-route-status="@Model.Status"
-                           asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">&rarr;</a>
+                            </div>
+                        </div>
                     </li>
                 }
             </ul>
-        </nav>
-    }
-}
-else
-{
-    <div class="woocommerce-info" style="margin-top: 20px;">
-        No products were found matching your selection.
-        <a asp-action="Create">Add the first product</a>.
-    </div>
-}
 
-@section Sidebar {
-    <!-- Screen-specific sidebar: shop overview + latest products (template widget markup) -->
-    <div class="widget woocommerce">
-        <h5 class="widget-title">Shop overview</h5>
-        <ul class="item-list">
-            <li class="vcard">
-                <div class="item">
-                    <div class="item-title fn">
-                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.Published">Published</a>
-                    </div>
-                    <div class="item-meta"><span class="activity">@publishedCount product@(publishedCount == 1 ? "" : "s") live in the shop</span></div>
-                </div>
-            </li>
-            <li class="vcard">
-                <div class="item">
-                    <div class="item-title fn">
-                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.PendingReview">Pending review</a>
-                    </div>
-                    <div class="item-meta"><span class="activity">@pendingCount awaiting approval</span></div>
-                </div>
-            </li>
-            <li class="vcard">
-                <div class="item">
-                    <div class="item-title fn">
-                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.Draft">Drafts</a>
-                    </div>
-                    <div class="item-meta"><span class="activity">@draftCount not yet submitted</span></div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="widget woocommerce widget_products">
-        <h5 class="widget-title">Latest products</h5>
-        <ul class="product_list_widget">
-            @foreach (var latest in latestProducts)
+            @if (Model.TotalPages > 1)
             {
-                var latestImage = latest.Images?.OrderBy(img => img.Id).FirstOrDefault();
-                <li>
-                    <a asp-action="Details" asp-route-id="@latest.Id">
-                        @if (latestImage != null)
+                <nav class="woocommerce-pagination" aria-label="Product pagination">
+                    <ul class="page-numbers">
+                        @if (Model.CurrentPage > 1)
                         {
-                            <img width="300" height="300" src="@latestImage.Url" alt="@latest.Name" decoding="async" />
+                            <li>
+                                <a class="prev page-numbers" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)"
+                                   asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                                   asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">&larr;</a>
+                            </li>
                         }
-                        <span class="product-title">@latest.Name</span>
-                    </a>
-                    @if (latest.IsOnSale && latest.CompareAtPrice.HasValue)
-                    {
-                        <del aria-hidden="true">
-                            <span class="woocommerce-Price-amount amount">
-                                <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.CompareAtPrice.Value.ToString("N2")</bdi>
-                            </span>
-                        </del>
-                        <ins aria-hidden="true">
-                            <span class="woocommerce-Price-amount amount">
-                                <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.Price.ToString("N2")</bdi>
-                            </span>
-                        </ins>
-                    }
+                        @for (var p = 1; p <= Model.TotalPages; p++)
+                        {
+                            <li>
+                                @if (p == Model.CurrentPage)
+                                {
+                                    <span aria-current="page" class="page-numbers current">@p</span>
+                                }
+                                else
+                                {
+                                    <a class="page-numbers" asp-action="Index" asp-route-page="@p" asp-route-search="@Model.Search"
+                                       asp-route-status="@Model.Status" asp-route-categoryId="@Model.CategoryId"
+                                       asp-route-orderby="@orderby">@p</a>
+                                }
+                            </li>
+                        }
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li>
+                                <a class="next page-numbers" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)"
+                                   asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                                   asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">&rarr;</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        }
+else
+        {
+            <div class="woocommerce-info" style="margin-top: 20px;">
+                No products were found matching your selection.
+                <a asp-action="Create">Add the first product</a>.
+            </div>
+        }
+
+        @section Sidebar {
+            <!-- Screen-specific sidebar: shop overview + latest products (template widget markup) -->
+            <div class="widget woocommerce">
+                <h5 class="widget-title">Shop overview</h5>
+                <ul class="item-list">
+                    <li class="vcard">
+                        <div class="item">
+                            <div class="item-title fn">
+                                <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.Published">Published</a>
+                            </div>
+                            <div class="item-meta"><span class="activity">@publishedCount product@(publishedCount == 1 ? "" : "s")
+                                live in the shop</span></div>
+                            </div>
+                        </li>
+                        <li class="vcard">
+                            <div class="item">
+                                <div class="item-title fn">
+                                    <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.PendingReview">Pending
+                                        review</a>
+                                    </div>
+                                    <div class="item-meta"><span class="activity">@pendingCount awaiting approval</span></div>
+                                </div>
+                            </li>
+                            <li class="vcard">
+                                <div class="item">
+                                    <div class="item-title fn">
+                                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.Draft">Drafts</a>
+                                    </div>
+                                    <div class="item-meta"><span class="activity">@draftCount not yet submitted</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="widget woocommerce widget_products">
+                        <h5 class="widget-title">Latest products</h5>
+                        <ul class="product_list_widget">
+                            @foreach (var latest in latestProducts)
+                            {
+                                var latestImage = latest.Images?.OrderBy(img => img.Id).FirstOrDefault();
+                                <li>
+                                    <a asp-action="Details" asp-route-id="@latest.Id">
+                                        @if (latestImage != null)
+                                        {
+                                            <img width="300" height="300" src="@latestImage.Url" alt="@latest.Name" decoding="async" />
+                                        }
+                                        <span class="product-title">@latest.Name</span>
+                                    </a>
+                                    @if (latest.IsOnSale && latest.CompareAtPrice.HasValue)
+                                    {
+                                        <del aria-hidden="true">
+                                            <span class="woocommerce-Price-amount amount">
+                                                <bdi><span
+                                                    class="woocommerce-Price-currencySymbol">$</span>@latest.CompareAtPrice.Value.ToString("N2")</bdi>
+                                                </span>
+                                            </del>
+                                            <ins aria-hidden="true">
+                                                <span class="woocommerce-Price-amount amount">
+                                                    <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.Price.ToString("N2")</bdi>
+                                                </span>
+                                            </ins>
+                                        }
                     else
-                    {
-                        <span class="woocommerce-Price-amount amount">
-                            <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.Price.ToString("N2")</bdi>
-                        </span>
+                                        {
+                                            <span class="woocommerce-Price-amount amount">
+                                                <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.Price.ToString("N2")</bdi>
+                                            </span>
+                                        }
+                                    </li>
+                                }
+                                @if (!latestProducts.Any())
+                                {
+                                    <li><span class="product-title">No products yet.</span></li>
+                                }
+                            </ul>
+                        </div>
                     }
-                </li>
-            }
-            @if (!latestProducts.Any())
-            {
-                <li><span class="product-title">No products yet.</span></li>
-            }
-        </ul>
-    </div>
-}

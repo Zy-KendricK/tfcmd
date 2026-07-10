@@ -9,7 +9,7 @@
             <i class="hgi-group-layers"></i> Manage User Groups
         </h4>
         <a asp-action="Create" class="btn-admin btn-admin-primary">
-            <i class="hgi-add-square"></i> Create Group
+            <i class="hgi-add-02"></i> Create Group
         </a>
     </div>
 
@@ -63,21 +63,21 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@group.Id" class="btn-admin btn-admin-sm btn-admin-primary"
-                                    title="Edit">
+                                   title="Edit">
                                     <i class="hgi-edit-01"></i>
                                 </a>
                                 <a asp-action="Permissions" asp-route-id="@group.Id"
-                                    class="btn-admin btn-admin-sm btn-admin-warning" title="Manage Permissions">
+                                   class="btn-admin btn-admin-sm btn-admin-warning" title="Manage Permissions">
                                     <i class="hgi-shield-user"></i>
                                 </a>
                                 <a asp-action="Members" asp-route-id="@group.Id"
-                                    class="btn-admin btn-admin-sm btn-admin-success" title="Manage Members">
+                                   class="btn-admin btn-admin-sm btn-admin-success" title="Manage Members">
                                     <i class="hgi-user-group"></i>
                                 </a>
                                 @if (!group.IsSystemGroup)
                                 {
                                     <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
-                                        onsubmit="return confirm('Delete this group?');">
+                                          onsubmit="return confirm('Delete this group?');">
                                         <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
                                             <i class="hgi-delete-01"></i>
                                         </button>
@@ -178,7 +178,7 @@
         <h5 class="widget-title">Group Actions</h5>
         <ul class="menu">
             <li class="menu-item">
-                <a asp-action="Create"><i class="hgi-add-square"></i> Create Group</a>
+                <a asp-action="Create"><i class="hgi-add-02"></i> Create Group</a>
             </li>
             <li class="menu-item">
                 <a asp-controller="Members" asp-action="Index"><i class="hgi-user-group"></i> Manage Members</a>

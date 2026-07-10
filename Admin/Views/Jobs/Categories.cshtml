@@ -44,9 +44,10 @@
                                     </td>
                                     <td>
                                         <form asp-action="DeleteCategory" asp-route-id="@category.Id" method="post"
-                                            style="display: inline;" onsubmit="return confirm('Delete this category?');">
+                                              style="display: inline;" onsubmit="return confirm('Delete this category?');">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                            <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger"
+                                                    title="Delete">
                                                 <i class="hgi-delete-01"></i>
                                             </button>
                                         </form>
@@ -92,7 +93,7 @@
                         </select>
                     </div>
                     <button type="submit" class="btn-admin btn-admin-primary">
-                        <i class="hgi-add-square"></i> Add Category
+                        <i class="hgi-add-02"></i> Add Category
                     </button>
                 </form>
             </div>

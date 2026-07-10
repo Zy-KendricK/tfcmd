@@ -17,13 +17,14 @@
             else
             {
                 <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
-                    <i class="hgi-stroke-left hgi-note-02" style="font-size: 34px; color: #c9cdd6;"></i>
+                    <i class="hgi-stroke hgi-note-02" style="font-size: 34px; color: #c9cdd6;"></i>
                 </div>
             }
         </div>
         <div class="bh-blog-body">
             <div class="bh-actions" style="margin-bottom:8px;">
-                <span class="bh-badge @((post.Status == ContentStatus.PendingReview ? "bh-badge-pending" : post.Status == ContentStatus.Published ? "bh-badge-published" : "bh-badge-draft"))">@post.Status</span>
+                <span
+                class="bh-badge @((post.Status == ContentStatus.PendingReview ? "bh-badge-pending" : post.Status == ContentStatus.Published ? "bh-badge-published" : "bh-badge-draft"))">@post.Status</span>
                 @if (post.IntendedForWeb)
                 {
                     <span class="bh-badge bh-badge-web"><i class="hgi-globe"></i> Web</span>
@@ -93,7 +94,7 @@
                 @if (HasPermission("posts.delete"))
                 {
                     <form asp-action="Delete" asp-route-id="@post.Id" method="post" style="display:inline;"
-                        onsubmit="return confirm('Delete this post?');">
+                          onsubmit="return confirm('Delete this post?');">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
                             <i class="hgi-delete-01"></i>

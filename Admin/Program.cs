@@ -1,3 +1,4 @@
+using Admin.Hubs;
 using Admin.Infrastructure;
 using Admin.Logging;
 using AppCore;
@@ -73,6 +74,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Initialize database and seed super admin
@@ -146,6 +149,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+app.MapHub<ChatHub>("/chathub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");

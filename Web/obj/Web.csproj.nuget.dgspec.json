@@ -1,36 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\Web\\Web.csproj": {}
+    "/Applications/Projects/Training/IE/tfcmd/Web/Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\AppCore\\AppCore.csproj": {
+    "/Applications/Projects/Training/IE/tfcmd/AppCore/AppCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\AppCore\\AppCore.csproj",
+        "projectUniqueName": "/Applications/Projects/Training/IE/tfcmd/AppCore/AppCore.csproj",
         "projectName": "AppCore",
-        "projectPath": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\AppCore\\AppCore.csproj",
-        "packagesPath": "C:\\Users\\kenzy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\AppCore\\obj\\",
+        "projectPath": "/Applications/Projects/Training/IE/tfcmd/AppCore/AppCore.csproj",
+        "packagesPath": "/Users/oakwoodadvansio-bl/.nuget/packages/",
+        "outputPath": "/Applications/Projects/Training/IE/tfcmd/AppCore/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\kenzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/oakwoodadvansio-bl/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
-            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -45,11 +38,10 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net9.0": {
-          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
@@ -82,6 +74,16 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[9.0.14, 9.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[9.0.14, 9.0.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -90,41 +92,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\Web\\Web.csproj": {
+    "/Applications/Projects/Training/IE/tfcmd/Web/Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\Web\\Web.csproj",
+        "projectUniqueName": "/Applications/Projects/Training/IE/tfcmd/Web/Web.csproj",
         "projectName": "Web",
-        "projectPath": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\Web\\Web.csproj",
-        "packagesPath": "C:\\Users\\kenzy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\Web\\obj\\",
+        "projectPath": "/Applications/Projects/Training/IE/tfcmd/Web/Web.csproj",
+        "packagesPath": "/Users/oakwoodadvansio-bl/.nuget/packages/",
+        "outputPath": "/Applications/Projects/Training/IE/tfcmd/Web/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\kenzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/oakwoodadvansio-bl/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
-            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\AppCore\\AppCore.csproj": {
-                "projectPath": "C:\\Users\\kenzy\\Source\\Ience\\tfcmd\\AppCore\\AppCore.csproj"
+              "/Applications/Projects/Training/IE/tfcmd/AppCore/AppCore.csproj": {
+                "projectPath": "/Applications/Projects/Training/IE/tfcmd/AppCore/AppCore.csproj"
               }
             }
           }
@@ -139,11 +134,10 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net9.0": {
-          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
@@ -166,6 +160,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[9.0.14, 9.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.osx-arm64",
+              "version": "[9.0.14, 9.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[9.0.14, 9.0.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -174,7 +182,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

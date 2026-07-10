@@ -9,12 +9,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="author" content="TFC: Tema Friends Club of Maryland">
 	<meta name="description"
-		content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
+		  content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
 	<meta name="keywords"
-		content="temafriendsclub, tema, tfc, tfcmd, tfc charity, charity, health, fitness,  personal development, inspiration">
+		  content="temafriendsclub, tema, tfc, tfcmd, tfc charity, charity, health, fitness,  personal development, inspiration">
 	<meta property="og:title" content="TFC: Tema Friends Club of Maryland">
 	<meta property="og:description"
-		content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
+		  content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
 	<meta property="og:type" content="website">
 	<meta property="og:image" content="">
 	<meta property="og:url" content="">
@@ -45,8 +45,8 @@
 						</div>
 
 						<button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
-							data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false"
-							aria-label="Toggle navigation">
+								data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false"
+								aria-label="Toggle navigation">
 							<img src="~/images/menu.svg" alt="">
 						</button>
 
@@ -59,11 +59,11 @@
 								</li> -->
 								<li class="d-none d-xl-inline-block">
 									<button type="button" data-bs-toggle="modal" data-bs-target="#modalSubscribe"
-										class="btn btn-primary-light btn-line">Join Us</button>
+											class="btn btn-primary-light btn-line">Join Us</button>
 								</li>
 								<li class="d-none d-lg-inline-block">
 									<button class="btn-link" type="button" data-bs-toggle="offcanvas"
-										data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+											data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
 										<img src="~/images/menu.svg" alt="">
 									</button>
 								</li>
@@ -79,177 +79,177 @@
 
 						<!-- Navigation List -->
 						<nav class="navigation-list navbar-collapse collapse justify-content-center" id="navbarToggler"
-							aria-label="Main">
+							 aria-label="Main">
 							<div class="website-logo">
 								<a asp-controller="Home" asp-action="Index"><img src="~/images/logo-light.png"
-										alt=""></a>
-							</div>
-							<ul class="nav navbar-nav">
-								<li><a asp-controller="Home" asp-action="Index">Home</a></li>
-								<li><a asp-controller="Pages" asp-action="About">About Us</a></li>
-								<li class="menu-down-item">
-									<a asp-controller="Groups" asp-action="Index">Groups</a>
-									@await Component.InvokeAsync("GroupsMenu")
-								</li>
-
-								<li class="menu-down-item mega-menu-down menu-down-category">
-									<a asp-controller="Post" asp-action="Index">Latest Posts</a>
-									@await Component.InvokeAsync("MegaMenu")
-								</li>
-								<li><a asp-controller="NoticeBoard" asp-action="Index">Notice Board</a></li>
-								<li><a asp-controller="Post" asp-action="News">News</a></li>
-								<li><a asp-controller="Pages" asp-action="Gallery">Gallery</a></li>
-								<li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-			</div>
-		</header>
-
-		<div class="offcanvas offcanvas-end offcanvas-sidebar" tabindex="-1" id="offcanvasSidebar">
-			<div class="offcanvas-body">
-				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-
-				<div class="website-logo mb-30">
-					<a asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="TFC"></a>
-				</div>
-
-				<div class="widget widget-about">
-					<h5 class="widget-title">About</h5>
-					<p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
-						and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
-					<a asp-controller="Pages" asp-action="About">Read More</a>
-				</div>
-
-				<div class="widget mb-0">
-					<h5 class="widget-title">Get in touch with us</h5>
-					<form asp-controller="Contact" asp-action="Send" method="post">
-						<input type="text" class="form-control mb-15" placeholder="Name" name="Name">
-						<input type="email" class="form-control mb-15" placeholder="Email Address" name="Email">
-						<textarea class="form-control mb-15" rows="5" placeholder="Message" name="Message"></textarea>
-						<button type="submit" class="btn btn-primary-light btn-line">SUBMIT</button>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade modal-subscribe" id="modalSubscribe" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-body p-0">
-						<div class="row g-0">
-							<div class="col-sm-5 d-none d-sm-block">
-								<img class="object-cover" src="~/images/subscribe.jpg" alt="">
-							</div>
-							<div class="col-sm-7">
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
-								<div class="subscribe-body">
-									<div class="mb-20">
-										<h4>Join Tema Friends Club!</h4>
-										<p>We'll contact you to continue the process to become one of us.</p>
-									</div>
-									<form asp-controller="Contact" asp-action="Join" method="post">
-										<input type="email" class="form-control mb-15" placeholder="Email Address"
-											name="Email">
-										<button type="submit" class="btn btn-primary-light btn-line w-100">SEND
-											REQUEST</button>
-									</form>
+																					 alt=""></a>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<main class="main-wrapper">
-			@RenderBody()
-		</main>
-		<footer class="footer-wrapper">
-			<div class="footer-main">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-3">
-							<div class="widget">
-								<div class="widget-logo mb-4">
-									<img src="~/images/logo.png" alt="TFC">
-								</div>
-								<p class="mb-4">The Tema Friends Club of Maryland is a nonprofit organization, aiming to
-									bring
-									together the sons and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
-								<ul class="widget-social">
-									<li><a target="_blank" href="https://www.facebook.com/" class="btn btn-social"><i
-												class="feather icon-facebook"></i></a></li>
-									<li><a target="_blank" href="https://www.instagram.com/" class="btn btn-social"><i
-												class="feather icon-instagram"></i></a></li>
-									<li><a target="_blank" href="https://www.youtube.com/" class="btn btn-social"><i
-												class="feather icon-youtube"></i></a></li>
-									<li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-social"><i
-												class="feather icon-linkedin"></i></a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="col-lg-3 col-sm-6">
-							<div class="widget widget_link">
-								<h5 class="widget-title">Useful Links</h5>
-								<ul>
+								<ul class="nav navbar-nav">
 									<li><a asp-controller="Home" asp-action="Index">Home</a></li>
 									<li><a asp-controller="Pages" asp-action="About">About Us</a></li>
-									<li><a asp-controller="Post" asp-action="Index">Posts</a></li>
+									<li class="menu-down-item">
+										<a asp-controller="Groups" asp-action="Index">Groups</a>
+										@await Component.InvokeAsync("GroupsMenu")
+									</li>
+
+									<li class="menu-down-item mega-menu-down menu-down-category">
+										<a asp-controller="Post" asp-action="Index">Latest Posts</a>
+										@await Component.InvokeAsync("MegaMenu")
+									</li>
+									@* <li><a asp-controller="NoticeBoard" asp-action="Index">Notice Board</a></li> *@
 									<li><a asp-controller="Post" asp-action="News">News</a></li>
-									<li><a asp-controller="NoticeBoard" asp-action="Index">Notice Board</a></li>
-									<li><a asp-controller="Groups" asp-action="Index">Groups</a></li>
 									<li><a asp-controller="Pages" asp-action="Gallery">Gallery</a></li>
 									<li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
 								</ul>
-							</div>
+							</nav>
 						</div>
-						<div class="col-lg-3 col-sm-6">
-							<div class="widget widget-post-wrapper">
-								<h5 class="widget-title">Latest Events</h5>
-								<div class="widget-post-inner">
-									@await Component.InvokeAsync("LatestEvents")
-								</div>
-							</div>
+					</div>
+				</div>
+			</header>
+
+			<div class="offcanvas offcanvas-end offcanvas-sidebar" tabindex="-1" id="offcanvasSidebar">
+				<div class="offcanvas-body">
+					<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+					<div class="website-logo mb-30">
+						<a asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="TFC"></a>
+					</div>
+
+					<div class="widget widget-about">
+						<h5 class="widget-title">About</h5>
+						<p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
+							and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+							<a asp-controller="Pages" asp-action="About">Read More</a>
 						</div>
-						<div class="col-lg-3">
-							<div class="widget widget-post-wrapper">
-								<h5 class="widget-title">Latest Posts</h5>
-								<div class="widget-post-inner">
-									@await Component.InvokeAsync("LatestPosts")
+
+						<div class="widget mb-0">
+							<h5 class="widget-title">Get in touch with us</h5>
+							<form asp-controller="Contact" asp-action="Send" method="post">
+								<input type="text" class="form-control mb-15" placeholder="Name" name="Name">
+								<input type="email" class="form-control mb-15" placeholder="Email Address" name="Email">
+								<textarea class="form-control mb-15" rows="5" placeholder="Message" name="Message"></textarea>
+								<button type="submit" class="btn btn-primary-light btn-line">SUBMIT</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal fade modal-subscribe" id="modalSubscribe" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-body p-0">
+								<div class="row g-0">
+									<div class="col-sm-5 d-none d-sm-block">
+										<img class="object-cover" src="~/images/subscribe.jpg" alt="">
+									</div>
+									<div class="col-sm-7">
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+												aria-label="Close"></button>
+										<div class="subscribe-body">
+											<div class="mb-20">
+												<h4>Join Tema Friends Club!</h4>
+												<p>We'll contact you to continue the process to become one of us.</p>
+											</div>
+											<form asp-controller="Contact" asp-action="Join" method="post">
+												<input type="email" class="form-control mb-15" placeholder="Email Address"
+													   name="Email">
+												<button type="submit" class="btn btn-primary-light btn-line w-100">SEND
+													REQUEST</button>
+												</form>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="footer-copyright">
-				<div class="container">
-					<small>© <span class="year">@DateTime.Now.Year</span>. Proudly powered by Ience Software
-						Solutions.</small>
-				</div>
-			</div>
-		</footer>
-	</div>
-	<script src="~/libraries/globle/main.js"></script>
-	<script src="~/libraries/swiper/swiper-bundle.min.js"></script>
-	<script src="~/js/silde-init.js"></script>
-	<script src="~/js/script.js"></script>
-	@await RenderSectionAsync("Scripts", required: false)
-	<script>
-		// Initialize Swiper for categories
-		new Swiper('.swiper-catogary', {
-			slidesPerView: 1,
-			spaceBetween: 20,
-			breakpoints: {
-				640: { slidesPerView: 2 },
-				768: { slidesPerView: 3 },
-				1024: { slidesPerView: 3 }
-			}
-		});
-	</script>
-</body>
 
-</html>
+					<main class="main-wrapper">
+						@RenderBody()
+					</main>
+					<footer class="footer-wrapper">
+						<div class="footer-main">
+							<div class="container">
+								<div class="row">
+									<div class="col-lg-3">
+										<div class="widget">
+											<div class="widget-logo mb-4">
+												<img src="~/images/logo.png" alt="TFC">
+											</div>
+											<p class="mb-4">The Tema Friends Club of Maryland is a nonprofit organization, aiming to
+												bring
+												together the sons and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+												<ul class="widget-social">
+													<li><a target="_blank" href="https://www.facebook.com/" class="btn btn-social"><i
+														class="feather icon-facebook"></i></a></li>
+														<li><a target="_blank" href="https://www.instagram.com/" class="btn btn-social"><i
+															class="feather icon-instagram"></i></a></li>
+															<li><a target="_blank" href="https://www.youtube.com/" class="btn btn-social"><i
+																class="feather icon-youtube"></i></a></li>
+																<li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-social"><i
+																	class="feather icon-linkedin"></i></a></li>
+																</ul>
+															</div>
+														</div>
+														<div class="col-lg-3 col-sm-6">
+															<div class="widget widget_link">
+																<h5 class="widget-title">Useful Links</h5>
+																<ul>
+																	<li><a asp-controller="Home" asp-action="Index">Home</a></li>
+																	<li><a asp-controller="Pages" asp-action="About">About Us</a></li>
+																	<li><a asp-controller="Post" asp-action="Index">Posts</a></li>
+																	<li><a asp-controller="Post" asp-action="News">News</a></li>
+																	<li><a asp-controller="NoticeBoard" asp-action="Index">Notice Board</a></li>
+																	<li><a asp-controller="Groups" asp-action="Index">Groups</a></li>
+																	<li><a asp-controller="Pages" asp-action="Gallery">Gallery</a></li>
+																	<li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
+																</ul>
+															</div>
+														</div>
+														<div class="col-lg-3 col-sm-6">
+															<div class="widget widget-post-wrapper">
+																<h5 class="widget-title">Latest Events</h5>
+																<div class="widget-post-inner">
+																	@await Component.InvokeAsync("LatestEvents")
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-3">
+															<div class="widget widget-post-wrapper">
+																<h5 class="widget-title">Latest Posts</h5>
+																<div class="widget-post-inner">
+																	@await Component.InvokeAsync("LatestPosts")
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="footer-copyright">
+												<div class="container">
+													<small>© <span class="year">@DateTime.Now.Year</span>. Proudly powered by Ience Software
+														Solutions.</small>
+													</div>
+												</div>
+											</footer>
+										</div>
+										<script src="~/libraries/globle/main.js"></script>
+										<script src="~/libraries/swiper/swiper-bundle.min.js"></script>
+										<script src="~/js/silde-init.js"></script>
+										<script src="~/js/script.js"></script>
+										@await RenderSectionAsync("Scripts", required: false)
+										<script>
+												// Initialize Swiper for categories
+												new Swiper('.swiper-catogary', {
+													slidesPerView: 1,
+													spaceBetween: 20,
+													breakpoints: {
+														640: { slidesPerView: 2 },
+														768: { slidesPerView: 3 },
+														1024: { slidesPerView: 3 }
+													}
+												});
+										</script>
+									</body>
+
+								</html>

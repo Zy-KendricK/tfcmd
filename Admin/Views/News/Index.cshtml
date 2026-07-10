@@ -30,7 +30,7 @@
         @if (HasPermission("posts.create"))
         {
             <a asp-action="Create" class="bh-btn bh-btn-primary">
-                <i class="hgi-add-square"></i> New News Item
+                <i class="hgi-add-02"></i> New News Item
             </a>
         }
     </div>
@@ -55,11 +55,12 @@
     <form asp-action="Index" method="get" class="bh-filterbar">
         <input type="hidden" name="tab" value="@tab" />
         <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
-            placeholder="Search news..." />
+               placeholder="Search news..." />
         <select name="status" class="form-admin-control">
             <option value="">All Status</option>
             <option value="Draft" selected="@(Model.Status == ContentStatus.Draft)">Draft</option>
-            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review</option>
+            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review
+            </option>
             <option value="Approved" selected="@(Model.Status == ContentStatus.Approved)">Approved</option>
             <option value="Published" selected="@(Model.Status == ContentStatus.Published)">Published</option>
             <option value="Rejected" selected="@(Model.Status == ContentStatus.Rejected)">Rejected</option>
@@ -70,7 +71,8 @@
     </form>
 
     <!-- Forum-style news rows -->
-    <div id="news-list" class="bh-forum-list" data-next-page="@(Model.TotalPages > Model.CurrentPage ? Model.CurrentPage + 1 : 0)">
+    <div id="news-list" class="bh-forum-list"
+         data-next-page="@(Model.TotalPages > Model.CurrentPage ? Model.CurrentPage + 1 : 0)">
         @if (Model.Posts != null && Model.Posts.Any())
         {
             @await Html.PartialAsync("_ListItems", Model)
@@ -99,8 +101,8 @@
                 }
                 else
                 {
-                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
-                        asp-route-status="@Model.Status" asp-route-tab="@tab">@i</a>
+                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                       asp-route-tab="@tab">@i</a>
                 }
             }
         </div>
@@ -108,27 +110,27 @@
 
     @section Scripts {
         <script>
-            const newsList = document.getElementById('news-list');
-            if (newsList) {
-                const loadMore = () => {
-                    const nextPage = parseInt(newsList.dataset.nextPage || '0', 10);
-                    if (!nextPage) return;
-                    const url = '@Url.Action("Index", "News")?page=' + nextPage + '&search=@(Model.Search ?? "")&status=@(Model.Status?.ToString() ?? "")&tab=@(tab ?? "")&ajax=true';
-                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                        .then(response => response.text())
-                        .then(html => {
-                            if (!html.trim()) return;
-                            newsList.insertAdjacentHTML('beforeend', html);
-                            const newNextPage = parseInt(newsList.dataset.nextPage || '0', 10) + 1;
-                            newsList.dataset.nextPage = newNextPage;
-                        });
-                };
-                window.addEventListener('scroll', () => {
-                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                        loadMore();
-                    }
-                });
-            }
+                const newsList = document.getElementById('news-list');
+                if (newsList) {
+                    const loadMore = () => {
+                        const nextPage = parseInt(newsList.dataset.nextPage || '0', 10);
+                        if (!nextPage) return;
+                        const url = '@Url.Action("Index", "News")?page=' + nextPage + '&search=@(Model.Search ?? "")&status=@(Model.Status?.ToString() ?? "")&tab=@(tab ?? "")&ajax=true';
+                        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(response => response.text())
+                            .then(html => {
+                                if (!html.trim()) return;
+                                newsList.insertAdjacentHTML('beforeend', html);
+                                const newNextPage = parseInt(newsList.dataset.nextPage || '0', 10) + 1;
+                                newsList.dataset.nextPage = newNextPage;
+                            });
+                    };
+                    window.addEventListener('scroll', () => {
+                        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                            loadMore();
+                        }
+                    });
+                }
         </script>
     }
 </div>
@@ -157,7 +159,7 @@
             <h5 class="widget-title">News Actions</h5>
             <ul class="menu">
                 <li class="menu-item">
-                    <a asp-action="Create"><i class="hgi-add-square"></i> New News Item</a>
+                    <a asp-action="Create"><i class="hgi-add-02"></i> New News Item</a>
                 </li>
                 <li class="menu-item">
                     <a asp-action="Index" asp-route-tab="pending"><i class="hgi-clock-01"></i> Pending Review</a>

@@ -16,7 +16,7 @@
         @if (canManageGroups)
         {
             <a asp-action="Create" class="btn-admin btn-admin-primary">
-                <i class="hgi-add-square"></i> Create Group
+                <i class="hgi-add-02"></i> Create Group
             </a>
         }
     </div>
@@ -24,7 +24,7 @@
     <!-- Filters -->
     <form asp-action="Index" method="get" class="bh-filterbar">
         <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow bh-filter-input"
-            placeholder="Search groups..." />
+               placeholder="Search groups..." />
         <select name="type" class="form-admin-control bh-filter-select">
             <option value="">All Types</option>
             <option value="Public">Public</option>
@@ -42,20 +42,21 @@
             @foreach (var group in Model.Groups)
             {
                 <div class="col-lg-6 col-md-6">
-                    <div class="admin-card h-100" style="border: 1px solid var(--theme-color-border); padding: 0; overflow: hidden;">
+                    <div class="admin-card h-100"
+                         style="border: 1px solid var(--theme-color-border); padding: 0; overflow: hidden;">
                         <!-- Group Cover -->
                         <div
                             style="height: 100px; background: linear-gradient(135deg, var(--theme-color-primary), var(--theme-color-primary-lightened)); border-radius: 8px 8px 0 0; position: relative;">
                             @if (!string.IsNullOrEmpty(group.CoverImageUrl))
                             {
                                 <img src="@group.CoverImageUrl" alt=""
-                                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;" />
+                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;" />
                             }
                             <div style="position: absolute; bottom: -30px; left: 20px;">
                                 @if (!string.IsNullOrEmpty(group.AvatarUrl))
                                 {
                                     <img src="@group.AvatarUrl" alt="@group.Name"
-                                        style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; object-fit: cover;" />
+                                         style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; object-fit: cover;" />
                                 }
                                 else
                                 {
@@ -80,7 +81,7 @@
                                         GroupType.Private => "status-pending",
                                         GroupType.Hidden => "status-draft",
                                         _ => "status-draft"
-                                                };
+                                    };
                                 }
                                 <span class="status-badge @typeClass">@group.Type</span>
                                 @if (group.IsPublishedToWeb)
@@ -115,7 +116,7 @@
                                 @if (canManageGroups)
                                 {
                                     <a asp-action="Edit" asp-route-id="@group.Id"
-                                        class="btn-admin btn-admin-sm btn-admin-primary flex-grow-1 mr-2">
+                                       class="btn-admin btn-admin-sm btn-admin-primary flex-grow-1 mr-2">
                                         <i class="hgi-edit-01"></i> Edit
                                     </a>
                                     <a asp-action="Members" asp-route-id="@group.Id"
@@ -123,10 +124,13 @@
                                         <i class="hgi-user-group"></i>
                                     </a>
                                 }
-                                @if (!group.IsPublishedToWeb && group.Status != ContentStatus.PendingReview && group.Status != ContentStatus.Approved && (canManageGroups || HasPermission("posts.edit")))
+                                @if (!group.IsPublishedToWeb && group.Status != ContentStatus.PendingReview && group.Status !=
+                        ContentStatus.Approved && (canManageGroups || HasPermission("posts.edit")))
                                 {
-                                    <form asp-action="RequestPublish" asp-route-id="@group.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning mr-2" title="Submit for review" style="padding:0px 15px">
+                                    <form asp-action="RequestPublish" asp-route-id="@group.Id" method="post"
+                                          style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning mr-2"
+                                                title="Submit for review" style="padding:0px 15px">
                                             <i class="hgi-file-upload"></i>
                                         </button>
                                     </form>
@@ -134,15 +138,18 @@
                                 @if (group.Status == ContentStatus.PendingReview && canPublishGroups)
                                 {
                                     <form asp-action="Approve" asp-route-id="@group.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success mr-2" title="Approve" style="padding:0px 15px">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success mr-2" title="Approve"
+                                                style="padding:0px 15px">
                                             <i class="hgi-checkmark-circle-01"></i>
                                         </button>
                                     </form>
                                 }
-                                @if (!group.IsPublishedToWeb && (group.Status == ContentStatus.Approved || group.Status == ContentStatus.PendingReview) && canPublishGroups)
+                                @if (!group.IsPublishedToWeb && (group.Status == ContentStatus.Approved || group.Status ==
+                        ContentStatus.PendingReview) && canPublishGroups)
                                 {
                                     <form asp-action="PublishToWeb" asp-route-id="@group.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-primary mr-2" title="Publish to website" style="padding:0px 15px">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-primary mr-2"
+                                                title="Publish to website" style="padding:0px 15px">
                                             <i class="hgi-globe"></i>
                                         </button>
                                     </form>
@@ -150,8 +157,9 @@
                                 @if (group.IsPublishedToWeb && canPublishGroups)
                                 {
                                     <form asp-action="Unpublish" asp-route-id="@group.Id" method="post" style="display: inline;"
-                                        onsubmit="return confirm('Remove this group from the website?');">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning mr-2" title="Unpublish" style="padding:0px 15px">
+                                          onsubmit="return confirm('Remove this group from the website?');">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning mr-2"
+                                                title="Unpublish" style="padding:0px 15px">
                                             <i class="hgi-cloud"></i>
                                         </button>
                                     </form>
@@ -159,8 +167,9 @@
                                 @if (canManageGroups)
                                 {
                                     <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
-                                        onsubmit="return confirm('Delete this group?');">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" style="padding:0px 15px">
+                                          onsubmit="return confirm('Delete this group?');">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger"
+                                                style="padding:0px 15px">
                                             <i class="hgi-delete-01"></i>
                                         </button>
                                     </form>
@@ -189,8 +198,8 @@
                 @for (int i = 1; i <= Model.TotalPages; i++)
                 {
                     <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@i"
-                           asp-route-search="@Model.Search" asp-route-type="@Model.Type">@i</a>
+                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
+                           asp-route-type="@Model.Type">@i</a>
                     </li>
                 }
             </ul>
@@ -229,7 +238,7 @@
         <h5 class="widget-title">Group Actions</h5>
         <ul class="menu">
             <li class="menu-item">
-                <a asp-action="Create"><i class="hgi-add-square"></i> Create Social Group</a>
+                <a asp-action="Create"><i class="hgi-add-02"></i> Create Social Group</a>
             </li>
             <li class="menu-item">
                 <a asp-controller="Members" asp-action="Index"><i class="hgi-user-group"></i> Manage Members</a>

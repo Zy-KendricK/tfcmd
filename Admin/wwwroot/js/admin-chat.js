@@ -1,6 +1,6 @@
 /* Messenger dock (Beehive buddy-chat markup, jQuery-driven).
    Lets signed-in admins message each other: buddy rail on the extreme right,
-   pop-up chat windows, Enter-to-send, unread badges, 5s polling. */
+   pop-up chat windows, Enter-to-send, unread badges, and SignalR push updates. */
 (function ($) {
     'use strict';
 
@@ -20,8 +20,8 @@
     var buddies = [];
     var openWindows = {};   // userId -> { $el, lastMessageId }
     var maxWindows = 3;
-    var lastPolledId = 0;
     var soundMuted = window.localStorage.getItem('bpc-muted') === '1';
+    var hubConnection = null;
 
     /* ---------- helpers ---------- */
 
@@ -52,6 +52,39 @@
             contentType: 'application/json',
             headers: { 'RequestVerificationToken': token },
             data: JSON.stringify(payload)
+        });
+    }
+
+    function initSignalR() {
+        if (hubConnection) { return; }
+
+        hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/chathub')
+            .withAutomaticReconnect()
+            .build();
+
+        hubConnection.on('ReceiveMessage', function (message) {
+            var senderId = String(message.senderId);
+            var win = openWindows[senderId];
+            if (win) {
+                appendMessage(win.$el, message, buddyById(senderId));
+                win.lastMessageId = Math.max(win.lastMessageId, message.id || 0);
+                scrollToBottom(win.$el);
+                postJson(urls.markRead, { userId: senderId });
+            }
+
+            var buddy = buddyById(senderId);
+            if (!buddy) { return; }
+
+            buddy.unread = (buddy.unread || 0) + 1;
+            renderBuddies($('#bpc-buddy-filter').val());
+            updateRailBadge();
+            notifySound();
+        });
+
+        hubConnection.start().catch(function () {
+            // Fall back to the existing REST polling if SignalR cannot start.
+            poll();
         });
     }
 
@@ -233,6 +266,33 @@
         if (!text) { return; }
 
         $field.text('');
+        if (hubConnection && hubConnection.state === signalR.HubConnectionState.Connected) {
+            hubConnection.invoke('SendMessage', userId, text)
+                .then(function (msg) {
+                    appendMessage($win, msg, buddyById(userId));
+                    if (openWindows[userId] && msg.id > openWindows[userId].lastMessageId) {
+                        openWindows[userId].lastMessageId = msg.id;
+                    }
+                    scrollToBottom($win);
+                })
+                .catch(function () {
+                    postJson(urls.send, { recipientId: userId, content: text })
+                        .done(function (msg) {
+                            appendMessage($win, msg, buddyById(userId));
+                            if (openWindows[userId] && msg.id > openWindows[userId].lastMessageId) {
+                                openWindows[userId].lastMessageId = msg.id;
+                            }
+                            scrollToBottom($win);
+                        })
+                        .fail(function () {
+                            var $list = $win.find('.bpc-chat-list');
+                            $list.append('<li class="message--self"><div class="message-block"><div class="messages"><div class="message bpc-send-failed"><span>Message failed to send.</span></div></div></div></li>');
+                            scrollToBottom($win);
+                        });
+                });
+            return;
+        }
+
         postJson(urls.send, { recipientId: userId, content: text })
             .done(function (msg) {
                 appendMessage($win, msg, buddyById(userId));
@@ -248,30 +308,26 @@
             });
     }
 
-    /* ---------- polling ---------- */
+    /* ---------- fallback polling ---------- */
 
     function poll() {
-        $.getJSON(urls.updates, { sinceId: lastPolledId })
+        if (hubConnection && hubConnection.state === signalR.HubConnectionState.Connected) { return; }
+
+        $.getJSON(urls.updates, { sinceId: 0 })
             .done(function (data) {
                 if (!data) { return; }
-                lastPolledId = data.lastId || lastPolledId;
 
                 var unreadMap = {};
                 $.each(data.unread || [], function (_, u) { unreadMap[String(u.senderId)] = u.count; });
 
-                var hadNew = false;
                 $.each(data.messages || [], function (_, m) {
                     var senderId = String(m.senderId);
                     var win = openWindows[senderId];
-                    if (win && m.id > win.lastMessageId) {
+                    if (win) {
                         appendMessage(win.$el, m, buddyById(senderId));
-                        win.lastMessageId = m.id;
+                        win.lastMessageId = Math.max(win.lastMessageId, m.id || 0);
                         scrollToBottom(win.$el);
-                        delete unreadMap[senderId];
                         postJson(urls.markRead, { userId: senderId });
-                        hadNew = true;
-                    } else if (!win) {
-                        hadNew = true;
                     }
                 });
 
@@ -280,11 +336,6 @@
                 });
                 renderBuddies($('#bpc-buddy-filter').val());
                 updateRailBadge();
-
-                if (hadNew) { notifySound(); }
-            })
-            .always(function () {
-                window.setTimeout(poll, 5000);
             });
     }
 
@@ -348,7 +399,11 @@
             buddy.unread = 0;
             renderBuddies($('#bpc-buddy-filter').val());
             updateRailBadge();
-            postJson(urls.markRead, { userId: userId });
+            if (hubConnection && hubConnection.state === signalR.HubConnectionState.Connected) {
+                hubConnection.invoke('MarkAsRead', userId).catch(function () { });
+            } else {
+                postJson(urls.markRead, { userId: userId });
+            }
         }
     });
 
@@ -356,6 +411,7 @@
 
     $(function () {
         loadBuddies();
+        initSignalR();
         poll();
     });
 })(jQuery);
