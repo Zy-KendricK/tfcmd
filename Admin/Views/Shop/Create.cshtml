@@ -1,0 +1,156 @@
+@model ProductViewModel
+@{
+    ViewData["Title"] = Model?.Id > 0 ? "Edit Product" : "Add Product";
+    var isEdit = Model?.Id > 0;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-shopping-basket-01"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Name" class="form-admin-label">Product Name *</label>
+                    <input asp-for="Name" class="form-admin-control" placeholder="Product name" required />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="SKU" class="form-admin-label">SKU</label>
+                            <input asp-for="SKU" class="form-admin-control" placeholder="e.g. PRD-001" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="Type" class="form-admin-label">Product Type</label>
+                            <select asp-for="Type" class="form-admin-control"
+                                asp-items="Html.GetEnumSelectList<ProductType>()"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="ShortDescription" class="form-admin-label">Short Description</label>
+                    <textarea asp-for="ShortDescription" class="form-admin-control" rows="2"
+                        placeholder="Brief summary shown in listings..."></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Full Description</label>
+                    <textarea asp-for="Description" class="form-admin-control wysiwyg-editor" rows="8"
+                        placeholder="Full product description..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Organization</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="CategoryId" class="form-admin-label">Category</label>
+                        <select asp-for="CategoryId" class="form-admin-control" asp-items="ViewBag.Categories">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Pricing</h5>
+
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="form-admin-group">
+                                <label asp-for="Price" class="form-admin-label">Price *</label>
+                                <input asp-for="Price" type="number" step="0.01" class="form-admin-control" required />
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-admin-group">
+                                <label asp-for="Currency" class="form-admin-label">Currency</label>
+                                <input asp-for="Currency" class="form-admin-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="CompareAtPrice" class="form-admin-label">Compare-at Price</label>
+                        <input asp-for="CompareAtPrice" type="number" step="0.01" class="form-admin-control" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="CostPrice" class="form-admin-label">Cost Price</label>
+                        <input asp-for="CostPrice" type="number" step="0.01" class="form-admin-control" />
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Inventory</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="TrackInventory" type="checkbox" style="margin-right: 10px;" />
+                            Track inventory
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="StockQuantity" class="form-admin-label">Stock Quantity</label>
+                        <input asp-for="StockQuantity" type="number" class="form-admin-control" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="AllowBackorder" type="checkbox" style="margin-right: 10px;" />
+                            Allow backorder
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Weight" class="form-admin-label">Weight (kg)</label>
+                        <input asp-for="Weight" type="number" step="0.01" class="form-admin-control" />
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Visibility</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured Product
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsOnSale" type="checkbox" style="margin-right: 10px;" />
+                            On Sale
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Product" : "Add Product")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+
+    @await Html.PartialAsync("_WysiwygScripts")
+</div>

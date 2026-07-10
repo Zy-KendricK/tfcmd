@@ -1,6 +1,7 @@
 using AppCore;
 using AppCore.Entities;
 using AppCore.Services;
+using Admin.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,15 @@ namespace Admin.Controllers;
 public class SocialGroupsController : BaseAdminController
 {
     private readonly ApplicationDbContext _context;
+    private readonly IImageUploadService _imageUpload;
 
     public SocialGroupsController(
         ApplicationDbContext context,
-        IPermissionService permissionService) : base(permissionService)
+        IPermissionService permissionService,
+        IImageUploadService imageUpload) : base(permissionService)
     {
         _context = context;
+        _imageUpload = imageUpload;
     }
 
     public async Task<IActionResult> Index(string? search, string? type, int page = 1, int pageSize = 20)
@@ -52,6 +56,13 @@ public class SocialGroupsController : BaseAdminController
             .GroupBy(m => m.SocialGroupId)
             .Select(g => new { GroupId = g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.GroupId, x => x.Count);
+
+        // Sidebar stats
+        ViewBag.TotalGroups = await _context.SocialGroups.CountAsync(g => !g.IsDeleted);
+        ViewBag.PublicGroups = await _context.SocialGroups.CountAsync(g => !g.IsDeleted && g.Type == GroupType.Public);
+        ViewBag.PrivateGroups = await _context.SocialGroups.CountAsync(g => !g.IsDeleted && g.Type == GroupType.Private);
+        ViewBag.HiddenGroups = await _context.SocialGroups.CountAsync(g => !g.IsDeleted && g.Type == GroupType.Hidden);
+        ViewBag.TotalMemberships = await _context.SocialGroupMembers.CountAsync(m => !m.IsBanned);
 
         var viewModel = new SocialGroupListViewModel
         {
@@ -95,12 +106,18 @@ public class SocialGroupsController : BaseAdminController
         if (!ModelState.IsValid)
             return View(model);
 
+        var avatarUrl = await _imageUpload.SaveAsync(model.AvatarFile, "groups");
+        var coverUrl = await _imageUpload.SaveAsync(model.CoverFile, "groups");
+
         var group = new SocialGroup
         {
             Name = model.Name,
             Slug = GenerateSlug(model.Name),
             Description = model.Description,
             Type = model.Type,
+            Rules = model.Rules,
+            AvatarUrl = avatarUrl ?? model.AvatarUrl,
+            CoverImageUrl = coverUrl ?? model.CoverImageUrl,
             CreatedById = CurrentUserId!,
             IsActive = true,
             CreatedAt = DateTime.UtcNow
@@ -136,6 +153,9 @@ public class SocialGroupsController : BaseAdminController
             Name = group.Name,
             Description = group.Description,
             Type = group.Type,
+            Rules = group.Rules,
+            AvatarUrl = group.AvatarUrl,
+            CoverImageUrl = group.CoverImageUrl,
             IsActive = group.IsActive
         };
 
@@ -153,9 +173,15 @@ public class SocialGroupsController : BaseAdminController
         if (group == null)
             return NotFound();
 
+        var avatarUrl = await _imageUpload.SaveAsync(model.AvatarFile, "groups");
+        var coverUrl = await _imageUpload.SaveAsync(model.CoverFile, "groups");
+
         group.Name = model.Name;
         group.Description = model.Description;
         group.Type = model.Type;
+        group.Rules = model.Rules;
+        group.AvatarUrl = avatarUrl ?? model.AvatarUrl;
+        group.CoverImageUrl = coverUrl ?? model.CoverImageUrl;
         group.IsActive = model.IsActive;
         group.UpdatedAt = DateTime.UtcNow;
 
@@ -175,9 +201,89 @@ public class SocialGroupsController : BaseAdminController
 
         group.IsDeleted = true;
         group.UpdatedAt = DateTime.UtcNow;
+        await HomeContentService.TouchCacheVersionAsync(_context, CurrentUserId);
         await _context.SaveChangesAsync();
 
         TempData["Success"] = "Group deleted successfully.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RequestPublish(int id)
+    {
+        var group = await _context.SocialGroups.FindAsync(id);
+        if (group == null)
+            return NotFound();
+
+        group.PublishRequested = true;
+        group.PublishRequestedAt = DateTime.UtcNow;
+        group.Status = ContentStatus.PendingReview;
+        group.UpdatedById = CurrentUserId;
+        group.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Publish request submitted for review.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [RequirePermission("posts.publish")]
+    public async Task<IActionResult> Approve(int id)
+    {
+        var group = await _context.SocialGroups.FindAsync(id);
+        if (group == null)
+            return NotFound();
+
+        group.Status = ContentStatus.Approved;
+        group.ReviewedById = CurrentUserId;
+        group.ReviewedAt = DateTime.UtcNow;
+        group.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Group approved. It can now be published to the website.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [RequirePermission("posts.publish")]
+    public async Task<IActionResult> PublishToWeb(int id)
+    {
+        var group = await _context.SocialGroups.FindAsync(id);
+        if (group == null)
+            return NotFound();
+
+        group.Status = ContentStatus.Published;
+        group.IsPublishedToWeb = true;
+        group.PublishedToWebAt = DateTime.UtcNow;
+        group.PublishedById = CurrentUserId;
+        group.UpdatedAt = DateTime.UtcNow;
+        await HomeContentService.TouchCacheVersionAsync(_context, CurrentUserId);
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Group published to the website.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [RequirePermission("posts.publish")]
+    public async Task<IActionResult> Unpublish(int id)
+    {
+        var group = await _context.SocialGroups.FindAsync(id);
+        if (group == null)
+            return NotFound();
+
+        group.IsPublishedToWeb = false;
+        group.Status = ContentStatus.Draft;
+        group.UpdatedById = CurrentUserId;
+        group.UpdatedAt = DateTime.UtcNow;
+        await HomeContentService.TouchCacheVersionAsync(_context, CurrentUserId);
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Group removed from the website.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -264,5 +370,10 @@ public class SocialGroupViewModel
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public GroupType Type { get; set; } = GroupType.Public;
+    public string? Rules { get; set; }
+    public string? AvatarUrl { get; set; }
+    public string? CoverImageUrl { get; set; }
+    public IFormFile? AvatarFile { get; set; }
+    public IFormFile? CoverFile { get; set; }
     public bool IsActive { get; set; } = true;
 }

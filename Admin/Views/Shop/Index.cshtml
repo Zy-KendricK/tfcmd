@@ -1,162 +1,397 @@
-@model IEnumerable<Product>
+@model ProductListViewModel
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Shop";
+    ViewData["BodyClass"] = "woocommerce woocommerce-page woocommerce-shop archive post-type-archive post-type-archive-product woocommerce-no-js";
+    var latestProducts = ViewBag.LatestProducts as IList<AppCore.Entities.Product> ?? new List<AppCore.Entities.Product>();
+    int pendingCount = ViewBag.PendingReviewCount ?? 0;
+    int publishedCount = ViewBag.PublishedCount ?? 0;
+    int draftCount = ViewBag.DraftCount ?? 0;
+    string? orderby = ViewBag.Orderby as string;
+    var columns = 3;
+
+    string PriceHtmlClass(AppCore.Entities.Product p) =>
+        p.IsOnSale && p.CompareAtPrice.HasValue ? "sale" : "";
 }
 
-<div class="admin-card">
-    <div class="admin-card-header d-flex justify-content-between align-items-center">
-        <h4 class="admin-card-title">
-            <i class="uil-shopping-trolley"></i> Manage Products
-        </h4>
-        <a asp-action="Create" class="btn-admin btn-admin-primary">
-            <i class="uil-plus"></i> Add Product
-        </a>
-    </div>
+@section Styles {
+    <style>
+        /* Theme's wow.js normally reveals .animate-item; play the entrance with animate.css instead */
+        ul.products li.animate-item {
+            visibility: visible;
+        }
 
-    <!-- Filters -->
-    <div class="mb-4">
-        <form asp-action="Index" method="get" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
-                    placeholder="Search products..." />
-            </div>
-            <div class="col-md-2">
-                <select name="status" class="form-admin-control">
-                    <option value="">All Status</option>
-                    <option value="Draft">Draft</option>
-                    <option value="Published">Published</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select name="type" class="form-admin-control">
-                    <option value="">All Types</option>
-                    <option value="Physical">Physical</option>
-                    <option value="Digital">Digital</option>
-                    <option value="Virtual">Virtual</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn-admin btn-admin-primary">
-                    <i class="uil-filter"></i> Filter
-                </button>
-            </div>
-        </form>
-    </div>
+        /* WooCommerce pagination (grid variant is not in the 1.6.1 stylesheet) */
+        .woocommerce-pagination {
+            text-align: center;
+            margin: 10px 0 30px;
+        }
 
-    <div class="table-responsive">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th style="width: 80px;">Image</th>
-                    <th>Product</th>
-                    <th>SKU</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th style="width: 150px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    @foreach (var product in Model)
-                    {
-                        <tr>
-                            <td>
-                                @{
-                                    var mainImage = product.Images?.FirstOrDefault();
-                                }
-                                @if (mainImage != null)
-                                {
-                                    <img src="@mainImage.Url" alt="@product.Name"
-                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />
-                                }
-                                else
-                                {
-                                    <div
-                                        style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="uil-image" style="font-size: 24px; color: #ccc;"></i>
-                                    </div>
-                                }
-                            </td>
-                            <td>
-                                <strong>@product.Name</strong>
-                                @if (product.IsFeatured)
-                                {
-                                    <span class="status-badge" style="background: gold; color: #333;"><i
-                                            class="uil-star"></i></span>
-                                }
-                                @if (product.IsOnSale && product.CompareAtPrice.HasValue)
-                                {
-                                    <span class="status-badge status-approved">Sale</span>
-                                }
-                            </td>
-                            <td><code>@(product.SKU ?? "N/A")</code></td>
-                            <td>
-                                @if (product.IsOnSale && product.CompareAtPrice.HasValue)
-                                {
-                                    <span
-                                        style="text-decoration: line-through; color: #999;">$@product.CompareAtPrice.Value.ToString("N2")</span>
-                                    <br />
+        .woocommerce-pagination ul.page-numbers {
+            list-style: none;
+            display: inline-flex;
+            gap: 6px;
+            margin: 0;
+            padding: 0;
+        }
 
-                                    <strong style="color: var(--theme-color-success);">$@product.Price.ToString("N2")</strong>
-                                }
-                                else
-                                {
-                                    <strong>$@product.Price.ToString("N2")</strong>
-                                }
-                            </td>
-                            <td>
-                                @if (product.TrackInventory)
-                                {
-                                    var stockClass = product.StockQuantity <= 0 ? "status-rejected" :
-                                    (product.StockQuantity < 10 ? "status-pending" : "status-approved");
-                                    <span class="status-badge @stockClass">@product.StockQuantity</span>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">-</span>
-                                }
-                            </td>
-                            <td>@product.Type</td>
-                            <td>
-                                @{
-                                    var statusClass = product.Status == ContentStatus.Published ? "status-published" :
-                                    "status-draft";
-                                }
-                                <span class="status-badge @statusClass">@product.Status</span>
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@product.Id" class="btn-admin btn-admin-sm btn-admin-primary"
-                                    title="Edit">
-                                    <i class="uil-edit"></i>
-                                </a>
-                                <a asp-action="Details" asp-route-id="@product.Id"
-                                    class="btn-admin btn-admin-sm btn-admin-success" title="View">
-                                    <i class="uil-eye"></i>
-                                </a>
-                                <form asp-action="Delete" asp-route-id="@product.Id" method="post" style="display: inline;"
-                                    onsubmit="return confirm('Delete this product?');">
-                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
-                                        <i class="uil-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="8" class="text-center py-4">
-                            <i class="uil-shopping-trolley" style="font-size: 48px; color: #ddd;"></i>
-                            <p class="text-muted mt-2">No products found.</p>
-                            <a asp-action="Create" class="btn-admin btn-admin-primary">Add product</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        .woocommerce-pagination ul.page-numbers li .page-numbers {
+            background-color: #fff;
+            display: inline-block;
+            min-width: 2.25rem;
+            padding: .4rem .75rem;
+            border: 1px solid var(--theme-color-border);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 2px;
+            font-size: 14px;
+            color: var(--theme-color-text);
+        }
+
+        .woocommerce-pagination ul.page-numbers li .page-numbers:hover {
+            border-color: var(--theme-color-primary);
+            color: var(--theme-color-primary);
+        }
+
+        .woocommerce-pagination ul.page-numbers li .page-numbers.current {
+            background: var(--theme-color-primary);
+            border-color: var(--theme-color-primary);
+            color: #fff;
+        }
+    </style>
+}
+
+<!-- Title bar (template: beehive-title-bar) -->
+<div class="beehive-title-bar social">
+    <div class="title-bar-wrapper">
+        <div class="title-wrapper">
+            <h1 class="title h3">Shop</h1>
+        </div>
     </div>
 </div>
+
+<!-- Shop menu (template: nav-component shop-navbar) -->
+<nav class="nav-component">
+    <ul class="nav-component-list shop-navbar">
+        <li class="menu-item current-menu-item">
+            <a asp-action="Index" aria-current="page">All products</a>
+        </li>
+        <li class="menu-item">
+            <a asp-action="Categories">Categories</a>
+        </li>
+        <li class="menu-item">
+            <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.PendingReview">
+                Pending review
+                @if (pendingCount > 0)
+                {
+                    <span class="status-badge status-pending">@pendingCount</span>
+                }
+            </a>
+        </li>
+        <li class="menu-item">
+            <a asp-action="Create"><i class="hgi-add-square"></i> Add product</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Search + collapsible filters (template: shop-filters beehive-filters) -->
+<div class="shop-filters beehive-filters">
+    <div class="filter-wrapper">
+        <div class="search beehive-shop-search">
+            <form role="search" method="get" class="woocommerce-product-search" asp-action="Index">
+                <label class="screen-reader-text" for="product-search-field">Search for:</label>
+                <input type="search" id="product-search-field" class="search-field" placeholder="Search products&hellip;"
+                       value="@Model.Search" name="search" />
+                <button type="submit" value="Search"><i class="hgi-search-list-01"></i></button>
+                @if (Model.Status.HasValue)
+                {
+                    <input type="hidden" name="status" value="@Model.Status" />
+                }
+                @if (!string.IsNullOrEmpty(orderby))
+                {
+                    <input type="hidden" name="orderby" value="@orderby" />
+                }
+            </form>
+        </div>
+        <div class="wrap-collapse-button">
+            <button class="button button-filter" type="button" data-bs-toggle="collapse" data-toggle="collapse"
+                    data-bs-target="#shop_filter_widgets" data-target="#shop_filter_widgets"
+                    aria-expanded="false" aria-controls="shop_filter_widgets">
+                <i class="hgi-sliders-vertical"></i>
+                Filter
+            </button>
+        </div>
+    </div>
+    <div id="shop_filter_widgets" class="collapse @(Model.Status.HasValue || Model.CategoryId.HasValue ? "show" : "")">
+        <div class="widget-wrapper">
+            <div class="widget woocommerce widget_layered_nav">
+                <h5 class="widget-title">Filter by</h5>
+                <form method="get" asp-action="Index" class="woocommerce-widget-layered-nav-dropdown">
+                    <select class="woocommerce-widget-layered-nav-dropdown" name="status" onchange="this.form.submit()">
+                        <option value="">Any status</option>
+                        @foreach (AppCore.Entities.ContentStatus s in Enum.GetValues<AppCore.Entities.ContentStatus>())
+                        {
+                            <option value="@s" selected="@(Model.Status == s)">@s</option>
+                        }
+                    </select>
+                    <input type="hidden" name="search" value="@Model.Search" />
+                    <input type="hidden" name="orderby" value="@orderby" />
+                </form>
+            </div>
+            <div class="widget woocommerce widget_layered_nav">
+                <h5 class="widget-title">Filter by</h5>
+                <form method="get" asp-action="Index" class="woocommerce-widget-layered-nav-dropdown">
+                    <select class="woocommerce-widget-layered-nav-dropdown" name="categoryId" onchange="this.form.submit()"
+                            asp-items="@(ViewBag.Categories as Microsoft.AspNetCore.Mvc.Rendering.SelectList)">
+                        <option value="">Any category</option>
+                    </select>
+                    <input type="hidden" name="search" value="@Model.Search" />
+                    <input type="hidden" name="orderby" value="@orderby" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="woocommerce-notices-wrapper"></div>
+
+<!-- Result count + ordering (template: WooCommerce toolbar) -->
+<p class="woocommerce-result-count" role="status" aria-relevant="all">
+    @if (Model.TotalCount == 0)
+    {
+        <text>No results found</text>
+    }
+    else if (Model.TotalPages <= 1)
+    {
+        <text>Showing all @Model.TotalCount result@(Model.TotalCount == 1 ? "" : "s")</text>
+    }
+    else
+    {
+        var first = (Model.CurrentPage - 1) * Model.PageSize + 1;
+        var last = Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalCount);
+        <text>Showing @first&ndash;@last of @Model.TotalCount results</text>
+    }
+</p>
+<form class="woocommerce-ordering" method="get" asp-action="Index">
+    <select name="orderby" class="orderby" aria-label="Shop order" onchange="this.form.submit()">
+        <option value="" selected="@(string.IsNullOrEmpty(orderby))">Default sorting</option>
+        <option value="popularity" selected="@(orderby == "popularity")">Sort by popularity</option>
+        <option value="rating" selected="@(orderby == "rating")">Sort by average rating</option>
+        <option value="date" selected="@(orderby == "date")">Sort by latest</option>
+        <option value="price" selected="@(orderby == "price")">Sort by price: low to high</option>
+        <option value="price-desc" selected="@(orderby == "price-desc")">Sort by price: high to low</option>
+    </select>
+    <input type="hidden" name="search" value="@Model.Search" />
+    @if (Model.Status.HasValue)
+    {
+        <input type="hidden" name="status" value="@Model.Status" />
+    }
+    @if (Model.CategoryId.HasValue)
+    {
+        <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+    }
+</form>
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    <!-- Product grid (template: ul.products.columns-3 / item-product cards) -->
+    <ul class="products columns-@columns">
+        @for (var i = 0; i < Model.Products.Count; i++)
+        {
+            var product = Model.Products[i];
+            var mainImage = product.Images?.OrderBy(img => img.Id).FirstOrDefault();
+            var onSale = product.IsOnSale && product.CompareAtPrice.HasValue;
+            var positionClass = i % columns == 0 ? "first" : (i % columns == columns - 1 ? "last" : "");
+            var stockClass = !product.TrackInventory || (product.StockQuantity ?? 0) > 0 ? "instock" : "outofstock";
+
+            <li class="animate-item animated slideInUp beehive-post product @positionClass @stockClass @(onSale ? "sale" : "") has-post-thumbnail">
+                <div class="item-product">
+                    @if (onSale)
+                    {
+                        <span class="onsale">Sale!</span>
+                    }
+                    @if (product.Status != AppCore.Entities.ContentStatus.Published)
+                    {
+                        var statusClass = product.Status switch
+                        {
+                            AppCore.Entities.ContentStatus.PendingReview => "status-pending",
+                            AppCore.Entities.ContentStatus.Rejected => "status-rejected",
+                            _ => "status-draft"
+                        };
+                        <span class="admin-status status-badge @statusClass">@product.Status</span>
+                    }
+                    <div class="img-top">
+                        <div class="product-img">
+                            @if (mainImage != null)
+                            {
+                                <img width="300" height="300" src="@mainImage.Url" alt="@product.Name" decoding="async" />
+                            }
+                            else
+                            {
+                                <span class="bpc-product-placeholder"><i class="hgi-image-01"></i></span>
+                            }
+                        </div>
+                        <div class="hover-only">
+                            <a asp-action="Details" asp-route-id="@product.Id" class="hover-overlay"></a>
+                            <ul class="product-actions">
+                                <li>
+                                    <a asp-action="Edit" asp-route-id="@product.Id" class="button add_to_cart_button"
+                                       aria-label="Edit @product.Name">Edit product</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Details" asp-route-id="@product.Id" class="view_cart_button"
+                                       aria-label="View @product.Name">View Product</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="woocommerce-loop-product__title">
+                            <a asp-action="Details" asp-route-id="@product.Id">@product.Name</a>
+                        </h2>
+                        <span class="price @PriceHtmlClass(product)">
+                            @if (onSale)
+                            {
+                                <del aria-hidden="true">
+                                    <span class="woocommerce-Price-amount amount">
+                                        <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.CompareAtPrice!.Value.ToString("N2")</bdi>
+                                    </span>
+                                </del>
+                                <ins aria-hidden="true">
+                                    <span class="woocommerce-Price-amount amount">
+                                        <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.Price.ToString("N2")</bdi>
+                                    </span>
+                                </ins>
+                            }
+                            else
+                            {
+                                <span class="woocommerce-Price-amount amount">
+                                    <bdi><span class="woocommerce-Price-currencySymbol">$</span>@product.Price.ToString("N2")</bdi>
+                                </span>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="woocommerce-pagination" aria-label="Product pagination">
+            <ul class="page-numbers">
+                @if (Model.CurrentPage > 1)
+                {
+                    <li>
+                        <a class="prev page-numbers" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)"
+                           asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                           asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">&larr;</a>
+                    </li>
+                }
+                @for (var p = 1; p <= Model.TotalPages; p++)
+                {
+                    <li>
+                        @if (p == Model.CurrentPage)
+                        {
+                            <span aria-current="page" class="page-numbers current">@p</span>
+                        }
+                        else
+                        {
+                            <a class="page-numbers" asp-action="Index" asp-route-page="@p"
+                               asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                               asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">@p</a>
+                        }
+                    </li>
+                }
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li>
+                        <a class="next page-numbers" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)"
+                           asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+                           asp-route-categoryId="@Model.CategoryId" asp-route-orderby="@orderby">&rarr;</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <div class="woocommerce-info" style="margin-top: 20px;">
+        No products were found matching your selection.
+        <a asp-action="Create">Add the first product</a>.
+    </div>
+}
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: shop overview + latest products (template widget markup) -->
+    <div class="widget woocommerce">
+        <h5 class="widget-title">Shop overview</h5>
+        <ul class="item-list">
+            <li class="vcard">
+                <div class="item">
+                    <div class="item-title fn">
+                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.Published">Published</a>
+                    </div>
+                    <div class="item-meta"><span class="activity">@publishedCount product@(publishedCount == 1 ? "" : "s") live in the shop</span></div>
+                </div>
+            </li>
+            <li class="vcard">
+                <div class="item">
+                    <div class="item-title fn">
+                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.PendingReview">Pending review</a>
+                    </div>
+                    <div class="item-meta"><span class="activity">@pendingCount awaiting approval</span></div>
+                </div>
+            </li>
+            <li class="vcard">
+                <div class="item">
+                    <div class="item-title fn">
+                        <a asp-action="Index" asp-route-status="@AppCore.Entities.ContentStatus.Draft">Drafts</a>
+                    </div>
+                    <div class="item-meta"><span class="activity">@draftCount not yet submitted</span></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="widget woocommerce widget_products">
+        <h5 class="widget-title">Latest products</h5>
+        <ul class="product_list_widget">
+            @foreach (var latest in latestProducts)
+            {
+                var latestImage = latest.Images?.OrderBy(img => img.Id).FirstOrDefault();
+                <li>
+                    <a asp-action="Details" asp-route-id="@latest.Id">
+                        @if (latestImage != null)
+                        {
+                            <img width="300" height="300" src="@latestImage.Url" alt="@latest.Name" decoding="async" />
+                        }
+                        <span class="product-title">@latest.Name</span>
+                    </a>
+                    @if (latest.IsOnSale && latest.CompareAtPrice.HasValue)
+                    {
+                        <del aria-hidden="true">
+                            <span class="woocommerce-Price-amount amount">
+                                <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.CompareAtPrice.Value.ToString("N2")</bdi>
+                            </span>
+                        </del>
+                        <ins aria-hidden="true">
+                            <span class="woocommerce-Price-amount amount">
+                                <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.Price.ToString("N2")</bdi>
+                            </span>
+                        </ins>
+                    }
+                    else
+                    {
+                        <span class="woocommerce-Price-amount amount">
+                            <bdi><span class="woocommerce-Price-currencySymbol">$</span>@latest.Price.ToString("N2")</bdi>
+                        </span>
+                    }
+                </li>
+            }
+            @if (!latestProducts.Any())
+            {
+                <li><span class="product-title">No products yet.</span></li>
+            }
+        </ul>
+    </div>
+}

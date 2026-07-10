@@ -47,6 +47,9 @@ public class PermissionService : IPermissionService
         if (await IsSuperAdminAsync(userId))
             return true;
 
+        if (permissionCodes == null || permissionCodes.Length == 0)
+            return false;
+
         return await _context.UserGroupMemberships
             .Where(m => m.UserId == userId && m.IsActive && !m.IsDeleted)
             .Join(_context.GroupPermissions.Where(gp => gp.IsGranted && gp.IsActive && !gp.IsDeleted),

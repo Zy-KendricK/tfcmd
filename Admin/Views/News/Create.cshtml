@@ -1,0 +1,129 @@
+@model NewsViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? "Edit News Item" : "Create News Item";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-rss"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" enctype="multipart/form-data">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="bh-web-intent">
+            <label>
+                <input asp-for="IntendedForWeb" type="checkbox" />
+                <span>
+                    <b>Intended for the public website</b>
+                    <small>Tick this if the news item should go to the internet after moderator approval.
+                        Unticked items stay internal to the member portal and never enter the publish flow.</small>
+                </span>
+            </label>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="News headline" required />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Excerpt" class="form-admin-label">Brief *</label>
+                    <textarea asp-for="Excerpt" class="form-admin-control" rows="3"
+                        placeholder="Short summary shown with the image and title on the website..."></textarea>
+                    <small class="text-muted">Shown under the headline on the home page and news listing cards</small>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Content" class="form-admin-label">Content *</label>
+                    <textarea asp-for="Content" id="Content" class="form-admin-control wysiwyg-editor" rows="12"
+                        placeholder="Write the news story here..."></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Header Image</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="FeaturedImageFile" class="form-admin-label">Upload header image</label>
+                        <input asp-for="FeaturedImageFile" type="file" accept="image/*" class="form-admin-control" />
+                        <small class="text-muted">Every news item shows an image, title and brief on the website</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="FeaturedImageUrl" class="form-admin-label">…or image URL</label>
+                        <input asp-for="FeaturedImageUrl" class="form-admin-control" placeholder="https://…" />
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model?.FeaturedImageUrl))
+                    {
+                        <div class="mt-2">
+                            <img src="@Model.FeaturedImageUrl" alt="Header" style="max-width: 100%; border-radius: 8px;" />
+                        </div>
+                    }
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3"><i class="hgi-home-01"></i> Home Page Placement</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured (large What's New slot)
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="ShowOnHomePage" type="checkbox" style="margin-right: 10px;" />
+                            Show on Home Page (smaller slot)
+                        </label>
+                    </div>
+
+                    @{
+                        var whatsNewUsage = ViewBag.WhatsNewUsage as (int FeaturedUsed, int SecondaryUsed, int FeaturedCap, int SecondaryCap)?;
+                    }
+                    @if (whatsNewUsage.HasValue)
+                    {
+                        <small class="text-muted">
+                            What's New usage: @whatsNewUsage.Value.FeaturedUsed/@whatsNewUsage.Value.FeaturedCap featured,
+                            @whatsNewUsage.Value.SecondaryUsed/@whatsNewUsage.Value.SecondaryCap home slots
+                        </small>
+                    }
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Options</h5>
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="AllowComments" type="checkbox" style="margin-right: 10px;" />
+                            Allow Comments
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update News Item" : "Create News Item")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_WysiwygScripts")

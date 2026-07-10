@@ -1,140 +1,180 @@
-@model IEnumerable<Post>
+@model PostListViewModel
 @{
     ViewData["Title"] = "Blog Posts";
+    var totalPosts = (int?)ViewBag.TotalPosts ?? 0;
+    var publishedPosts = (int?)ViewBag.PublishedPosts ?? 0;
+    var draftPosts = (int?)ViewBag.DraftPosts ?? 0;
+    var internalPosts = (int?)ViewBag.InternalPosts ?? 0;
+    var pendingCount = (int?)ViewBag.PendingReviewCount ?? 0;
+    var tagCount = (int?)ViewBag.TagCount ?? 0;
+    var tab = (string?)ViewBag.Tab;
+
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+
+    static string StatusBadge(ContentStatus status) => status switch
+    {
+        ContentStatus.Draft => "bh-badge-draft",
+        ContentStatus.PendingReview => "bh-badge-pending",
+        ContentStatus.Approved => "bh-badge-approved",
+        ContentStatus.Published => "bh-badge-published",
+        ContentStatus.Rejected => "bh-badge-rejected",
+        _ => "bh-badge-archived"
+    };
 }
 
 <div class="admin-card">
     <div class="admin-card-header d-flex justify-content-between align-items-center">
         <h4 class="admin-card-title">
-            <i class="uil-newspaper"></i> Manage Blog Posts
+            <i class="hgi-news"></i> Blog Posts
         </h4>
-        <a asp-action="Create" class="btn-admin btn-admin-primary">
-            <i class="uil-plus"></i> New Post
+        @if (HasPermission("posts.create"))
+        {
+            <a asp-action="Create" class="bh-btn bh-btn-primary">
+                <i class="hgi-add-square"></i> New Post
+            </a>
+        }
+    </div>
+
+    <!-- Template-style tab bar -->
+    <div class="bh-tabbar">
+        <a asp-action="Index" class="bh-tab @(string.IsNullOrEmpty(tab) ? "active" : "")">
+            All <span class="bh-count">@totalPosts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="pending" class="bh-tab @(tab == "pending" ? "active" : "")">
+            Pending Review <span class="bh-count">@pendingCount</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="live" class="bh-tab @(tab == "live" ? "active" : "")">
+            Live on Website <span class="bh-count">@publishedPosts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="drafts" class="bh-tab @(tab == "drafts" ? "active" : "")">
+            Drafts <span class="bh-count">@draftPosts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="internal" class="bh-tab @(tab == "internal" ? "active" : "")">
+            Internal Only <span class="bh-count">@internalPosts</span>
         </a>
     </div>
 
-    <!-- Filters -->
-    <div class="mb-4">
-        <form asp-action="Index" method="get" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
-                    placeholder="Search posts..." />
-            </div>
-            <div class="col-md-2">
-                <select name="status" class="form-admin-control">
-                    <option value="">All Status</option>
-                    <option value="Draft" selected="@(ViewBag.Status == "Draft")">Draft</option>
-                    <option value="PendingReview" selected="@(ViewBag.Status == "PendingReview")">Pending Review
-                    </option>
-                    <option value="Approved" selected="@(ViewBag.Status == "Approved")">Approved</option>
-                    <option value="Published" selected="@(ViewBag.Status == "Published")">Published</option>
-                    <option value="Rejected" selected="@(ViewBag.Status == "Rejected")">Rejected</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn-admin btn-admin-primary">
-                    <i class="uil-filter"></i> Filter
-                </button>
-            </div>
-        </form>
-    </div>
+    <!-- Filter bar -->
+    <form asp-action="Index" method="get" class="bh-filterbar">
+        <input type="hidden" name="tab" value="@tab" />
+        <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
+            placeholder="Search posts..." />
+        <select name="status" class="form-admin-control">
+            <option value="">All Status</option>
+            <option value="Draft" selected="@(Model.Status == ContentStatus.Draft)">Draft</option>
+            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review</option>
+            <option value="Approved" selected="@(Model.Status == ContentStatus.Approved)">Approved</option>
+            <option value="Published" selected="@(Model.Status == ContentStatus.Published)">Published</option>
+            <option value="Rejected" selected="@(Model.Status == ContentStatus.Rejected)">Rejected</option>
+        </select>
+        <button type="submit" class="bh-btn bh-btn-primary">
+            <i class="hgi-filter"></i> Filter
+        </button>
+    </form>
 
-    <div class="table-responsive">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Status</th>
-                    <th>Format</th>
-                    <th>Created</th>
-                    <th style="width: 200px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
+    <!-- Blog cards grid (template blog layout) -->
+    @if (Model.Posts != null && Model.Posts.Any())
+    {
+        <div id="blog-list" class="bh-blog-grid" data-next-page="@(Model.TotalPages > Model.CurrentPage ? Model.CurrentPage + 1 : 0)">
+            @await Html.PartialAsync("_ListItems", Model)
+        </div>
+    }
+    else
+    {
+        <div class="bh-empty">
+            <i class="hgi-news"></i>
+            <p>No blog posts found.</p>
+            @if (HasPermission("posts.create"))
+            {
+                <a asp-action="Create" class="bh-btn bh-btn-primary">Write your first post</a>
+            }
+        </div>
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="bh-pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
                 {
-                    @foreach (var post in Model)
-                    {
-                        <tr>
-                            <td>
-                                <strong>@post.Title</strong>
-                                @if (post.IsFeatured)
-                                {
-                                    <span class="status-badge" style="background: gold; color: #333;">
-                                        <i class="uil-star"></i> Featured
-                                    </span>
-                                }
-                            </td>
-                            <td>
-                                <small>@(post.Author?.DisplayName ?? "Unknown")</small>
-                            </td>
-                            <td>
-                                @{
-                                    var statusClass = post.Status switch
-                                    {
-                                        ContentStatus.Draft => "status-draft",
-                                        ContentStatus.PendingReview => "status-pending",
-                                        ContentStatus.Approved => "status-approved",
-                                        ContentStatus.Published => "status-published",
-                                        ContentStatus.Rejected => "status-rejected",
-                                        _ => "status-draft"
-                                    };
-                                }
-                                <span class="status-badge @statusClass">@post.Status</span>
-                            </td>
-                            <td>@post.Format</td>
-                            <td>@post.CreatedAt.ToString("MMM dd, yyyy")</td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@post.Id" class="btn-admin btn-admin-sm btn-admin-primary"
-                                    title="Edit">
-                                    <i class="uil-edit"></i>
-                                </a>
-
-                                @if (post.Status == ContentStatus.PendingReview)
-                                {
-                                    <form asp-action="Approve" asp-route-id="@post.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success" title="Approve">
-                                            <i class="uil-check"></i>
-                                        </button>
-                                    </form>
-                                    <form asp-action="Reject" asp-route-id="@post.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning" title="Reject">
-                                            <i class="uil-times"></i>
-                                        </button>
-                                    </form>
-                                }
-
-                                @if (post.Status == ContentStatus.Approved)
-                                {
-                                    <form asp-action="Publish" asp-route-id="@post.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success" title="Publish">
-                                            <i class="uil-globe"></i>
-                                        </button>
-                                    </form>
-                                }
-
-                                <form asp-action="Delete" asp-route-id="@post.Id" method="post" style="display: inline;"
-                                    onsubmit="return confirm('Are you sure you want to delete this post?');">
-                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
-                                        <i class="uil-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
+                    <span class="current">@i</span>
                 }
                 else
                 {
-                    <tr>
-                        <td colspan="6" class="text-center py-4">
-                            <i class="uil-newspaper" style="font-size: 48px; color: #ddd;"></i>
-                            <p class="text-muted mt-2">No posts found.</p>
-                            <a asp-action="Create" class="btn-admin btn-admin-primary">Create your first post</a>
-                        </td>
-                    </tr>
+                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
+                        asp-route-status="@Model.Status" asp-route-tab="@tab">@i</a>
                 }
-            </tbody>
-        </table>
-    </div>
+            }
+        </div>
+    }
+
+    @section Scripts {
+        <script>
+            const blogList = document.getElementById('blog-list');
+            if (blogList) {
+                const loadMore = () => {
+                    const nextPage = parseInt(blogList.dataset.nextPage || '0', 10);
+                    if (!nextPage) return;
+                    const url = '@Url.Action("Index", "Blog")?page=' + nextPage + '&search=@(Model.Search ?? "")&status=@(Model.Status?.ToString() ?? "")&tab=@(tab ?? "")&ajax=true';
+                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => response.text())
+                        .then(html => {
+                            if (!html.trim()) return;
+                            blogList.insertAdjacentHTML('beforeend', html);
+                            const newNextPage = parseInt(blogList.dataset.nextPage || '0', 10) + 1;
+                            blogList.dataset.nextPage = newNextPage;
+                        });
+                };
+                window.addEventListener('scroll', () => {
+                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                        loadMore();
+                    }
+                });
+            }
+        </script>
+    }
 </div>
+
+@section Sidebar {
+    <div class="widget">
+        <h5 class="widget-title">Blog Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-news"></i> Total posts</span>
+                <strong>@totalPosts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-globe"></i> Live on website</span>
+                <strong>@publishedPosts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-clock-01"></i> Pending review</span>
+                <strong>@pendingCount.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-bookmark-01"></i> Tags</span>
+                <strong>@tagCount.ToString("N0")</strong>
+            </li>
+        </ul>
+    </div>
+    @if (HasPermission("posts.create"))
+    {
+        <div class="widget widget_nav_menu">
+            <h5 class="widget-title">Blog Actions</h5>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a asp-action="Create"><i class="hgi-add-square"></i> New Post</a>
+                </li>
+                <li class="menu-item">
+                    <a asp-action="Tags"><i class="hgi-bookmark-01"></i> Manage Tags</a>
+                </li>
+                <li class="menu-item">
+                    <a asp-action="Index" asp-route-tab="pending"><i class="hgi-clock-01"></i> Pending Review</a>
+                </li>
+            </ul>
+        </div>
+    }
+}

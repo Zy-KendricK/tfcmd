@@ -1,0 +1,141 @@
+@model CharityListViewModel
+@{
+    ViewData["Title"] = "Charities";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-heart-add"></i> Manage Charities
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="hgi-add-square"></i> Add Charity
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Charities" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@Model.Search" class="form-admin-control"
+                    placeholder="Search charities..." />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="hgi-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Tagline</th>
+                    <th>Contact</th>
+                    <th>Projects</th>
+                    <th>Status</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Charities != null && Model.Charities.Any())
+                {
+                    @foreach (var charity in Model.Charities)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@charity.Id"><strong>@charity.Name</strong></a>
+                                @if (charity.IsFeatured)
+                                {
+                                    <span class="status-badge" style="background: gold; color: #333;">Featured</span>
+                                }
+                            </td>
+                            <td><small class="text-muted">@(charity.Tagline ?? "—")</small></td>
+                            <td><small>@(charity.Email ?? charity.Phone ?? "—")</small></td>
+                            <td>@(charity.Projects?.Count ?? 0)</td>
+                            <td>
+                                <span class="status-badge status-@charity.Status.ToString().ToLower()">@charity.Status</span>
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@charity.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-primary" title="Edit">
+                                    <i class="hgi-edit-01"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@charity.Id" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Delete this charity?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                        <i class="hgi-delete-01"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">No charities yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="Charities" asp-route-page="@i" asp-route-search="@Model.Search">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: charity stats + actions -->
+    <div class="widget">
+        <h5 class="widget-title">Charity Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-heart-add"></i> Total charities</span>
+                <strong>@(((int?)ViewBag.TotalCharities ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-star"></i> Featured</span>
+                <strong>@(((int?)ViewBag.FeaturedCharities ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-folder-01"></i> Total projects</span>
+                <strong>@(((int?)ViewBag.TotalProjects ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-checkmark-circle-01"></i> Active projects</span>
+                <strong>@(((int?)ViewBag.ActiveProjects ?? 0).ToString("N0"))</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Charity Actions</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-action="Index"><i class="hgi-cursor-in-window"></i> Charity Page Manager</a>
+            </li>
+            <li class="menu-item">
+                <a asp-action="Create"><i class="hgi-add-square"></i> New Charity</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Dashboard" asp-action="Index"><i class="hgi-home-01"></i> Dashboard</a>
+            </li>
+        </ul>
+    </div>
+}

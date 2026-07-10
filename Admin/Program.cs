@@ -1,3 +1,5 @@
+using Admin.Infrastructure;
+using Admin.Logging;
 using AppCore;
 using AppCore.Entities;
 using AppCore.Services;
@@ -15,7 +17,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 var serverVersion = ServerVersion.Create(8, 0, 0, ServerType.MySql);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
+    options.UseMySql(connectionString, serverVersion, mySqlOptions =>
+        mySqlOptions.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null)));
 
 // Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -42,12 +45,24 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // Add services
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUserGroupService, UserGroupService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<IHomeContentService, HomeContentService>();
+builder.Services.AddScoped<Admin.Services.IImageUploadService, Admin.Services.ImageUploadService>();
+
+var logPath = Path.Combine(builder.Environment.ContentRootPath, "Logs", "system.log");
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddProvider(new FileLoggerProvider(logPath));
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AuditLoggingFilter>();
+});
 
 // Add session support
 builder.Services.AddDistributedMemoryCache();

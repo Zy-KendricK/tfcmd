@@ -1,0 +1,158 @@
+@model AdvertViewModel
+@{
+    ViewData["Title"] = Model?.Id > 0 ? "Edit Advert" : "Post Advert";
+    var isEdit = Model?.Id > 0;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-tv-01"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="bh-web-intent">
+            <label>
+                <input asp-for="IntendedForWeb" type="checkbox" />
+                <span>
+                    <b>Intended for the public website</b>
+                    <small>Tick this if the advert should go to the internet after moderator approval.
+                        Unticked adverts stay internal to the member portal and never enter the publish flow.</small>
+                </span>
+            </label>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="Advert title" required />
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Description *</label>
+                    <textarea asp-for="Description" class="form-admin-control wysiwyg-editor" rows="10"
+                        placeholder="Describe the item or service..."></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="ContactEmail" class="form-admin-label">Contact Email</label>
+                            <input asp-for="ContactEmail" class="form-admin-control" placeholder="contact@example.com" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="ContactPhone" class="form-admin-label">Contact Phone</label>
+                            <input asp-for="ContactPhone" class="form-admin-control" placeholder="+1 555 000 0000" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-admin-group">
+                    <label class="d-flex align-items-center">
+                        <input asp-for="ShowContactInfo" type="checkbox" style="margin-right: 10px;" />
+                        Show contact info to public
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Advert Details</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="CategoryId" class="form-admin-label">Category</label>
+                        <select asp-for="CategoryId" class="form-admin-control" asp-items="ViewBag.Categories">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Condition" class="form-admin-label">Condition</label>
+                        <select asp-for="Condition" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<AdvertCondition>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Location" class="form-admin-label">Location</label>
+                        <input asp-for="Location" class="form-admin-control" placeholder="e.g. New York, NY" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="ExpiresAt" class="form-admin-label">Expires At</label>
+                        <input asp-for="ExpiresAt" type="date" class="form-admin-control" />
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Pricing</h5>
+
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="form-admin-group">
+                                <label asp-for="Price" class="form-admin-label">Price</label>
+                                <input asp-for="Price" type="number" step="0.01" class="form-admin-control" />
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-admin-group">
+                                <label asp-for="Currency" class="form-admin-label">Currency</label>
+                                <input asp-for="Currency" class="form-admin-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="PriceType" class="form-admin-label">Price Type</label>
+                        <select asp-for="PriceType" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<PriceType>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsNegotiable" type="checkbox" style="margin-right: 10px;" />
+                            Price is negotiable
+                        </label>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Visibility</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured Advert
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsUrgent" type="checkbox" style="margin-right: 10px;" />
+                            Urgent
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Advert" : "Post Advert")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+
+    @await Html.PartialAsync("_WysiwygScripts")
+</div>

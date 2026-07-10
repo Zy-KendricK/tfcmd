@@ -1,0 +1,265 @@
+@model Web.Controllers.PostDetailsViewModel
+@using AppCore.Entities
+@{
+    var post = Model.Post;
+    ViewData["Title"] = post.MetaTitle ?? post.Title;
+    var postDate = (post.PublishedToWebAt ?? post.CreatedAt).ToString("MMMM dd, yyyy");
+    var authorName = !string.IsNullOrWhiteSpace(post.Author?.DisplayName)
+        ? post.Author.DisplayName
+        : ($"{post.Author?.FirstName} {post.Author?.LastName}".Trim() is { Length: > 0 } n ? n : "TFC Maryland");
+    var sidebarFallbackImages = new[] { "/images/category/category-list/category1.jpg", "/images/category/category-list/category2.jpg", "/images/category/category-list/category3.jpg", "/images/category/category-list/category4.jpg", "/images/category/category-list/category5.jpg" };
+    var latestFallbackImages = new[] { "/images/widget-post/post1.jpg", "/images/widget-post/post2.jpg", "/images/widget-post/post3.jpg" };
+    var approvedComments = Model.Comments;
+    var commentCount = approvedComments.Count + approvedComments.Sum(c => c.Replies.Count);
+}
+
+<section class="section-space3">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8">
+                <div class="content-wrapper left-side">
+                    <div class="post-details post-sidebar">
+                        <ul class="post-meta">
+                            <li class="author"><img src="@(post.Author?.AvatarUrl ?? "/images/posts/middle-post/middle-post1.jpg")" alt="">By <a asp-controller="Post" asp-action="Search" asp-route-q="@authorName"> @authorName</a></li>
+                            <li class="date"><a asp-controller="Post" asp-action="Index">@postDate</a></li>
+                            <li class="tag">
+                                @if (post.Category != null)
+                                {
+                                    <a asp-controller="Post" asp-action="Category" asp-route-id="@(post.Category.Slug ?? post.Category.Id.ToString())">@post.Category.Name</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Post" asp-action="Index">General</a>
+                                }
+                            </li>
+                        </ul>
+                        <h1 class="post-title">@post.Title</h1>
+                        @if (!string.IsNullOrEmpty(post.FeaturedImageUrl))
+                        {
+                            <div class="post-main-media">
+                                <img src="@post.FeaturedImageUrl" alt="@post.Title">
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(post.VideoUrl))
+                        {
+                            <div class="post-main-media">
+                                <video controls class="w-100">
+                                    <source src="@post.VideoUrl">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(post.AudioUrl))
+                        {
+                            <div class="post-main-media">
+                                <audio controls class="w-100">
+                                    <source src="@post.AudioUrl">
+                                    Your browser does not support the audio tag.
+                                </audio>
+                            </div>
+                        }
+
+                        <div class="post-content">
+                            @Html.Raw(post.Content)
+
+                            @if (post.Images.Any())
+                            {
+                                <figure class="wp-block-gallery wp-block-gallery-3 is-cropped">
+                                    @foreach (var image in post.Images.OrderBy(i => i.DisplayOrder))
+                                    {
+                                        <figure class="wp-block-image"><img src="@image.ImageUrl" alt="@(image.Caption ?? post.Title)"></figure>
+                                    }
+                                </figure>
+                            }
+                        </div>
+
+                        <div class="post-footer">
+                            @if (post.Tags.Any())
+                            {
+                                <div class="tags-list">
+                                    <strong>Tags:</strong>
+                                    <ul>
+                                        @foreach (var postTag in post.Tags)
+                                        {
+                                            <li><a asp-controller="Post" asp-action="Search" asp-route-q="@postTag.Tag?.Name">@postTag.Tag?.Name</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            <ul class="widget-social">
+                                @{
+                                    var shareUrl = Url.Action("Details", "Post", new { id = post.Id }, Context.Request.Scheme);
+                                }
+                                <li><a href="https://www.facebook.com/sharer/sharer.php?u=@(Uri.EscapeDataString(shareUrl ?? string.Empty))" target="_blank" rel="noopener" class="btn btn-light btn-social"><i class="feather icon-facebook"></i></a></li>
+                                <li><a href="https://www.instagram.com/" target="_blank" rel="noopener" class="btn btn-light btn-social"><i class="feather icon-instagram"></i></a></li>
+                                <li><a href="https://www.youtube.com/" target="_blank" rel="noopener" class="btn btn-light btn-social"><i class="feather icon-youtube"></i></a></li>
+                                <li><a href="https://www.linkedin.com/sharing/share-offsite/?url=@(Uri.EscapeDataString(shareUrl ?? string.Empty))" target="_blank" rel="noopener" class="btn btn-light btn-social"><i class="feather icon-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+
+                        @if (Model.PreviousPost != null || Model.NextPost != null)
+                        {
+                            <div class="post-pagination">
+                                @if (Model.PreviousPost != null)
+                                {
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.PreviousPost.Id" class="prev-post">
+                                        <img src="@(Model.PreviousPost.FeaturedImageUrl ?? "/images/widget-post/post1.jpg")" alt="@Model.PreviousPost.Title">
+                                        <div class="pagination-title">
+                                            <span class="text"><i class="fa fa-angle-left"></i> Prev post</span>
+                                            <h6>@Model.PreviousPost.Title</h6>
+                                        </div>
+                                    </a>
+                                }
+                                @if (Model.NextPost != null)
+                                {
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.NextPost.Id" class="next-post">
+                                        <div class="pagination-title">
+                                            <span class="text">Next post <i class="fa fa-angle-right"></i></span>
+                                            <h6>@Model.NextPost.Title</h6>
+                                        </div>
+                                        <img src="@(Model.NextPost.FeaturedImageUrl ?? "/images/widget-post/post2.jpg")" alt="@Model.NextPost.Title">
+                                    </a>
+                                }
+                            </div>
+                        }
+
+                        @if (post.AllowComments)
+                        {
+                            <div class="post-comment-wrapper" id="postCommentWrapper">
+
+                                <!-- Comment List Wrapper -->
+                                <div class="comment-list-wrapper">
+                                    <h5 class="widget-title">@commentCount Comment@(commentCount == 1 ? "" : "s")</h5>
+                                    <div id="postCommentList">
+                                        <ul class="comment-list">
+                                            @foreach (var comment in approvedComments)
+                                            {
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-media">
+                                                            <img src="@(comment.User?.AvatarUrl ?? "/images/media/media.jpg")" alt="" class="media">
+                                                        </div>
+                                                        <div class="comment-content">
+                                                            <cite class="name">@(comment.User?.DisplayName ?? "Guest") <span class="comment-date">@comment.CreatedAt.ToString("MMMM d, yyyy")</span></cite>
+                                                            <p>@comment.Content</p>
+                                                            <a class="reply" href="#postRespond">Reply</a>
+                                                        </div>
+                                                    </div>
+                                                    @if (comment.Replies.Any())
+                                                    {
+                                                        <ul class="inner-comment">
+                                                            @foreach (var reply in comment.Replies.OrderBy(r => r.CreatedAt))
+                                                            {
+                                                                <li class="comment">
+                                                                    <div class="comment-body">
+                                                                        <div class="comment-media">
+                                                                            <img src="@(reply.User?.AvatarUrl ?? "/images/media/media2.jpg")" alt="" class="media">
+                                                                        </div>
+                                                                        <div class="comment-content">
+                                                                            <cite class="name">@(reply.User?.DisplayName ?? "Guest") <span class="comment-date">@reply.CreatedAt.ToString("MMMM d, yyyy")</span></cite>
+                                                                            <p>@reply.Content</p>
+                                                                            <a class="reply" href="#postRespond"> Reply</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Post Comments Respond -->
+                                <div class="post-comments-respond" id="postRespond">
+                                    <h5 class="widget-title" id="postReply">Leave a Reply</h5>
+                                    <div class="post-comments-wrapper">
+                                        <p class="post-comments-text">Your email address will not be published. Required fields are marked <span class="text-danger">*</span></p>
+                                        <form method="post" id="postCommentsForm" class="post-form">
+                                            <p class="post-author-input">
+                                                <input id="postAuthor" required="required" placeholder="Author" name="author" type="text">
+                                            </p>
+                                            <p class="post-email-input">
+                                                <input id="email" required="required" placeholder="Email" name="email" type="email">
+                                            </p>
+                                            <p class="post-website-input">
+                                                <input id="postWebsite" placeholder="Website" name="website" type="text">
+                                            </p>
+                                            <p class="post-comment-input">
+                                                <textarea id="postComments" placeholder="Type comments here..." class="form-control" name="comments" rows="7" required="required"></textarea>
+                                            </p>
+                                            <p class="post-submit-btn">
+                                                <button id="postSubmit" type="submit" class="submit btn btn-primary-light btn-line">POST COMMENT</button>
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4">
+
+                <aside class="aside-wrapper">
+
+                    <div class="widget widget-about">
+                        <h5 class="widget-title">About Us</h5>
+                        <p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
+                            and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+                        <a asp-controller="Pages" asp-action="About">Read More</a>
+                    </div>
+
+                    <div class="widget widget-categories">
+                        <h5 class="widget-title">Category</h5>
+                        <ul>
+                            @if (Model.SidebarCategories.Any())
+                            {
+                                for (var i = 0; i < Model.SidebarCategories.Count; i++)
+                                {
+                                    var category = Model.SidebarCategories[i];
+                                    <li>
+                                        <a asp-controller="Post" asp-action="Category" asp-route-id="@(category.Slug ?? category.Id.ToString())"
+                                            style="background-image: url(@(category.IconUrl ?? sidebarFallbackImages[i % sidebarFallbackImages.Length]));">
+                                            <span>@category.Name</span>
+                                            <span class="num">@category.ItemCount.ToString("00")</span>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="widget widget-post-wrapper">
+                        <h5 class="widget-title">Latest Posts</h5>
+                        <div class="widget-post-inner">
+                            @for (var i = 0; i < Model.LatestPosts.Count; i++)
+                            {
+                                var latest = Model.LatestPosts[i];
+                                <div class="widget-post">
+                                    <div class="post-content">
+                                        <div class="post-header">
+                                            <h6 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="@latest.Id">@latest.Title</a></h6>
+                                        </div>
+                                        <ul class="post-meta">
+                                            <li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@latest.Id">@((latest.PublishedToWebAt ?? latest.CreatedAt).ToString("MMMM dd, yyyy"))</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="post-thumb">
+                                        <a asp-controller="Post" asp-action="Details" asp-route-id="@latest.Id">
+                                            <img src="@(latest.FeaturedImageUrl ?? latestFallbackImages[i % latestFallbackImages.Length])" alt="@latest.Title">
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,13 +1,13 @@
-@model Post
+@model PostViewModel
 @{
-    ViewData["Title"] = Model == null ? "Create Post" : "Edit Post";
+    ViewData["Title"] = Model == null || Model.Id == 0 ? "Create Post" : "Edit Post";
     var isEdit = Model?.Id > 0;
 }
 
 <div class="admin-card">
     <div class="admin-card-header">
         <h4 class="admin-card-title">
-            <i class="uil-newspaper"></i> @ViewData["Title"]
+            <i class="hgi-news"></i> @ViewData["Title"]
         </h4>
     </div>
 
@@ -17,8 +17,19 @@
             <input type="hidden" asp-for="Id" />
         }
 
+        <div class="bh-web-intent">
+            <label>
+                <input asp-for="IntendedForWeb" type="checkbox" />
+                <span>
+                    <b>Intended for the public website</b>
+                    <small>Tick this if the post should go to the internet after moderator approval.
+                        Unticked posts stay internal to the member portal and never enter the publish flow.</small>
+                </span>
+            </label>
+        </div>
+
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-12">
                 <div class="form-admin-group">
                     <label asp-for="Title" class="form-admin-label">Title *</label>
                     <input asp-for="Title" class="form-admin-control" placeholder="Enter post title" required />
@@ -39,21 +50,15 @@
 
                 <div class="form-admin-group">
                     <label asp-for="Content" class="form-admin-label">Content *</label>
-                    <textarea asp-for="Content" class="form-admin-control" rows="15"
-                        placeholder="Write your post content here..." required></textarea>
+                    <textarea asp-for="Content" id="Content" class="form-admin-control wysiwyg-editor" rows="15"
+                        placeholder="Write your post content here..."></textarea>
                     <span asp-validation-for="Content" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="form-aside-panels">
                 <div class="admin-card" style="background: #f8f9fa;">
                     <h5 class="mb-3">Publish Settings</h5>
-
-                    <div class="form-admin-group">
-                        <label asp-for="Status" class="form-admin-label">Status</label>
-                        <select asp-for="Status" class="form-admin-control"
-                            asp-items="Html.GetEnumSelectList<ContentStatus>()"></select>
-                    </div>
 
                     <div class="form-admin-group">
                         <label asp-for="Format" class="form-admin-label">Post Format</label>
@@ -63,25 +68,68 @@
 
                     <div class="form-admin-group">
                         <label class="d-flex align-items-center">
-                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
-                            Featured Post
-                        </label>
-                    </div>
-
-                    <div class="form-admin-group">
-                        <label class="d-flex align-items-center">
-                            <input asp-for="AllowComments" type="checkbox" style="margin-right: 10px;" checked />
+                            <input asp-for="AllowComments" type="checkbox" style="margin-right: 10px;" />
                             Allow Comments
                         </label>
                     </div>
                 </div>
 
                 <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3"><i class="hgi-home-01"></i> Home Page Placement</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="HomeSection" class="form-admin-label">Home Section</label>
+                        <select asp-for="HomeSection" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<HomeSection>()"></select>
+                        <small class="text-muted">Which home page section this post belongs to</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured (large slot)
+                        </label>
+                        <small class="text-muted">Only one featured item per section — featuring this un-features the
+                            current one</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="ShowOnHomePage" type="checkbox" style="margin-right: 10px;" />
+                            Show on Home Page (smaller slot)
+                        </label>
+                    </div>
+
+                    @{ 
+                        var heroUsage = ViewData["HeroUsage"] as (int FeaturedUsed, int SecondaryUsed, int FeaturedCap, int SecondaryCap)?;
+                        var whatsNewUsage = ViewData["WhatsNewUsage"] as (int FeaturedUsed, int SecondaryUsed, int FeaturedCap, int SecondaryCap)?;
+                        var eventsUsage = ViewData["EventsUsage"] as (int FeaturedUsed, int SecondaryUsed, int FeaturedCap, int SecondaryCap)?;
+                    }
+
+                    @if (heroUsage.HasValue && whatsNewUsage.HasValue && eventsUsage.HasValue)
+                    {
+                        <div class="mt-2" style="font-size: 12px;">
+                            <div class="text-muted mb-1"><strong>Section usage (featured / home slots):</strong></div>
+                            <div>Hero: @heroUsage.Value.FeaturedUsed/@heroUsage.Value.FeaturedCap featured, @heroUsage.Value.SecondaryUsed/@heroUsage.Value.SecondaryCap home</div>
+                            <div>What's New: @whatsNewUsage.Value.FeaturedUsed/@whatsNewUsage.Value.FeaturedCap featured, @whatsNewUsage.Value.SecondaryUsed/@whatsNewUsage.Value.SecondaryCap home</div>
+                            <div>Events: @eventsUsage.Value.FeaturedUsed/@eventsUsage.Value.FeaturedCap featured, @eventsUsage.Value.SecondaryUsed/@eventsUsage.Value.SecondaryCap home</div>
+                        </div>
+                    }
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
                     <h5 class="mb-3">Featured Image</h5>
 
                     <div class="form-admin-group">
+                        <label asp-for="FeaturedImageFile" class="form-admin-label">Upload header image</label>
+                        <input asp-for="FeaturedImageFile" type="file" accept="image/*" class="form-admin-control" />
+                        <small class="text-muted">This image shows with the title and brief on the website cards.</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="FeaturedImageUrl" class="form-admin-label">…or image URL</label>
                         <input asp-for="FeaturedImageUrl" class="form-admin-control"
-                            placeholder="Image URL or upload" />
+                            placeholder="https://…" />
                     </div>
 
                     @if (!string.IsNullOrEmpty(Model?.FeaturedImageUrl))
@@ -91,6 +139,25 @@
                                 style="max-width: 100%; border-radius: 8px;" />
                         </div>
                     }
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3"><i class="hgi-user-group"></i> Group &amp; Event</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="SocialGroupId" class="form-admin-label">Group</label>
+                        <select asp-for="SocialGroupId" class="form-admin-control"
+                            asp-items="@(ViewBag.GroupOptions as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)">
+                            <option value="">— None (site-wide) —</option>
+                        </select>
+                        <small class="text-muted">Link this post/event to a group so it shows on the group's page</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="EventDate" class="form-admin-label">Event date</label>
+                        <input asp-for="EventDate" type="datetime-local" class="form-admin-control" />
+                        <small class="text-muted">Set for events — used to split upcoming vs past events</small>
+                    </div>
                 </div>
 
                 <div class="admin-card mt-3" style="background: #f8f9fa;">
@@ -112,36 +179,40 @@
 
         <div class="mt-4 d-flex gap-2">
             <button type="submit" class="btn-admin btn-admin-primary">
-                <i class="uil-save"></i> @(isEdit ? "Update Post" : "Create Post")
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Post" : "Create Post")
             </button>
 
             @if (!isEdit)
             {
                 <button type="submit" name="status" value="PendingReview" class="btn-admin btn-admin-warning">
-                    <i class="uil-file-check-alt"></i> Save & Submit for Review
+                    <i class="hgi-file-upload"></i> Save & Submit for Review
                 </button>
             }
 
             <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
-                <i class="uil-arrow-left"></i> Cancel
+                <i class="hgi-arrow-left-01"></i> Cancel
             </a>
         </div>
     </form>
 </div>
 
-@section Scripts {
-    <script>
-        // Auto-generate slug from title
-        document.getElementById('Title').addEventListener('blur', function () {
-            var slugField = document.getElementById('Slug');
-            if (!slugField.value) {
-                slugField.value = this.value
-                    .toLowerCase()
-                    .replace(/[^\w\s-]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-')
-                    .trim();
-            }
-        });
-    </script>
-}
+@await Html.PartialAsync("_WysiwygScripts")
+<script>
+    // Auto-generate slug from title
+    (function () {
+        var title = document.getElementById('Title');
+        var slugField = document.getElementById('Slug');
+        if (title && slugField) {
+            title.addEventListener('blur', function () {
+                if (!slugField.value) {
+                    slugField.value = this.value
+                        .toLowerCase()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-')
+                        .trim();
+                }
+            });
+        }
+    })();
+</script>

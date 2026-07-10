@@ -41,6 +41,11 @@ public class Category : BaseEntity
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
+    /// Whether this category appears in the home page Groups strip
+    /// </summary>
+    public bool ShowOnHomePage { get; set; } = false;
+
+    /// <summary>
     /// Count of items in this category
     /// </summary>
     public int ItemCount { get; set; } = 0;

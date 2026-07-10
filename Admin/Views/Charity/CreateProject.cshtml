@@ -1,0 +1,124 @@
+@model CharityProjectViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    var charityName = ViewBag.CharityName as string ?? "Charity";
+    ViewData["Title"] = isEdit ? "Edit Cause" : "Add Cause";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-heart-add"></i> @ViewData["Title"] <small class="text-muted">for @charityName</small>
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "EditProject" : "CreateProject")" method="post">
+        <input type="hidden" asp-for="CharityId" />
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Cause Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="e.g. Education for all children" required />
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Description</label>
+                    <textarea asp-for="Description" class="form-admin-control wysiwyg-editor" rows="8"
+                        placeholder="Describe this cause..."></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="ImageUrl" class="form-admin-label">Image URL</label>
+                    <input asp-for="ImageUrl" class="form-admin-control" placeholder="/uploads/causes/cause.jpg" />
+                    <small class="text-muted">Shown on the website charity page cause card</small>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Fundraising</h5>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-admin-group">
+                                <label asp-for="GoalAmount" class="form-admin-label">Goal Amount</label>
+                                <input asp-for="GoalAmount" type="number" step="0.01" min="0" class="form-admin-control" placeholder="900" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-admin-group">
+                                <label asp-for="CurrentAmount" class="form-admin-label">Raised So Far</label>
+                                <input asp-for="CurrentAmount" type="number" step="0.01" min="0" class="form-admin-control" placeholder="500" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-admin-group">
+                                <label asp-for="Currency" class="form-admin-label">Currency</label>
+                                <input asp-for="Currency" class="form-admin-control" placeholder="USD" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-admin-group">
+                                <label asp-for="DonorCount" class="form-admin-label">Donors</label>
+                                <input asp-for="DonorCount" type="number" min="0" class="form-admin-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Schedule</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="StartDate" class="form-admin-label">Start Date</label>
+                        <input asp-for="StartDate" type="date" class="form-admin-control" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="EndDate" class="form-admin-label">End Date</label>
+                        <input asp-for="EndDate" type="date" class="form-admin-control" />
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Visibility</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured Cause
+                        </label>
+                        <small class="text-muted">Featured causes are shown first on the website</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="PublishToWeb" type="checkbox" style="margin-right: 10px;" />
+                            Published to Website
+                        </label>
+                        <small class="text-muted">Only published causes appear on the charity page</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Cause" : "Add Cause")
+            </button>
+            <a asp-action="Details" asp-route-id="@Model!.CharityId" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+
+    @await Html.PartialAsync("_WysiwygScripts")
+</div>

@@ -21,6 +21,14 @@
                             <h3 class="mb-5">Contact Us</h3>
                             <p class="mb-0">Any question or remarks? Just write us a message!</p>
                         </div>
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success" role="alert">@TempData["ContactSuccess"]</div>
+                        }
+                        @if (TempData["ContactError"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">@TempData["ContactError"]</div>
+                        }
                         <form asp-action="Send" method="post" class="needs-validation" novalidate>
                             <div class="row g-3">
                                 <div class="col-md-6">

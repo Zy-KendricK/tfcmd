@@ -49,6 +49,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -81,6 +84,9 @@ namespace AppCore.Migrations
 
                     b.Property<int>("Section")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -296,6 +302,9 @@ namespace AppCore.Migrations
                     b.Property<int>("InquiryCount")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -356,6 +365,9 @@ namespace AppCore.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<bool>("ShowContactInfo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowOnHomePage")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
@@ -631,6 +643,100 @@ namespace AppCore.Migrations
                     b.ToTable("App_AdvertInquiries");
                 });
 
+            modelBuilder.Entity("AppCore.Entities.Announcement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPriority")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublishedToWeb")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("PublishRequested")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("PublishRequestedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PublishedById")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("PublishedToWebAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ReviewNotes")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ReviewedById")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("SocialGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TickerText")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SocialGroupId");
+
+                    b.ToTable("App_Announcements");
+                });
+
             modelBuilder.Entity("AppCore.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -871,6 +977,9 @@ namespace AppCore.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Slug")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
@@ -922,6 +1031,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -968,6 +1080,9 @@ namespace AppCore.Migrations
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
@@ -992,6 +1107,108 @@ namespace AppCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("App_Charities");
+                });
+
+            modelBuilder.Entity("AppCore.Entities.CharityPageItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Highlight")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublishedToWeb")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LinkUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Meta")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<int?>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PublishRequested")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("PublishRequestedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PublishedById")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("PublishedToWebAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ReviewNotes")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ReviewedById")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Section")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("App_CharityPageItems");
                 });
 
             modelBuilder.Entity("AppCore.Entities.CharityProject", b =>
@@ -1037,6 +1254,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -1069,6 +1289,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -1427,6 +1650,9 @@ namespace AppCore.Migrations
                     b.Property<int>("HelpfulCount")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -1464,6 +1690,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -1968,6 +2197,9 @@ namespace AppCore.Migrations
                     b.Property<int>("ForumId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -2018,6 +2250,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(300)
@@ -2161,8 +2396,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 1,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(2700),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3310),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2172,8 +2407,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 2,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3490),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3490),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2183,8 +2418,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 3,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3520),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3520),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2194,8 +2429,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 4,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3520),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3520),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2205,8 +2440,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 5,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3520),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2216,8 +2451,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 6,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2227,8 +2462,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 7,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2238,8 +2473,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 8,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2249,8 +2484,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 9,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2260,8 +2495,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 10,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2271,8 +2506,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 11,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2282,8 +2517,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 12,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2293,8 +2528,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 13,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2304,8 +2539,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 14,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2315,8 +2550,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 15,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2326,8 +2561,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 16,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3530),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2337,8 +2572,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 17,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2348,8 +2583,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 18,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2359,8 +2594,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 19,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2370,8 +2605,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 20,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2381,8 +2616,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 21,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2392,8 +2627,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 22,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2403,8 +2638,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 23,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2414,8 +2649,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 24,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2425,8 +2660,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 25,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2436,8 +2671,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 26,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2447,8 +2682,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 27,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3540),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2458,8 +2693,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 28,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2469,8 +2704,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 29,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2480,8 +2715,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 30,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2491,8 +2726,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 31,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2502,8 +2737,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 32,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2513,8 +2748,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 33,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2524,8 +2759,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 34,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2535,8 +2770,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 35,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2546,8 +2781,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 36,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2557,8 +2792,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 37,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2568,8 +2803,8 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 38,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
@@ -2579,12 +2814,56 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 39,
-                            AssignedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(3550),
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             IsDeleted = false,
                             IsGranted = true,
                             PermissionId = 39,
+                            UserGroupId = 1
+                        },
+                        new
+                        {
+                            Id = 40,
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            IsGranted = true,
+                            PermissionId = 40,
+                            UserGroupId = 1
+                        },
+                        new
+                        {
+                            Id = 41,
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            IsGranted = true,
+                            PermissionId = 41,
+                            UserGroupId = 1
+                        },
+                        new
+                        {
+                            Id = 42,
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            IsGranted = true,
+                            PermissionId = 42,
+                            UserGroupId = 1
+                        },
+                        new
+                        {
+                            Id = 43,
+                            AssignedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsDeleted = false,
+                            IsGranted = true,
+                            PermissionId = 43,
                             UserGroupId = 1
                         });
                 });
@@ -2641,6 +2920,9 @@ namespace AppCore.Migrations
 
                     b.Property<int?>("ExperienceLevel")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
@@ -2705,6 +2987,9 @@ namespace AppCore.Migrations
 
                     b.Property<int?>("SalaryPeriod")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("ShowSalary")
                         .HasColumnType("tinyint(1)");
@@ -3349,6 +3634,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -3395,6 +3683,9 @@ namespace AppCore.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<bool>("ShowInNavigation")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowOnHomePage")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
@@ -3497,7 +3788,7 @@ namespace AppCore.Migrations
                             Id = 1,
                             Category = "Dashboard",
                             Code = "dashboard.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(620),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3509,7 +3800,7 @@ namespace AppCore.Migrations
                             Id = 2,
                             Category = "Users",
                             Code = "users.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(630),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3521,7 +3812,7 @@ namespace AppCore.Migrations
                             Id = 3,
                             Category = "Users",
                             Code = "users.create",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(630),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3533,7 +3824,7 @@ namespace AppCore.Migrations
                             Id = 4,
                             Category = "Users",
                             Code = "users.edit",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(630),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3545,7 +3836,7 @@ namespace AppCore.Migrations
                             Id = 5,
                             Category = "Users",
                             Code = "users.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(640),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3557,7 +3848,7 @@ namespace AppCore.Migrations
                             Id = 6,
                             Category = "Groups",
                             Code = "groups.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(640),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3569,7 +3860,7 @@ namespace AppCore.Migrations
                             Id = 7,
                             Category = "Groups",
                             Code = "groups.manage",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(640),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3581,7 +3872,7 @@ namespace AppCore.Migrations
                             Id = 8,
                             Category = "Content",
                             Code = "posts.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(640),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3593,7 +3884,7 @@ namespace AppCore.Migrations
                             Id = 9,
                             Category = "Content",
                             Code = "posts.create",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(640),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3605,7 +3896,7 @@ namespace AppCore.Migrations
                             Id = 10,
                             Category = "Content",
                             Code = "posts.edit",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(640),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3617,7 +3908,7 @@ namespace AppCore.Migrations
                             Id = 11,
                             Category = "Content",
                             Code = "posts.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(650),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3629,7 +3920,7 @@ namespace AppCore.Migrations
                             Id = 12,
                             Category = "Content",
                             Code = "posts.publish",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(650),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3641,7 +3932,7 @@ namespace AppCore.Migrations
                             Id = 13,
                             Category = "Content",
                             Code = "jobs.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(650),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3653,7 +3944,7 @@ namespace AppCore.Migrations
                             Id = 14,
                             Category = "Content",
                             Code = "jobs.create",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(650),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3665,7 +3956,7 @@ namespace AppCore.Migrations
                             Id = 15,
                             Category = "Content",
                             Code = "jobs.edit",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(650),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3677,7 +3968,7 @@ namespace AppCore.Migrations
                             Id = 16,
                             Category = "Content",
                             Code = "jobs.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(650),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3689,7 +3980,7 @@ namespace AppCore.Migrations
                             Id = 17,
                             Category = "Content",
                             Code = "jobs.publish",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3701,7 +3992,7 @@ namespace AppCore.Migrations
                             Id = 18,
                             Category = "Content",
                             Code = "adverts.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3713,7 +4004,7 @@ namespace AppCore.Migrations
                             Id = 19,
                             Category = "Content",
                             Code = "adverts.create",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3725,7 +4016,7 @@ namespace AppCore.Migrations
                             Id = 20,
                             Category = "Content",
                             Code = "adverts.edit",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3737,7 +4028,7 @@ namespace AppCore.Migrations
                             Id = 21,
                             Category = "Content",
                             Code = "adverts.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3749,7 +4040,7 @@ namespace AppCore.Migrations
                             Id = 22,
                             Category = "Content",
                             Code = "adverts.publish",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3761,7 +4052,7 @@ namespace AppCore.Migrations
                             Id = 23,
                             Category = "Shop",
                             Code = "products.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3773,7 +4064,7 @@ namespace AppCore.Migrations
                             Id = 24,
                             Category = "Shop",
                             Code = "products.create",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3785,7 +4076,7 @@ namespace AppCore.Migrations
                             Id = 25,
                             Category = "Shop",
                             Code = "products.edit",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3797,7 +4088,7 @@ namespace AppCore.Migrations
                             Id = 26,
                             Category = "Shop",
                             Code = "products.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3809,7 +4100,7 @@ namespace AppCore.Migrations
                             Id = 27,
                             Category = "Shop",
                             Code = "products.publish",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3821,7 +4112,7 @@ namespace AppCore.Migrations
                             Id = 28,
                             Category = "Media",
                             Code = "photos.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3833,7 +4124,7 @@ namespace AppCore.Migrations
                             Id = 29,
                             Category = "Media",
                             Code = "photos.upload",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3845,7 +4136,7 @@ namespace AppCore.Migrations
                             Id = 30,
                             Category = "Media",
                             Code = "photos.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3857,7 +4148,7 @@ namespace AppCore.Migrations
                             Id = 31,
                             Category = "Media",
                             Code = "videos.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(670),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3869,7 +4160,7 @@ namespace AppCore.Migrations
                             Id = 32,
                             Category = "Media",
                             Code = "videos.upload",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3881,7 +4172,7 @@ namespace AppCore.Migrations
                             Id = 33,
                             Category = "Media",
                             Code = "videos.delete",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3893,7 +4184,7 @@ namespace AppCore.Migrations
                             Id = 34,
                             Category = "Community",
                             Code = "forums.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3905,7 +4196,7 @@ namespace AppCore.Migrations
                             Id = 35,
                             Category = "Community",
                             Code = "forums.manage",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3917,7 +4208,7 @@ namespace AppCore.Migrations
                             Id = 36,
                             Category = "Community",
                             Code = "forums.moderate",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3929,7 +4220,7 @@ namespace AppCore.Migrations
                             Id = 37,
                             Category = "System",
                             Code = "settings.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3941,7 +4232,7 @@ namespace AppCore.Migrations
                             Id = 38,
                             Category = "System",
                             Code = "settings.edit",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(680),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
@@ -3953,12 +4244,60 @@ namespace AppCore.Migrations
                             Id = 39,
                             Category = "System",
                             Code = "audit.view",
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(690),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             DisplayOrder = 0,
                             IsActive = true,
                             IsDeleted = false,
                             Module = "Audit",
                             Name = "View Audit Logs"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Category = "System",
+                            Code = "maintenance.cache",
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DisplayOrder = 0,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Module = "Maintenance",
+                            Name = "Clear Website Cache & Data"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Category = "Content",
+                            Code = "content.homepage",
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DisplayOrder = 0,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Module = "Posts",
+                            Name = "Manage Home Page Content"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Category = "Media",
+                            Code = "photos.publish",
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DisplayOrder = 0,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Module = "Photos",
+                            Name = "Publish Photos"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Category = "Media",
+                            Code = "videos.publish",
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DisplayOrder = 0,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Module = "Videos",
+                            Name = "Publish Videos"
                         });
                 });
 
@@ -4004,6 +4343,9 @@ namespace AppCore.Migrations
 
                     b.Property<int?>("Height")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
@@ -4065,6 +4407,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -4146,6 +4491,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -4190,6 +4538,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -4393,6 +4744,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -4434,6 +4788,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -4502,6 +4859,9 @@ namespace AppCore.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime?>("EventDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Excerpt")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
@@ -4512,6 +4872,12 @@ namespace AppCore.Migrations
 
                     b.Property<int>("Format")
                         .HasColumnType("int");
+
+                    b.Property<int>("HomeSection")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
@@ -4524,6 +4890,9 @@ namespace AppCore.Migrations
 
                     b.Property<bool>("IsPublishedToWeb")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("int");
 
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
@@ -4561,9 +4930,15 @@ namespace AppCore.Migrations
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<int?>("SocialGroupId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -4594,6 +4969,8 @@ namespace AppCore.Migrations
 
                     b.HasIndex("Slug")
                         .IsUnique();
+
+                    b.HasIndex("SocialGroupId");
 
                     b.HasIndex("Status");
 
@@ -4635,6 +5012,9 @@ namespace AppCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Source")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -4756,6 +5136,9 @@ namespace AppCore.Migrations
                     b.Property<double?>("Height")
                         .HasColumnType("double");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -4823,6 +5206,9 @@ namespace AppCore.Migrations
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -5207,7 +5593,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(4310),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Site name",
                             Group = "General",
                             IsActive = true,
@@ -5221,7 +5607,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(4320),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Site description",
                             Group = "General",
                             IsActive = true,
@@ -5235,7 +5621,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(4320),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Site logo URL",
                             Group = "General",
                             IsActive = true,
@@ -5249,7 +5635,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(4420),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Allow user registration",
                             Group = "Registration",
                             IsActive = true,
@@ -5263,7 +5649,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(4420),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Require admin approval for new users",
                             Group = "Registration",
                             IsActive = true,
@@ -5277,7 +5663,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 762, DateTimeKind.Utc).AddTicks(4420),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Require review before publishing",
                             Group = "Content",
                             IsActive = true,
@@ -5287,6 +5673,20 @@ namespace AppCore.Migrations
                             Key = "content.requireReview",
                             Value = "true",
                             ValueType = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Website cache version stamp; bumping it forces the website to reload data from the database",
+                            Group = "System",
+                            IsActive = true,
+                            IsDeleted = false,
+                            IsEditable = true,
+                            IsPublic = false,
+                            Key = "site.cacheVersion",
+                            Value = "1",
+                            ValueType = 1
                         });
                 });
 
@@ -5321,6 +5721,9 @@ namespace AppCore.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
+
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
@@ -5363,6 +5766,9 @@ namespace AppCore.Migrations
                     b.Property<string>("Rules")
                         .HasMaxLength(5000)
                         .HasColumnType("varchar(5000)");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(100)
@@ -5457,6 +5863,9 @@ namespace AppCore.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -5496,6 +5905,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("SocialGroupId")
                         .HasColumnType("int");
@@ -5604,6 +6016,9 @@ namespace AppCore.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -5653,6 +6068,9 @@ namespace AppCore.Migrations
 
                     b.Property<string>("ReviewedById")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -5739,7 +6157,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 761, DateTimeKind.Utc).AddTicks(6990),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Full system access",
                             DisplayOrder = 0,
                             IsActive = true,
@@ -5750,7 +6168,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 761, DateTimeKind.Utc).AddTicks(7140),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Can review and publish content",
                             DisplayOrder = 0,
                             IsActive = true,
@@ -5761,7 +6179,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 761, DateTimeKind.Utc).AddTicks(7140),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Can create and edit content",
                             DisplayOrder = 0,
                             IsActive = true,
@@ -5772,7 +6190,7 @@ namespace AppCore.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2026, 1, 5, 10, 30, 58, 761, DateTimeKind.Utc).AddTicks(7140),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Regular platform members",
                             DisplayOrder = 0,
                             IsActive = true,
@@ -5883,6 +6301,9 @@ namespace AppCore.Migrations
                     b.Property<int?>("Height")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IntendedForWeb")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -5939,6 +6360,9 @@ namespace AppCore.Migrations
 
                     b.Property<int>("ShareCount")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ShowOnHomePage")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(200)
@@ -6472,6 +6896,16 @@ namespace AppCore.Migrations
                     b.Navigation("Advert");
 
                     b.Navigation("Inquirer");
+                });
+
+            modelBuilder.Entity("AppCore.Entities.Announcement", b =>
+                {
+                    b.HasOne("AppCore.Entities.SocialGroup", "SocialGroup")
+                        .WithMany()
+                        .HasForeignKey("SocialGroupId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("SocialGroup");
                 });
 
             modelBuilder.Entity("AppCore.Entities.AuditLog", b =>
@@ -7046,9 +7480,16 @@ namespace AppCore.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("AppCore.Entities.SocialGroup", "SocialGroup")
+                        .WithMany()
+                        .HasForeignKey("SocialGroupId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Author");
 
                     b.Navigation("Category");
+
+                    b.Navigation("SocialGroup");
                 });
 
             modelBuilder.Entity("AppCore.Entities.PostComment", b =>

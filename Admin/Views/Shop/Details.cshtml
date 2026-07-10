@@ -1,0 +1,146 @@
+@model Product
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-shopping-basket-01"></i> @Model.Name
+        </h4>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-admin btn-admin-primary">
+                <i class="hgi-edit-01"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="mb-3">
+                <span class="status-badge status-@Model.Status.ToString().ToLower()">@Model.Status</span>
+                @if (Model.IsFeatured)
+                {
+                    <span class="status-badge" style="background: gold; color: #333;">Featured</span>
+                }
+                @if (Model.IsOnSale)
+                {
+                    <span class="status-badge" style="background: #dc3545; color: #fff;">On Sale</span>
+                }
+                @if (Model.IsPublishedToWeb)
+                {
+                    <span class="status-badge status-published">Live on Website</span>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ShortDescription))
+            {
+                <h5>Summary</h5>
+                <p>@Model.ShortDescription</p>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <h5>Description</h5>
+                <p style="white-space: pre-wrap;">@Model.Description</p>
+            }
+
+            @if (Model.Reviews != null && Model.Reviews.Any())
+            {
+                <h5 class="mt-4">Reviews (@Model.Reviews.Count)</h5>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var review in Model.Reviews)
+                            {
+                                <tr>
+                                    <td>@review.Rating / 5</td>
+                                    <td><small>@review.Comment</small></td>
+                                    <td><small>@review.CreatedAt.ToString("MMM dd, yyyy")</small></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Sidebar {
+    <div class="widget">
+        <h5 class="widget-title">Product Details</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-cube"></i> SKU</span>
+                <strong>@(Model.SKU ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-folder-01"></i> Category</span>
+                <strong>@(Model.Category?.Name ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-cube"></i> Type</span>
+                <strong>@Model.Type</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-dollar-circle"></i> Price</span>
+                <strong>@Model.Currency @Model.Price.ToString("N2")</strong>
+            </li>
+            @if (Model.CompareAtPrice.HasValue)
+            {
+                <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                    <span><i class="hgi-bookmark-01"></i> Compare At</span>
+                    <strong>@Model.Currency @Model.CompareAtPrice.Value.ToString("N2")</strong>
+                </li>
+            }
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-cube"></i> Stock</span>
+                <strong>@(Model.TrackInventory ? (Model.StockQuantity?.ToString() ?? "0") : "Not tracked")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-user"></i> Seller</span>
+                <strong>@(Model.Seller?.DisplayName ?? Model.Seller?.Email ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-truck"></i> Sold</span>
+                <strong>@Model.SoldCount</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-eye"></i> Views</span>
+                <strong>@Model.ViewCount</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-star"></i> Rating</span>
+                <strong>@(Model.AverageRating?.ToString("N1") ?? "—") (@Model.ReviewCount reviews)</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-calendar-01"></i> Created</span>
+                <strong>@Model.CreatedAt.ToString("MMM dd, yyyy")</strong>
+            </li>
+        </ul>
+    </div>
+
+    @if (!Model.IsPublishedToWeb && Model.Status == ContentStatus.Approved)
+    {
+        <div class="widget">
+            <h5 class="widget-title">Website Review</h5>
+            <form asp-action="PublishToWeb" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-admin btn-admin-success w-100">
+                    <i class="hgi-cloud-upload"></i> Publish to Website
+                </button>
+            </form>
+        </div>
+    }
+}

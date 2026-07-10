@@ -2,41 +2,197 @@
     ViewData["Title"] = "Dashboard";
 }
 
+@section Sidebar {
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title"><i class="hgi-flash"></i> Quick Actions</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-controller="Blog" asp-action="Create"><i class="hgi-add-square"></i> New Blog Post</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="News" asp-action="Create"><i class="hgi-add-square"></i> New News Item</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Announcements" asp-action="Create"><i class="hgi-add-square"></i> New Announcement</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Jobs" asp-action="Create"><i class="hgi-add-square"></i> Post New Job</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Adverts" asp-action="Create"><i class="hgi-add-square"></i> Create Advert</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Shop" asp-action="Create"><i class="hgi-add-square"></i> Add Product</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Audit" asp-action="Index"><i class="hgi-shield-user"></i> View Audit Logs</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="widget widget_nav_menu mt-4">
+        <h5 class="widget-title"><i class="hgi-check-list"></i> Pending Reviews</h5>
+        <ul class="menu">
+            @if ((ViewBag.PendingCount ?? 0) > 0)
+            {
+                <li class="menu-item">
+                    <a asp-controller="Blog" asp-action="Index" asp-route-status="PendingReview"><i class="hgi-news"></i> Blog Posts <span class="badge bg-warning text-dark ms-2">@ViewBag.PendingPosts</span></a>
+                </li>
+                <li class="menu-item">
+                    <a asp-controller="Jobs" asp-action="Index" asp-route-status="PendingReview"><i class="hgi-briefcase-01"></i> Jobs <span class="badge bg-warning text-dark ms-2">@ViewBag.PendingJobs</span></a>
+                </li>
+                <li class="menu-item">
+                    <a asp-controller="Adverts" asp-action="Index" asp-route-status="PendingReview"><i class="hgi-tv-01"></i> Adverts <span class="badge bg-warning text-dark ms-2">@ViewBag.PendingAdverts</span></a>
+                </li>
+            }
+            else
+            {
+                <li class="menu-item">
+                    <span class="text-muted"><i class="hgi-checkmark-circle-01"></i> No pending reviews</span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
 <!-- Stats Row -->
 <div class="row mb-4">
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="stat-card">
             <div class="stat-number">@(ViewBag.TotalMembers ?? 0)</div>
-            <div class="stat-label"><i class="uil-users-alt"></i> Total Members</div>
+            <div class="stat-label"><i class="hgi-user-group"></i> Members</div>
         </div>
     </div>
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="stat-card success">
             <div class="stat-number">@(ViewBag.TotalPosts ?? 0)</div>
-            <div class="stat-label"><i class="uil-newspaper"></i> Blog Posts</div>
+            <div class="stat-label"><i class="hgi-news"></i> Blog Posts</div>
         </div>
     </div>
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="stat-card warning">
             <div class="stat-number">@(ViewBag.TotalJobs ?? 0)</div>
-            <div class="stat-label"><i class="uil-briefcase-alt"></i> Active Jobs</div>
+            <div class="stat-label"><i class="hgi-briefcase-01"></i> Active Jobs</div>
         </div>
     </div>
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="stat-card info">
             <div class="stat-number">@(ViewBag.TotalProducts ?? 0)</div>
-            <div class="stat-label"><i class="uil-shopping-trolley"></i> Products</div>
+            <div class="stat-label"><i class="hgi-shopping-basket-01"></i> Products</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Content: posts & news (incl. unreleased) for members to view, comment and react -->
+    <div class="col-lg-12 mb-4">
+        <div class="admin-card">
+            <div class="admin-card-header d-flex justify-content-between align-items-center">
+                <h4 class="admin-card-title">
+                    <i class="hgi-news"></i> Recent Content
+                </h4>
+                <small class="text-muted">Unreleased items are visible here before they go to the website</small>
+            </div>
+            @if (ViewBag.RecentContent != null && ((IList<AppCore.Entities.Post>)ViewBag.RecentContent).Any())
+            {
+                <div class="recent-content-strip">
+                    @foreach (var post in (IList<AppCore.Entities.Post>)ViewBag.RecentContent)
+                    {
+                        <a class="recent-content-item" asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id"
+                           title="@post.Title">
+                            @if (!string.IsNullOrEmpty(post.FeaturedImageUrl))
+                            {
+                                <img src="@post.FeaturedImageUrl" alt="@post.Title" />
+                            }
+                            else
+                            {
+                                <div class="recent-content-placeholder"><i class="hgi-image-01"></i></div>
+                            }
+                            <span class="recent-content-title">@(post.Title.Length > 44 ? post.Title.Substring(0, 44) + "…" : post.Title)</span>
+                            <span class="recent-content-meta">
+                                @(post.Kind == AppCore.Entities.PostKind.News ? "News" : post.Kind == AppCore.Entities.PostKind.Event ? "Event" : "Post")
+                                · @post.CreatedAt.ToString("MMM dd")
+                                @if (!post.IsPublishedToWeb)
+                                {
+                                    <em class="recent-content-unreleased">unreleased</em>
+                                }
+                            </span>
+                        </a>
+                    }
+                </div>
+                <style>
+                    .recent-content-strip {
+                        display: flex;
+                        gap: 14px;
+                        overflow-x: auto;
+                        padding: 4px 2px 10px;
+                    }
+
+                    .recent-content-item {
+                        flex: 0 0 150px;
+                        text-decoration: none;
+                        color: inherit;
+                    }
+
+                    .recent-content-item img,
+                    .recent-content-placeholder {
+                        width: 150px;
+                        height: 90px;
+                        object-fit: cover;
+                        border-radius: 8px;
+                        background: #f0f0f5;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #bbb;
+                        font-size: 24px;
+                    }
+
+                    .recent-content-title {
+                        display: block;
+                        font-size: 13px;
+                        font-weight: 600;
+                        margin-top: 6px;
+                        line-height: 1.25;
+                        color: var(--theme-color-text);
+                    }
+
+                    .recent-content-item:hover .recent-content-title {
+                        color: var(--theme-color-primary);
+                    }
+
+                    .recent-content-meta {
+                        display: block;
+                        font-size: 11px;
+                        color: #9aa0ac;
+                        margin-top: 2px;
+                    }
+
+                    .recent-content-unreleased {
+                        color: #e6a100;
+                        font-style: normal;
+                        font-weight: 600;
+                        margin-left: 4px;
+                    }
+                </style>
+            }
+            else
+            {
+                <p class="text-muted text-center py-3">
+                    <i class="hgi-information-circle"></i> No content yet — create a post or news item to get started.
+                </p>
+            }
         </div>
     </div>
 </div>
 
 <div class="row">
     <!-- Recent Activity -->
-    <div class="col-lg-8 mb-4">
+    <div class="col-lg-12 mb-4">
         <div class="admin-card">
             <div class="admin-card-header">
                 <h4 class="admin-card-title">
-                    <i class="uil-clock-three"></i> Recent Activity
+                    <i class="hgi-clock-03"></i> Recent Activity
                 </h4>
             </div>
             <div class="activity-list">
@@ -47,8 +203,7 @@
                         <div class="activity-item d-flex align-items-start mb-3 pb-3"
                             style="border-bottom: 1px solid var(--theme-color-border);">
                             <div class="activity-avatar me-3">
-                                <img src="@(activity.User?.AvatarUrl ?? "/wp-content/uploads/2020/07/logo-icon.svg")" alt=""
-                                    style="width: 40px; height: 40px; border-radius: 50%;" />
+                                @await Html.PartialAsync("_UserAvatar", activity.User, new ViewDataDictionary(ViewData) { ["size"] = 40 })
                             </div>
                             <div class="activity-content flex-grow-1">
                                 <p class="mb-1">
@@ -56,7 +211,7 @@
                                     @activity.Content
                                 </p>
                                 <small class="text-muted">
-                                    <i class="uil-clock"></i> @activity.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                    <i class="hgi-clock-01"></i> @activity.CreatedAt.ToString("MMM dd, yyyy HH:mm")
                                 </small>
                             </div>
                         </div>
@@ -65,69 +220,14 @@
                 else
                 {
                     <p class="text-muted text-center py-4">
-                        <i class="uil-info-circle"></i> No recent activity to display.
+                        <i class="hgi-information-circle"></i> No recent activity to display.
                     </p>
                 }
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="col-lg-4 mb-4">
-        <div class="admin-card">
-            <div class="admin-card-header">
-                <h4 class="admin-card-title">
-                    <i class="uil-bolt-alt"></i> Quick Actions
-                </h4>
-            </div>
-            <div class="quick-actions">
-                <a asp-controller="Blog" asp-action="Create" class="btn-admin btn-admin-primary d-block mb-2">
-                    <i class="uil-plus"></i> New Blog Post
-                </a>
-                <a asp-controller="Jobs" asp-action="Create" class="btn-admin btn-admin-success d-block mb-2">
-                    <i class="uil-plus"></i> Post New Job
-                </a>
-                <a asp-controller="Adverts" asp-action="Create" class="btn-admin btn-admin-warning d-block mb-2">
-                    <i class="uil-plus"></i> Create Advert
-                </a>
-                <a asp-controller="Shop" asp-action="Create" class="btn-admin btn-admin-primary d-block mb-2">
-                    <i class="uil-plus"></i> Add Product
-                </a>
-            </div>
-        </div>
 
-        <!-- Pending Reviews -->
-        <div class="admin-card mt-4">
-            <div class="admin-card-header">
-                <h4 class="admin-card-title">
-                    <i class="uil-clipboard-notes"></i> Pending Reviews
-                </h4>
-            </div>
-            <div class="pending-list">
-                @if (ViewBag.PendingCount > 0)
-                {
-                    <div class="pending-item d-flex justify-content-between align-items-center mb-2">
-                        <span>Blog Posts</span>
-                        <span class="status-badge status-pending">@ViewBag.PendingPosts</span>
-                    </div>
-                    <div class="pending-item d-flex justify-content-between align-items-center mb-2">
-                        <span>Jobs</span>
-                        <span class="status-badge status-pending">@ViewBag.PendingJobs</span>
-                    </div>
-                    <div class="pending-item d-flex justify-content-between align-items-center mb-2">
-                        <span>Adverts</span>
-                        <span class="status-badge status-pending">@ViewBag.PendingAdverts</span>
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted text-center py-3">
-                        <i class="uil-check-circle"></i> No pending reviews
-                    </p>
-                }
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Content Status Overview -->
@@ -136,7 +236,7 @@
         <div class="admin-card">
             <div class="admin-card-header d-flex justify-content-between align-items-center">
                 <h4 class="admin-card-title">
-                    <i class="uil-chart-bar"></i> Content Overview
+                    <i class="hgi-dashboard-square-01"></i> Content Overview
                 </h4>
             </div>
             <div class="table-responsive">
@@ -153,7 +253,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><i class="uil-newspaper"></i> Blog Posts</td>
+                            <td><i class="hgi-news"></i> Blog Posts</td>
                             <td><span class="status-badge status-draft">@(ViewBag.PostsDraft ?? 0)</span></td>
                             <td><span class="status-badge status-pending">@(ViewBag.PostsPending ?? 0)</span></td>
                             <td><span class="status-badge status-published">@(ViewBag.PostsPublished ?? 0)</span></td>
@@ -162,7 +262,7 @@
                                     class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
                         </tr>
                         <tr>
-                            <td><i class="uil-briefcase-alt"></i> Jobs</td>
+                            <td><i class="hgi-briefcase-01"></i> Jobs</td>
                             <td><span class="status-badge status-draft">@(ViewBag.JobsDraft ?? 0)</span></td>
                             <td><span class="status-badge status-pending">@(ViewBag.JobsPending ?? 0)</span></td>
                             <td><span class="status-badge status-published">@(ViewBag.JobsPublished ?? 0)</span></td>
@@ -171,7 +271,7 @@
                                     class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
                         </tr>
                         <tr>
-                            <td><i class="uil-tv-retro"></i> Adverts</td>
+                            <td><i class="hgi-tv-01"></i> Adverts</td>
                             <td><span class="status-badge status-draft">@(ViewBag.AdvertsDraft ?? 0)</span></td>
                             <td><span class="status-badge status-pending">@(ViewBag.AdvertsPending ?? 0)</span></td>
                             <td><span class="status-badge status-published">@(ViewBag.AdvertsPublished ?? 0)</span></td>
@@ -180,7 +280,7 @@
                                     class="btn-admin btn-admin-sm btn-admin-primary">Manage</a></td>
                         </tr>
                         <tr>
-                            <td><i class="uil-shopping-trolley"></i> Products</td>
+                            <td><i class="hgi-shopping-basket-01"></i> Products</td>
                             <td><span class="status-badge status-draft">@(ViewBag.ProductsDraft ?? 0)</span></td>
                             <td><span class="status-badge status-pending">@(ViewBag.ProductsPending ?? 0)</span></td>
                             <td><span class="status-badge status-published">@(ViewBag.ProductsPublished ?? 0)</span>

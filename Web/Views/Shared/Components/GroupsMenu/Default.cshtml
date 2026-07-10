@@ -1,0 +1,9 @@
+@model IList<AppCore.Entities.SocialGroup>
+
+<ul class="sub-menu">
+    <li><a asp-controller="Charity" asp-action="Index">Charity</a></li>
+    @foreach (var group in Model)
+    {
+        <li><a asp-controller="Groups" asp-action="Details" asp-route-id="@(group.Slug ?? group.Id.ToString())">@group.Name</a></li>
+    }
+</ul>

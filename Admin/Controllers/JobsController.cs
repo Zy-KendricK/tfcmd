@@ -23,7 +23,7 @@ public class JobsController : BaseAdminController
         _jobService = new ContentService<Job>(context);
     }
 
-    public async Task<IActionResult> Index(string? search, ContentStatus? status, int? categoryId, int page = 1, int pageSize = 20)
+    public async Task<IActionResult> Index(string? search, ContentStatus? status, int? categoryId, JobType? type, string? tab, int page = 1, int pageSize = 20)
     {
         var query = _context.Jobs
             .Include(j => j.Category)
@@ -50,6 +50,20 @@ public class JobsController : BaseAdminController
             query = query.Where(j => j.CategoryId == categoryId.Value);
         }
 
+        if (type.HasValue)
+        {
+            query = query.Where(j => j.Type == type.Value);
+        }
+
+        query = tab switch
+        {
+            "pending" => query.Where(j => j.Status == ContentStatus.PendingReview),
+            "live" => query.Where(j => j.IsPublishedToWeb),
+            "expired" => query.Where(j => j.ApplicationDeadline != null && j.ApplicationDeadline < DateTime.UtcNow),
+            "internal" => query.Where(j => !j.IntendedForWeb),
+            _ => query
+        };
+
         var totalCount = await query.CountAsync();
         var jobs = await query
             .OrderByDescending(j => j.CreatedAt)
@@ -60,12 +74,23 @@ public class JobsController : BaseAdminController
         ViewBag.Categories = await GetCategoriesSelectListAsync();
         ViewBag.PendingReviewCount = await _context.Jobs.CountAsync(j => j.Status == ContentStatus.PendingReview && !j.IsDeleted);
 
+        // Sidebar stats
+        ViewBag.TotalJobs = await _context.Jobs.CountAsync(j => !j.IsDeleted);
+        ViewBag.PublishedJobs = await _context.Jobs.CountAsync(j => !j.IsDeleted && j.IsPublishedToWeb);
+        ViewBag.ExpiredJobs = await _context.Jobs.CountAsync(j => !j.IsDeleted && j.ApplicationDeadline != null && j.ApplicationDeadline < DateTime.UtcNow);
+        ViewBag.InternalJobs = await _context.Jobs.CountAsync(j => !j.IsDeleted && !j.IntendedForWeb);
+        ViewBag.CategoryCount = await _context.JobCategories.CountAsync(c => !c.IsDeleted);
+        ViewBag.Tab = tab;
+        ViewBag.Type = type;
+
         var viewModel = new JobListViewModel
         {
             Jobs = jobs,
             Search = search,
             Status = status,
             CategoryId = categoryId,
+            Type = type,
+            Tab = tab,
             CurrentPage = page,
             PageSize = pageSize,
             TotalCount = totalCount,
@@ -151,7 +176,8 @@ public class JobsController : BaseAdminController
             Benefits = model.Benefits,
             PostedById = CurrentUserId!,
             IsFeatured = model.IsFeatured,
-            IsUrgent = model.IsUrgent
+            IsUrgent = model.IsUrgent,
+            IntendedForWeb = model.IntendedForWeb
         };
 
         await _jobService.CreateAsync(job, CurrentUserId!);
@@ -189,7 +215,8 @@ public class JobsController : BaseAdminController
             RequiredSkills = job.RequiredSkills,
             Benefits = job.Benefits,
             IsFeatured = job.IsFeatured,
-            IsUrgent = job.IsUrgent
+            IsUrgent = job.IsUrgent,
+            IntendedForWeb = job.IntendedForWeb
         };
 
         ViewBag.Categories = await GetCategoriesSelectListAsync();
@@ -231,6 +258,13 @@ public class JobsController : BaseAdminController
         job.Benefits = model.Benefits;
         job.IsFeatured = model.IsFeatured;
         job.IsUrgent = model.IsUrgent;
+        job.IntendedForWeb = model.IntendedForWeb;
+        if (!model.IntendedForWeb && job.IsPublishedToWeb)
+        {
+            job.IsPublishedToWeb = false;
+            job.Status = ContentStatus.Draft;
+            TempData["Warning"] = "The job was live on the website; withdrawing web intent has unpublished it.";
+        }
 
         await _jobService.UpdateAsync(job, CurrentUserId!);
 
@@ -253,9 +287,16 @@ public class JobsController : BaseAdminController
     [RequirePermission("jobs.edit")]
     public async Task<IActionResult> RequestPublish(int id)
     {
-        await _jobService.RequestPublishAsync(id, CurrentUserId!);
-        TempData["Success"] = "Publish request submitted.";
-        return RedirectToAction(nameof(Details), new { id });
+        try
+        {
+            await _jobService.RequestPublishAsync(id, CurrentUserId!);
+            TempData["Success"] = "Publish request submitted.";
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["Error"] = ex.Message;
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]
@@ -289,9 +330,16 @@ public class JobsController : BaseAdminController
     [RequirePermission("jobs.publish")]
     public async Task<IActionResult> PublishToWeb(int id)
     {
-        await _jobService.PublishToWebAsync(id, CurrentUserId!);
-        TempData["Success"] = "Job published to web.";
-        return RedirectToAction(nameof(Details), new { id });
+        try
+        {
+            await _jobService.PublishToWebAsync(id, CurrentUserId!);
+            TempData["Success"] = "Job published to web.";
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["Error"] = ex.Message;
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]
@@ -319,6 +367,7 @@ public class JobsController : BaseAdminController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequirePermission("jobs.create")]
     public async Task<IActionResult> CreateCategory(string name, string? description, int? parentId)
     {
         var category = new JobCategory
@@ -340,6 +389,7 @@ public class JobsController : BaseAdminController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequirePermission("jobs.delete")]
     public async Task<IActionResult> DeleteCategory(int id)
     {
         var category = await _context.JobCategories.FindAsync(id);
@@ -377,6 +427,8 @@ public class JobListViewModel
     public string? Search { get; set; }
     public ContentStatus? Status { get; set; }
     public int? CategoryId { get; set; }
+    public JobType? Type { get; set; }
+    public string? Tab { get; set; }
     public int CurrentPage { get; set; }
     public int PageSize { get; set; }
     public int TotalCount { get; set; }
@@ -406,4 +458,5 @@ public class JobViewModel
     public string? Benefits { get; set; }
     public bool IsFeatured { get; set; }
     public bool IsUrgent { get; set; }
+    public bool IntendedForWeb { get; set; }
 }

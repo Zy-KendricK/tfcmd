@@ -1,48 +1,48 @@
-@model IEnumerable<SocialGroup>
+@model SocialGroupListViewModel
 @{
     ViewData["Title"] = "Social Groups";
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+    var canManageGroups = HasPermission("groups.view");
+    var canPublishGroups = HasPermission("posts.publish");
 }
 
 <div class="admin-card">
     <div class="admin-card-header d-flex justify-content-between align-items-center">
         <h4 class="admin-card-title">
-            <i class="uil-user-plus"></i> Manage Social Groups
+            <i class="hgi-user-add-01"></i> Manage Social Groups
         </h4>
-        <a asp-action="Create" class="btn-admin btn-admin-primary">
-            <i class="uil-plus"></i> Create Group
-        </a>
+        @if (canManageGroups)
+        {
+            <a asp-action="Create" class="btn-admin btn-admin-primary">
+                <i class="hgi-add-square"></i> Create Group
+            </a>
+        }
     </div>
 
     <!-- Filters -->
-    <div class="mb-4">
-        <form asp-action="Index" method="get" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
-                    placeholder="Search groups..." />
-            </div>
-            <div class="col-md-2">
-                <select name="type" class="form-admin-control">
-                    <option value="">All Types</option>
-                    <option value="Public">Public</option>
-                    <option value="Private">Private</option>
-                    <option value="Hidden">Hidden</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn-admin btn-admin-primary">
-                    <i class="uil-filter"></i> Filter
-                </button>
-            </div>
-        </form>
-    </div>
+    <form asp-action="Index" method="get" class="bh-filterbar">
+        <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow bh-filter-input"
+            placeholder="Search groups..." />
+        <select name="type" class="form-admin-control bh-filter-select">
+            <option value="">All Types</option>
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+            <option value="Hidden">Hidden</option>
+        </select>
+        <button type="submit" class="bh-btn bh-btn-primary bh-filter-submit">
+            <i class="hgi-filter"></i> Filter
+        </button>
+    </form>
 
-    <div class="row">
-        @if (Model != null && Model.Any())
+    <div class="row g-3">
+        @if (Model.Groups != null && Model.Groups.Any())
         {
-            @foreach (var group in Model)
+            @foreach (var group in Model.Groups)
             {
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="admin-card h-100" style="border: 1px solid var(--theme-color-border);">
+                <div class="col-lg-6 col-md-6">
+                    <div class="admin-card h-100" style="border: 1px solid var(--theme-color-border); padding: 0; overflow: hidden;">
                         <!-- Group Cover -->
                         <div
                             style="height: 100px; background: linear-gradient(135deg, var(--theme-color-primary), var(--theme-color-primary-lightened)); border-radius: 8px 8px 0 0; position: relative;">
@@ -61,7 +61,7 @@
                                 {
                                     <div
                                         style="width: 60px; height: 60px; border-radius: 50%; background: var(--theme-color-primary); border: 3px solid #fff; display: flex; align-items: center; justify-content: center;">
-                                        <i class="uil-users-alt" style="color: #fff; font-size: 24px;"></i>
+                                        <i class="hgi-user-group" style="color: #fff; font-size: 24px;"></i>
                                     </div>
                                 }
                             </div>
@@ -83,6 +83,18 @@
                                                 };
                                 }
                                 <span class="status-badge @typeClass">@group.Type</span>
+                                @if (group.IsPublishedToWeb)
+                                {
+                                    <span class="status-badge status-published"><i class="hgi-globe"></i> Live</span>
+                                }
+                                else if (group.Status == ContentStatus.PendingReview)
+                                {
+                                    <span class="status-badge status-pending">Pending Review</span>
+                                }
+                                else if (group.Status == ContentStatus.Approved)
+                                {
+                                    <span class="status-badge status-pending">Approved</span>
+                                }
                             </div>
 
                             <p class="text-muted small mb-3">
@@ -92,28 +104,67 @@
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="text-muted">
-                                    <i class="uil-users-alt"></i> @(group.Members?.Count ?? 0) members
+                                    <i class="hgi-user-group"></i> @(group.Members?.Count ?? 0) members
                                 </span>
                                 <span class="text-muted">
-                                    <i class="uil-file-alt"></i> @(group.Posts?.Count ?? 0) posts
+                                    <i class="hgi-file-01"></i> @(group.Posts?.Count ?? 0) posts
                                 </span>
                             </div>
 
-                            <div class="d-flex gap-2">
-                                <a asp-action="Edit" asp-route-id="@group.Id"
-                                    class="btn-admin btn-admin-sm btn-admin-primary flex-grow-1">
-                                    <i class="uil-edit"></i> Edit
-                                </a>
-                                <a asp-action="Members" asp-route-id="@group.Id"
-                                    class="btn-admin btn-admin-sm btn-admin-success">
-                                    <i class="uil-users-alt"></i>
-                                </a>
-                                <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
-                                    onsubmit="return confirm('Delete this group?');">
-                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger">
-                                        <i class="uil-trash-alt"></i>
-                                    </button>
-                                </form>
+                            <div class="d-flex gap-5 flex-wrap">
+                                @if (canManageGroups)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@group.Id"
+                                        class="btn-admin btn-admin-sm btn-admin-primary flex-grow-1 mr-2">
+                                        <i class="hgi-edit-01"></i> Edit
+                                    </a>
+                                    <a asp-action="Members" asp-route-id="@group.Id"
+                                       class="btn-admin btn-admin-sm btn-admin-success mr-2">
+                                        <i class="hgi-user-group"></i>
+                                    </a>
+                                }
+                                @if (!group.IsPublishedToWeb && group.Status != ContentStatus.PendingReview && group.Status != ContentStatus.Approved && (canManageGroups || HasPermission("posts.edit")))
+                                {
+                                    <form asp-action="RequestPublish" asp-route-id="@group.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning mr-2" title="Submit for review" style="padding:0px 15px">
+                                            <i class="hgi-file-upload"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (group.Status == ContentStatus.PendingReview && canPublishGroups)
+                                {
+                                    <form asp-action="Approve" asp-route-id="@group.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success mr-2" title="Approve" style="padding:0px 15px">
+                                            <i class="hgi-checkmark-circle-01"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (!group.IsPublishedToWeb && (group.Status == ContentStatus.Approved || group.Status == ContentStatus.PendingReview) && canPublishGroups)
+                                {
+                                    <form asp-action="PublishToWeb" asp-route-id="@group.Id" method="post" style="display: inline;">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-primary mr-2" title="Publish to website" style="padding:0px 15px">
+                                            <i class="hgi-globe"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (group.IsPublishedToWeb && canPublishGroups)
+                                {
+                                    <form asp-action="Unpublish" asp-route-id="@group.Id" method="post" style="display: inline;"
+                                        onsubmit="return confirm('Remove this group from the website?');">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-warning mr-2" title="Unpublish" style="padding:0px 15px">
+                                            <i class="hgi-cloud"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (canManageGroups)
+                                {
+                                    <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
+                                        onsubmit="return confirm('Delete this group?');">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" style="padding:0px 15px">
+                                            <i class="hgi-delete-01"></i>
+                                        </button>
+                                    </form>
+                                }
                             </div>
                         </div>
                     </div>
@@ -123,10 +174,69 @@
         else
         {
             <div class="col-12 text-center py-5">
-                <i class="uil-user-plus" style="font-size: 64px; color: #ddd;"></i>
+                <i class="hgi-user-add-01" style="font-size: 64px; color: #ddd;"></i>
                 <p class="text-muted mt-3">No social groups found.</p>
                 <a asp-action="Create" class="btn-admin btn-admin-primary">Create your first group</a>
             </div>
         }
     </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i"
+                           asp-route-search="@Model.Search" asp-route-type="@Model.Type">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
 </div>
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: social group stats + actions -->
+    <div class="widget">
+        <h5 class="widget-title">Social Groups Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-user-add-01"></i> Total groups</span>
+                <strong>@(((int?)ViewBag.TotalGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-globe"></i> Public</span>
+                <strong>@(((int?)ViewBag.PublicGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-lock"></i> Private</span>
+                <strong>@(((int?)ViewBag.PrivateGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-eye"></i> Hidden</span>
+                <strong>@(((int?)ViewBag.HiddenGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-user-group"></i> Total memberships</span>
+                <strong>@(((int?)ViewBag.TotalMemberships ?? 0).ToString("N0"))</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Group Actions</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-action="Create"><i class="hgi-add-square"></i> Create Social Group</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Members" asp-action="Index"><i class="hgi-user-group"></i> Manage Members</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Activity" asp-action="Index"><i class="hgi-notebook"></i> Group Activity</a>
+            </li>
+        </ul>
+    </div>
+}

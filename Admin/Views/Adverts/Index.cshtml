@@ -1,149 +1,301 @@
-@model IEnumerable<Advert>
+@model AdvertListViewModel
 @{
     ViewData["Title"] = "Adverts";
+    var totalAdverts = (int?)ViewBag.TotalAdverts ?? 0;
+    var publishedAdverts = (int?)ViewBag.PublishedAdverts ?? 0;
+    var featuredAdverts = (int?)ViewBag.FeaturedAdverts ?? 0;
+    var expiredAdverts = (int?)ViewBag.ExpiredAdverts ?? 0;
+    var internalAdverts = (int?)ViewBag.InternalAdverts ?? 0;
+    var pendingCount = (int?)ViewBag.PendingReviewCount ?? 0;
+    var tab = (string?)ViewBag.Tab;
+    var sort = (string?)ViewBag.Sort;
+
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+
+    static string StatusBadge(ContentStatus status) => status switch
+    {
+        ContentStatus.Draft => "bh-badge-draft",
+        ContentStatus.PendingReview => "bh-badge-pending",
+        ContentStatus.Approved => "bh-badge-approved",
+        ContentStatus.Published => "bh-badge-published",
+        ContentStatus.Rejected => "bh-badge-rejected",
+        _ => "bh-badge-archived"
+    };
+
+    static string PriceLabel(Advert a) => a.PriceType switch
+    {
+        PriceType.Free => "Free",
+        PriceType.ContactForPrice => "Contact for price",
+        PriceType.Auction => "Auction",
+        _ => a.Price.HasValue ? $"{(a.Currency ?? "USD")} {a.Price.Value:N2}" : "—"
+    };
 }
 
 <div class="admin-card">
     <div class="admin-card-header d-flex justify-content-between align-items-center">
         <h4 class="admin-card-title">
-            <i class="uil-tv-retro"></i> Manage Adverts
+            <i class="hgi-tv-01"></i> Adverts
         </h4>
-        <a asp-action="Create" class="btn-admin btn-admin-primary">
-            <i class="uil-plus"></i> Post Advert
+        @if (HasPermission("adverts.create"))
+        {
+            <a asp-action="Create" class="bh-btn bh-btn-primary">
+                <i class="hgi-add-square"></i> Post Advert
+            </a>
+        }
+    </div>
+
+    <!-- Template-style tab bar -->
+    <div class="bh-tabbar">
+        <a asp-action="Index" class="bh-tab @(string.IsNullOrEmpty(tab) ? "active" : "")">
+            All <span class="bh-count">@totalAdverts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="pending" class="bh-tab @(tab == "pending" ? "active" : "")">
+            Pending Review <span class="bh-count">@pendingCount</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="live" class="bh-tab @(tab == "live" ? "active" : "")">
+            Live on Website <span class="bh-count">@publishedAdverts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="featured" class="bh-tab @(tab == "featured" ? "active" : "")">
+            Featured <span class="bh-count">@featuredAdverts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="expired" class="bh-tab @(tab == "expired" ? "active" : "")">
+            Expired <span class="bh-count">@expiredAdverts</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="internal" class="bh-tab @(tab == "internal" ? "active" : "")">
+            Internal Only <span class="bh-count">@internalAdverts</span>
         </a>
     </div>
 
-    <!-- Filters -->
-    <div class="mb-4">
-        <form asp-action="Index" method="get" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
-                    placeholder="Search adverts..." />
-            </div>
-            <div class="col-md-2">
-                <select name="status" class="form-admin-control">
-                    <option value="">All Status</option>
-                    <option value="Draft">Draft</option>
-                    <option value="PendingReview">Pending</option>
-                    <option value="Published">Published</option>
-                    <option value="Sold">Sold</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn-admin btn-admin-primary">
-                    <i class="uil-filter"></i> Filter
-                </button>
-            </div>
-        </form>
+    <!-- Filter bar -->
+    <form asp-action="Index" method="get" class="bh-filterbar">
+        <input type="hidden" name="tab" value="@tab" />
+        <input type="hidden" name="sort" value="@sort" />
+        <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
+            placeholder="Search adverts..." />
+        <select name="status" class="form-admin-control">
+            <option value="">All Status</option>
+            <option value="Draft" selected="@(Model.Status == ContentStatus.Draft)">Draft</option>
+            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review</option>
+            <option value="Approved" selected="@(Model.Status == ContentStatus.Approved)">Approved</option>
+            <option value="Published" selected="@(Model.Status == ContentStatus.Published)">Published</option>
+            <option value="Rejected" selected="@(Model.Status == ContentStatus.Rejected)">Rejected</option>
+        </select>
+        <select name="categoryId" class="form-admin-control"
+            asp-items="@(ViewBag.Categories as Microsoft.AspNetCore.Mvc.Rendering.SelectList)">
+            <option value="">All Categories</option>
+        </select>
+        <button type="submit" class="bh-btn bh-btn-primary">
+            <i class="hgi-filter"></i> Filter
+        </button>
+    </form>
+
+    <!-- Template-style ordering pills -->
+    <div class="bh-sort-pills">
+        <a asp-action="Index" asp-route-tab="@tab" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+            asp-route-categoryId="@Model.CategoryId" class="bh-pill @(string.IsNullOrEmpty(sort) ? "active" : "")">Newest</a>
+        <a asp-action="Index" asp-route-tab="@tab" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+            asp-route-categoryId="@Model.CategoryId" asp-route-sort="oldest" class="bh-pill @(sort == "oldest" ? "active" : "")">Oldest</a>
+        <a asp-action="Index" asp-route-tab="@tab" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+            asp-route-categoryId="@Model.CategoryId" asp-route-sort="price-asc" class="bh-pill @(sort == "price-asc" ? "active" : "")">Price: low to high</a>
+        <a asp-action="Index" asp-route-tab="@tab" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+            asp-route-categoryId="@Model.CategoryId" asp-route-sort="price-desc" class="bh-pill @(sort == "price-desc" ? "active" : "")">Price: high to low</a>
+        <a asp-action="Index" asp-route-tab="@tab" asp-route-search="@Model.Search" asp-route-status="@Model.Status"
+            asp-route-categoryId="@Model.CategoryId" asp-route-sort="title" class="bh-pill @(sort == "title" ? "active" : "")">Title</a>
     </div>
 
-    <div class="table-responsive">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th style="width: 80px;"></th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Views</th>
-                    <th style="width: 150px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    @foreach (var advert in Model)
-                    {
-                        <tr>
-                            <td>
-                                @if (advert.Images?.Any() == true)
-                                {
-                                    <img src="@advert.Images.First().Url" alt=""
-                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />
-                                }
-                                else
-                                {
-                                    <div
-                                        style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="uil-image" style="font-size: 24px; color: #ccc;"></i>
-                                    </div>
-                                }
-                            </td>
-                            <td>
-                                <strong>@advert.Title</strong>
-                                @if (advert.IsFeatured)
-                                {
-                                    <span class="status-badge" style="background: gold; color: #333;">
-                                        <i class="uil-star"></i>
-                                    </span>
-                                }
-                            </td>
-                            <td>@(advert.Category?.Name ?? "Uncategorized")</td>
-                            <td>
-                                @switch (advert.PriceType)
-                                {
-                                    case PriceType.Fixed:
-                                        <strong>$@advert.Price?.ToString("N2")</strong>
-                                        break;
-                                    case PriceType.Negotiable:
-                                        <span>$@advert.Price?.ToString("N2") <small>(Neg.)</small></span>
-                                        break;
-                                    case PriceType.Free:
-                                        <span class="text-success">Free</span>
-                                        break;
-                                    case PriceType.ContactForPrice:
-                                        <span class="text-muted">Contact</span>
-                                        break;
-                                }
-                            </td>
-                            <td><small>@advert.Location</small></td>
-                            <td>
-                                @{
-                                    var statusClass = advert.Status switch
-                                    {
-                                        ContentStatus.Draft => "status-draft",
-                                        ContentStatus.PendingReview => "status-pending",
-                                        ContentStatus.Published => "status-published",
-                                        _ => "status-draft"
-                                                };
-                                }
-                                <span class="status-badge @statusClass">@advert.Status</span>
-                            </td>
-                            <td>@advert.ViewCount</td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@advert.Id" class="btn-admin btn-admin-sm btn-admin-primary">
-                                    <i class="uil-edit"></i>
+    <!-- Advert cards (template adverts layout) -->
+    <div class="bh-advert-list">
+        @if (Model.Adverts != null && Model.Adverts.Any())
+        {
+            @foreach (var advert in Model.Adverts)
+            {
+                <div class="bh-advert-card">
+                    <div class="bh-advert-thumb">
+                        @if (advert.IsFeatured)
+                        {
+                            <span class="bh-featured-flag">Featured</span>
+                        }
+                        @if (advert.Images?.Any() == true)
+                        {
+                            <img src="@advert.Images.First().Url" alt="@advert.Title" />
+                        }
+                        else
+                        {
+                            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+                                <i class="hgi-image-01" style="font-size: 34px; color: #c9cdd6;"></i>
+                            </div>
+                        }
+                    </div>
+                    <div class="bh-advert-body">
+                        <span class="bh-advert-cat">@(advert.Category?.Name ?? "Uncategorized")</span>
+                        <h5>
+                            <a asp-action="Details" asp-route-id="@advert.Id">@advert.Title</a>
+                        </h5>
+                        <div class="bh-advert-excerpt">@Html.Raw(advert.Description.Length > 160 ? advert.Description.Substring(0, 160) + "…" : advert.Description)</div>
+                        <div class="bh-forum-meta">
+                            <span><i class="hgi-user"></i> @(advert.PostedBy?.DisplayName ?? "Unknown")</span>
+                            @if (!string.IsNullOrEmpty(advert.Location))
+                            {
+                                <span><i class="hgi-location-01"></i> @advert.Location</span>
+                            }
+                            <span><i class="hgi-calendar-01"></i> @advert.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            <span><i class="hgi-eye"></i> @advert.ViewCount views</span>
+                            @if (advert.ExpiresAt.HasValue)
+                            {
+                                <span class="@(advert.ExpiresAt < DateTime.UtcNow ? "text-danger" : "")">
+                                    <i class="hgi-hourglass"></i>
+                                    @(advert.ExpiresAt < DateTime.UtcNow ? "Expired" : $"Expires {advert.ExpiresAt.Value:MMM dd, yyyy}")
+                                </span>
+                            }
+                        </div>
+                    </div>
+                    <div class="bh-advert-side">
+                        <div class="bh-advert-price">@PriceLabel(advert)</div>
+                        <div class="bh-actions" style="justify-content:flex-end;">
+                            <span class="bh-badge @StatusBadge(advert.Status)">@advert.Status</span>
+                            @if (advert.IntendedForWeb)
+                            {
+                                <span class="bh-badge bh-badge-web" title="Intended for the public website"><i class="hgi-globe"></i> Web</span>
+                            }
+                            else
+                            {
+                                <span class="bh-badge bh-badge-internal" title="Internal to the member portal"><i class="hgi-lock"></i> Internal</span>
+                            }
+                        </div>
+                        <div class="bh-actions" style="justify-content:flex-end;">
+                            @if (HasPermission("adverts.edit"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@advert.Id" class="bh-btn" title="Edit">
+                                    <i class="hgi-edit-01"></i>
                                 </a>
-                                @if (advert.Status == ContentStatus.PendingReview)
+                                @if (advert.IntendedForWeb && (advert.Status == ContentStatus.Draft || advert.Status == ContentStatus.Rejected))
                                 {
-                                    <form asp-action="Publish" asp-route-id="@advert.Id" method="post" style="display: inline;">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-success">
-                                            <i class="uil-check"></i>
+                                    <form asp-action="RequestPublish" asp-route-id="@advert.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Submit for review">
+                                            <i class="hgi-file-upload"></i>
                                         </button>
                                     </form>
                                 }
-                                <form asp-action="Delete" asp-route-id="@advert.Id" method="post" style="display: inline;"
-                                    onsubmit="return confirm('Delete this advert?');">
-                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger">
-                                        <i class="uil-trash-alt"></i>
+                            }
+                            @if (HasPermission("adverts.publish"))
+                            {
+                                @if (advert.Status == ContentStatus.PendingReview)
+                                {
+                                    <form asp-action="Approve" asp-route-id="@advert.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="bh-btn bh-btn-success" title="Approve">
+                                            <i class="hgi-checkmark-circle-01"></i>
+                                        </button>
+                                    </form>
+                                    <form asp-action="Reject" asp-route-id="@advert.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Reject">
+                                            <i class="hgi-cancel-circle"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (advert.Status == ContentStatus.Approved && !advert.IsPublishedToWeb && advert.IntendedForWeb)
+                                {
+                                    <form asp-action="PublishToWeb" asp-route-id="@advert.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="bh-btn bh-btn-success" title="Publish to website">
+                                            <i class="hgi-globe"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (advert.IsPublishedToWeb)
+                                {
+                                    <form asp-action="Unpublish" asp-route-id="@advert.Id" method="post" style="display:inline;"
+                                        onsubmit="return confirm('Remove this advert from the website?');">
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Unpublish">
+                                            <i class="hgi-cloud"></i>
+                                        </button>
+                                    </form>
+                                }
+                            }
+                            @if (HasPermission("adverts.delete"))
+                            {
+                                <form asp-action="Delete" asp-route-id="@advert.Id" method="post" style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this advert?');">
+                                    <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
+                                        <i class="hgi-delete-01"></i>
                                     </button>
                                 </form>
-                            </td>
-                        </tr>
-                    }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="bh-empty">
+                <i class="hgi-tv-01"></i>
+                <p>No adverts found.</p>
+                @if (HasPermission("adverts.create"))
+                {
+                    <a asp-action="Create" class="bh-btn bh-btn-primary">Post your first advert</a>
+                }
+            </div>
+        }
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="bh-pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <span class="current">@i</span>
                 }
                 else
                 {
-                    <tr>
-                        <td colspan="8" class="text-center py-4">
-                            <i class="uil-tv-retro" style="font-size: 48px; color: #ddd;"></i>
-                            <p class="text-muted mt-2">No adverts found.</p>
-                        </td>
-                    </tr>
+                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
+                        asp-route-status="@Model.Status" asp-route-categoryId="@Model.CategoryId"
+                        asp-route-tab="@tab" asp-route-sort="@sort">@i</a>
                 }
-            </tbody>
-        </table>
-    </div>
+            }
+        </div>
+    }
 </div>
+
+@section Sidebar {
+    <div class="widget">
+        <h5 class="widget-title">Adverts Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-tv-01"></i> Total adverts</span>
+                <strong>@totalAdverts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-globe"></i> Live on website</span>
+                <strong>@publishedAdverts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-clock-01"></i> Pending review</span>
+                <strong>@pendingCount.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-hourglass"></i> Expired</span>
+                <strong>@expiredAdverts.ToString("N0")</strong>
+            </li>
+        </ul>
+    </div>
+    @if (HasPermission("adverts.create"))
+    {
+        <div class="widget widget_nav_menu">
+            <h5 class="widget-title">Advert Actions</h5>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a asp-action="Create"><i class="hgi-add-square"></i> Post Advert</a>
+                </li>
+                <li class="menu-item">
+                    <a asp-action="Categories"><i class="hgi-layers-01"></i> Categories</a>
+                </li>
+                <li class="menu-item">
+                    <a asp-action="Index" asp-route-tab="pending"><i class="hgi-clock-01"></i> Pending Review</a>
+                </li>
+            </ul>
+        </div>
+    }
+}

@@ -1,154 +1,218 @@
-@model IEnumerable<ApplicationUser>
+@model MembersListViewModel
+@using AppCore.Entities
+@using AppCore.Services
 @{
     ViewData["Title"] = "Members";
+    var totalMembers = (int?)ViewBag.TotalMembers ?? 0;
+    var activeMembers = (int?)ViewBag.ActiveMembers ?? 0;
+    var newThisMonth = (int?)ViewBag.NewThisMonth ?? 0;
+    var onlineNow = (int?)ViewBag.OnlineNow ?? 0;
+    var tab = (string?)ViewBag.Tab;
+
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+
+    static string FullName(ApplicationUser u)
+    {
+        if (!string.IsNullOrWhiteSpace(u.DisplayName)) return u.DisplayName;
+        var name = $"{u.FirstName} {u.LastName}".Trim();
+        return name.Length > 0 ? name : (u.UserName ?? u.Email ?? "Member");
+    }
+
+    static string Initials(ApplicationUser u)
+    {
+        var name = FullName(u);
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2) return $"{char.ToUpper(parts[0][0])}{char.ToUpper(parts[^1][0])}";
+        return name.Length >= 2 ? name[..2].ToUpper() : name.ToUpper();
+    }
+
+    // Deterministic "random" light color per user with a darker version for the initials.
+    static (string Bg, string Fg) InitialsColors(ApplicationUser u)
+    {
+        var palette = new (string Bg, string Fg)[]
+        {
+            ("#EDE7F6", "#5E35B1"), // lavender
+            ("#E3F2FD", "#1565C0"), // light blue
+            ("#E8F5E9", "#2E7D32"), // light green
+            ("#FFF3E0", "#E65100"), // light orange
+            ("#FCE4EC", "#AD1457"), // pink
+            ("#E0F7FA", "#00838F"), // cyan
+            ("#F1F8E9", "#558B2F"), // lime
+            ("#FFF8E1", "#F57F17"), // amber
+            ("#EFEBE9", "#4E342E"), // taupe
+            ("#E8EAF6", "#283593")  // indigo
+        };
+        var hash = 0;
+        foreach (var ch in u.Id) hash = (hash * 31 + ch) & 0x7FFFFFFF;
+        return palette[hash % palette.Length];
+    }
 }
 
 <div class="admin-card">
     <div class="admin-card-header d-flex justify-content-between align-items-center">
         <h4 class="admin-card-title">
-            <i class="uil-users-alt"></i> Manage Members
+            <i class="hgi-user-group"></i> Members
         </h4>
-        <a asp-action="Create" class="btn-admin btn-admin-primary">
-            <i class="uil-plus"></i> Add Member
+        @if (HasPermission("users.create"))
+        {
+            <a asp-action="Create" class="bh-btn bh-btn-primary">
+                <i class="hgi-add-square"></i> Add Member
+            </a>
+        }
+    </div>
+
+    <!-- Template-style tab bar -->
+    <div class="bh-tabbar">
+        <a asp-action="Index" class="bh-tab @(string.IsNullOrEmpty(tab) ? "active" : "")">
+            All <span class="bh-count">@totalMembers</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="active" class="bh-tab @(tab == "active" ? "active" : "")">
+            Active <span class="bh-count">@activeMembers</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="new" class="bh-tab @(tab == "new" ? "active" : "")">
+            New This Month <span class="bh-count">@newThisMonth</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="online" class="bh-tab @(tab == "online" ? "active" : "")">
+            Online Now <span class="bh-count">@onlineNow</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="inactive" class="bh-tab @(tab == "inactive" ? "active" : "")">
+            Deactivated
         </a>
     </div>
 
-    <!-- Filters -->
-    <div class="mb-4">
-        <form asp-action="Index" method="get" class="row g-3">
-            <div class="col-md-4">
-                <input type="text" name="search" value="@ViewBag.Search" class="form-admin-control"
-                    placeholder="Search members..." />
-            </div>
-            <div class="col-md-3">
-                <select name="group" class="form-admin-control">
-                    <option value="">All Groups</option>
-                    @if (ViewBag.Groups != null)
-                    {
-                        @foreach (var group in ViewBag.Groups)
-                        {
-                            <option value="@group.Id" selected="@(ViewBag.GroupId == group.Id)">@group.Name</option>
-                        }
-                    }
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn-admin btn-admin-primary">
-                    <i class="uil-filter"></i> Filter
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <div class="table-responsive">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th style="width: 60px;"></th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Groups</th>
-                    <th>Status</th>
-                    <th>Joined</th>
-                    <th style="width: 150px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
+    <!-- Filter bar -->
+    <form asp-action="Index" method="get" class="bh-filterbar">
+        <input type="hidden" name="tab" value="@tab" />
+        <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
+            placeholder="Search members by name or email..." />
+        <select name="group" class="form-admin-control">
+            <option value="">All Groups</option>
+            @if (ViewBag.Groups != null)
+            {
+                @foreach (var group in ViewBag.Groups)
                 {
-                    @foreach (var member in Model)
-                    {
-                        <tr>
-                            <td>
-                                <img src="@(member.AvatarUrl ?? "/wp-content/uploads/2020/07/logo-icon.svg")"
-                                    alt="@member.DisplayName"
-                                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
-                            </td>
-                            <td>
-                                <strong>@(member.DisplayName ?? member.UserName)</strong>
-                                @if (member.IsSuperAdmin)
-                                {
-                                    <span class="status-badge"
-                                        style="background: var(--theme-color-primary); color: #fff; margin-left: 5px;">Super
-                                        Admin</span>
-                                }
-                            </td>
-                            <td>@member.Email</td>
-                            <td>
-                                @if (member.GroupMemberships?.Any() == true)
-                                {
-                                    @foreach (var membership in member.GroupMemberships.Take(2))
-                                    {
-                                        <span class="status-badge status-approved">@membership.UserGroup?.Name</span>
-                                    }
-                                    @if (member.GroupMemberships.Count > 2)
-                                    {
-                                        <span class="text-muted">+@(member.GroupMemberships.Count - 2) more</span>
-                                    }
-                                }
-                                else
-                                {
-                                    <span class="text-muted">No groups</span>
-                                }
-                            </td>
-                            <td>
-                                @if (member.EmailConfirmed)
-                                {
-                                    <span class="status-badge status-published">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="status-badge status-pending">Pending</span>
-                                }
-                            </td>
-                            <td>@member.CreatedAt.ToString("MMM dd, yyyy")</td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@member.Id" class="btn-admin btn-admin-sm btn-admin-primary"
-                                    title="Edit">
-                                    <i class="uil-edit"></i>
-                                </a>
-                                <a asp-action="Details" asp-route-id="@member.Id"
-                                    class="btn-admin btn-admin-sm btn-admin-success" title="View">
-                                    <i class="uil-eye"></i>
-                                </a>
-                                @if (!member.IsSuperAdmin)
-                                {
-                                    <form asp-action="Delete" asp-route-id="@member.Id" method="post" style="display: inline;"
-                                        onsubmit="return confirm('Are you sure you want to delete this member?');">
-                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
-                                            <i class="uil-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                }
-                            </td>
-                        </tr>
-                    }
+                    <option value="@group.Id" selected="@(Model.GroupId == group.Id)">@group.Name</option>
+                }
+            }
+        </select>
+        <button type="submit" class="bh-btn bh-btn-primary">
+            <i class="hgi-filter"></i> Filter
+        </button>
+    </form>
+
+    <!-- Two-column member grid: avatar or colored initials, name clamped to 2 lines -->
+    @if (Model?.Users != null && Model.Users.Any())
+    {
+        <div id="members-list" class="bh-member-grid" data-next-page="@(Model.TotalPages > Model.CurrentPage ? Model.CurrentPage + 1 : 0)">
+            @await Html.PartialAsync("_ListItems", Model)
+        </div>
+    }
+    else
+    {
+        <div class="bh-empty">
+            <i class="hgi-user-group"></i>
+            <p>No members found.</p>
+            @if (HasPermission("users.create"))
+            {
+                <a asp-action="Create" class="bh-btn bh-btn-primary">Add the first member</a>
+            }
+        </div>
+    }
+
+    @if (Model is { TotalPages: > 1 })
+    {
+        <div class="bh-pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <span class="current">@i</span>
                 }
                 else
                 {
-                    <tr>
-                        <td colspan="7" class="text-center py-4">
-                            <i class="uil-users-alt" style="font-size: 48px; color: #ddd;"></i>
-                            <p class="text-muted mt-2">No members found.</p>
-                        </td>
-                    </tr>
+                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
+                        asp-route-group="@Model.GroupId" asp-route-tab="@tab">@i</a>
                 }
-            </tbody>
-        </table>
-    </div>
+            }
+        </div>
+    }
 
-    <!-- Pagination -->
-    @if (ViewBag.TotalPages > 1)
-    {
-        <nav class="mt-4">
-            <ul class="pagination justify-content-center">
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@ViewBag.Search">@i</a>
-                    </li>
-                }
-            </ul>
-        </nav>
+    @section Scripts {
+        <script>
+            const membersList = document.getElementById('members-list');
+            if (membersList) {
+                const loadMore = () => {
+                    const nextPage = parseInt(membersList.dataset.nextPage || '0', 10);
+                    if (!nextPage) return;
+                    const url = '@Url.Action("Index", "Members")?page=' + nextPage + '&search=@(Model.Search ?? "")&group=@(Model.GroupId?.ToString() ?? "")&tab=@(tab ?? "")&ajax=true';
+                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => response.text())
+                        .then(html => {
+                            if (!html.trim()) return;
+                            membersList.insertAdjacentHTML('beforeend', html);
+                            const newNextPage = parseInt(membersList.dataset.nextPage || '0', 10) + 1;
+                            membersList.dataset.nextPage = newNextPage;
+                        });
+                };
+                window.addEventListener('scroll', () => {
+                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                        loadMore();
+                    }
+                });
+            }
+        </script>
     }
 </div>
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: member stats + actions -->
+    <div class="widget">
+        <h5 class="widget-title">Members Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-user-group"></i> Total members</span>
+                <strong>@totalMembers.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-checkmark-circle-01"></i> Active</span>
+                <strong>@activeMembers.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-add-square"></i> New this month</span>
+                <strong>@newThisMonth.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-globe"></i> Online now</span>
+                <strong>@onlineNow.ToString("N0")</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Member Actions</h5>
+        <ul class="menu">
+            @if (HasPermission("users.create"))
+            {
+                <li class="menu-item">
+                    <a asp-action="Create"><i class="hgi-add-square"></i> Add Member</a>
+                </li>
+            }
+            @if (HasPermission("groups.view"))
+            {
+                <li class="menu-item">
+                    <a asp-controller="Groups" asp-action="Index"><i class="hgi-layers-01"></i> User Groups</a>
+                </li>
+                <li class="menu-item">
+                    <a asp-controller="SocialGroups" asp-action="Index"><i class="hgi-user-add-01"></i> Social Groups</a>
+                </li>
+            }
+            @if (HasPermission("posts.view"))
+            {
+                <li class="menu-item">
+                    <a asp-controller="Activity" asp-action="Index"><i class="hgi-notebook"></i> Member Activity</a>
+                </li>
+            }
+        </ul>
+    </div>
+}

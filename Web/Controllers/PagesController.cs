@@ -6,7 +6,7 @@ namespace Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult About()
@@ -16,7 +16,7 @@ namespace Web.Controllers
 
         public IActionResult ContactUs()
         {
-            return View();
+            return RedirectToAction("Index", "Contact");
         }
 
         public IActionResult Gallery()
@@ -26,7 +26,7 @@ namespace Web.Controllers
 
         public IActionResult Groups()
         {
-            return View();
+            return RedirectToActionPermanent("Index", "Groups");
         }
         // Add more actions for other pages as needed
     }

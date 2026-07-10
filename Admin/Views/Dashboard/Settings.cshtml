@@ -1,0 +1,51 @@
+@model Admin.Models.SettingsViewModel
+@{
+    ViewData["Title"] = "Settings";
+    var forceChange = ViewBag.RequiresPasswordChange as bool? ?? false;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-dashboard-square-setting"></i> Account Settings
+        </h4>
+    </div>
+
+    @if (forceChange)
+    {
+        <div class="alert alert-warning" role="alert">
+            <i class="hgi-information-circle"></i> Please choose a new password before continuing.
+        </div>
+    }
+
+    <form asp-action="Settings" method="post">
+        <div class="form-admin-group">
+            <label class="form-admin-label" for="Email">Email Address</label>
+            <input asp-for="Email" type="email" class="form-admin-control" />
+        </div>
+
+        <div class="form-admin-group">
+            <label class="form-admin-label" for="CurrentPassword">Current Password</label>
+            <input asp-for="CurrentPassword" type="password" class="form-admin-control" />
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-admin-group">
+                    <label class="form-admin-label" for="NewPassword">New Password</label>
+                    <input asp-for="NewPassword" type="password" class="form-admin-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-admin-group">
+                    <label class="form-admin-label" for="ConfirmPassword">Confirm New Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-admin-control" />
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-admin btn-admin-primary">
+            <i class="hgi-floppy-disk"></i> Save Settings
+        </button>
+    </form>
+</div>

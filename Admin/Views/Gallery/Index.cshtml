@@ -1,0 +1,381 @@
+@model GalleryListViewModel
+@using AppCore.Entities
+@{
+    ViewData["Title"] = "Gallery";
+    var type = Model.Type;
+    var isVideos = type == "videos";
+    var tab = Model.Tab;
+
+    var canPhotos = ViewBag.CanPhotos as bool? ?? false;
+    var canVideos = ViewBag.CanVideos as bool? ?? false;
+    var photoCount = (int?)ViewBag.PhotoCount ?? 0;
+    var videoCount = (int?)ViewBag.VideoCount ?? 0;
+    var pendingCount = (int?)ViewBag.PendingCount ?? 0;
+    var liveCount = (int?)ViewBag.LiveCount ?? 0;
+    var featuredCount = (int?)ViewBag.FeaturedCount ?? 0;
+    var internalCount = (int?)ViewBag.InternalCount ?? 0;
+
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+
+    static string StatusBadge(ContentStatus status) => status switch
+    {
+        ContentStatus.Draft => "bh-badge-draft",
+        ContentStatus.PendingReview => "bh-badge-pending",
+        ContentStatus.Approved => "bh-badge-approved",
+        ContentStatus.Published => "bh-badge-published",
+        ContentStatus.Rejected => "bh-badge-rejected",
+        _ => "bh-badge-archived"
+    };
+
+    static string StatusText(ContentStatus status) => status switch
+    {
+        ContentStatus.PendingReview => "Pending Review",
+        _ => status.ToString()
+    };
+
+    static string FormatDuration(int? seconds)
+    {
+        if (!seconds.HasValue || seconds <= 0) return "";
+        var ts = TimeSpan.FromSeconds(seconds.Value);
+        return ts.TotalHours >= 1 ? ts.ToString(@"h\:mm\:ss") : ts.ToString(@"m\:ss");
+    }
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-image-01"></i> Gallery
+        </h4>
+        <div class="bh-actions">
+            @if (!isVideos && HasPermission("photos.upload"))
+            {
+                <a asp-action="UploadPhoto" class="bh-btn bh-btn-primary">
+                    <i class="hgi-image-add-01"></i> Upload Photo
+                </a>
+            }
+            @if (isVideos && HasPermission("videos.upload"))
+            {
+                <a asp-action="UploadVideo" class="bh-btn bh-btn-primary">
+                    <i class="hgi-video-01"></i> Add Video
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- Media type switch (photos / videos) -->
+    <div class="bh-tabbar">
+        @if (canPhotos)
+        {
+            <a asp-action="Index" asp-route-type="photos" class="bh-tab @(!isVideos ? "active" : "")">
+                <i class="hgi-image-01"></i> Photos <span class="bh-count">@photoCount</span>
+            </a>
+        }
+        @if (canVideos)
+        {
+            <a asp-action="Index" asp-route-type="videos" class="bh-tab @(isVideos ? "active" : "")">
+                <i class="hgi-video-01"></i> Videos <span class="bh-count">@videoCount</span>
+            </a>
+        }
+    </div>
+
+    <!-- Workflow tabs -->
+    <div class="bh-tabbar">
+        <a asp-action="Index" asp-route-type="@type" class="bh-tab @(string.IsNullOrEmpty(tab) ? "active" : "")">
+            All
+        </a>
+        <a asp-action="Index" asp-route-type="@type" asp-route-tab="pending" class="bh-tab @(tab == "pending" ? "active" : "")">
+            Pending Review <span class="bh-count">@pendingCount</span>
+        </a>
+        <a asp-action="Index" asp-route-type="@type" asp-route-tab="live" class="bh-tab @(tab == "live" ? "active" : "")">
+            Live on Website <span class="bh-count">@liveCount</span>
+        </a>
+        <a asp-action="Index" asp-route-type="@type" asp-route-tab="featured" class="bh-tab @(tab == "featured" ? "active" : "")">
+            Featured <span class="bh-count">@featuredCount</span>
+        </a>
+        <a asp-action="Index" asp-route-type="@type" asp-route-tab="internal" class="bh-tab @(tab == "internal" ? "active" : "")">
+            Internal Only <span class="bh-count">@internalCount</span>
+        </a>
+    </div>
+
+    <!-- Filter bar -->
+    <form asp-action="Index" method="get" class="bh-filterbar">
+        <input type="hidden" name="type" value="@type" />
+        <input type="hidden" name="tab" value="@tab" />
+        <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
+            placeholder="Search @(isVideos ? "videos" : "photos")..." />
+        @if (isVideos)
+        {
+            <select name="categoryId" class="form-admin-control"
+                asp-items="@(ViewBag.Categories as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)">
+                <option value="">All Categories</option>
+            </select>
+        }
+        else
+        {
+            <select name="albumId" class="form-admin-control"
+                asp-items="@(ViewBag.Albums as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)">
+                <option value="">All Albums</option>
+            </select>
+        }
+        <button type="submit" class="bh-btn bh-btn-primary">
+            <i class="hgi-filter"></i> Filter
+        </button>
+    </form>
+
+    @if (isVideos)
+    {
+        @if (Model.Videos.Any())
+        {
+            <div class="bh-media-grid">
+                @foreach (var video in Model.Videos)
+                {
+                    <div class="bh-media-card">
+                        <div class="bh-media-badges">
+                            <span class="bh-badge @StatusBadge(video.Status)">@StatusText(video.Status)</span>
+                            @if (video.IntendedForWeb)
+                            {
+                                <span class="bh-badge bh-badge-web">Web</span>
+                            }
+                            else
+                            {
+                                <span class="bh-badge bh-badge-internal">Internal</span>
+                            }
+                        </div>
+                        <div class="bh-media-thumb">
+                            @if (!string.IsNullOrEmpty(video.ThumbnailUrl))
+                            {
+                                <img src="@video.ThumbnailUrl" alt="@video.Title" loading="lazy" />
+                            }
+                            <span class="bh-media-play"><i class="hgi-play-circle"></i></span>
+                            @if (video.Duration > 0)
+                            {
+                                <span class="bh-media-duration">@FormatDuration(video.Duration)</span>
+                            }
+                        </div>
+                        <div class="bh-media-body">
+                            <h6>
+                                @if (HasPermission("videos.upload"))
+                                {
+                                    <a asp-action="EditVideo" asp-route-id="@video.Id">@video.Title</a>
+                                }
+                                else
+                                {
+                                    @video.Title
+                                }
+                            </h6>
+                            <div class="bh-media-meta">
+                                @if (video.Category != null)
+                                {
+                                    <span><i class="hgi-folder-01"></i> @video.Category.Name</span>
+                                }
+                                <span><i class="hgi-eye"></i> @video.ViewCount</span>
+                                <span>@video.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            </div>
+                            <div class="bh-actions">
+                                @if (HasPermission("videos.upload"))
+                                {
+                                    <a asp-action="EditVideo" asp-route-id="@video.Id" class="bh-btn" title="Edit">
+                                        <i class="hgi-edit-01"></i>
+                                    </a>
+                                }
+                                @if (video.IntendedForWeb && video.Status == ContentStatus.Draft && HasPermission("videos.upload"))
+                                {
+                                    <form asp-action="RequestPublishVideo" asp-route-id="@video.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Submit for review">
+                                            <i class="hgi-cloud-upload"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (video.Status == ContentStatus.PendingReview && HasPermission("videos.publish"))
+                                {
+                                    <form asp-action="ApproveVideo" asp-route-id="@video.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-success" title="Approve">
+                                            <i class="hgi-checkmark-circle-01"></i>
+                                        </button>
+                                    </form>
+                                    <form asp-action="RejectVideo" asp-route-id="@video.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-danger" title="Reject">
+                                            <i class="hgi-cancel-circle"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (video.IntendedForWeb && !video.IsPublishedToWeb && video.Status == ContentStatus.Approved && HasPermission("videos.publish"))
+                                {
+                                    <form asp-action="PublishVideo" asp-route-id="@video.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-success" title="Publish to website">
+                                            <i class="hgi-globe"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (video.IsPublishedToWeb && HasPermission("videos.publish"))
+                                {
+                                    <form asp-action="UnpublishVideo" asp-route-id="@video.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Remove from website">
+                                            <i class="hgi-cloud"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (HasPermission("videos.delete"))
+                                {
+                                    <form asp-action="DeleteVideo" asp-route-id="@video.Id" method="post" class="d-inline"
+                                        onsubmit="return confirm('Delete this video?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
+                                            <i class="hgi-delete-01"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="bh-empty">
+                <i class="hgi-video-off"></i>
+                <p>No videos found. @(HasPermission("videos.upload") ? "Add the first video to get started." : "")</p>
+            </div>
+        }
+    }
+    else
+    {
+        @if (Model.Photos.Any())
+        {
+            <div class="bh-media-grid">
+                @foreach (var photo in Model.Photos)
+                {
+                    <div class="bh-media-card">
+                        <div class="bh-media-badges">
+                            <span class="bh-badge @StatusBadge(photo.Status)">@StatusText(photo.Status)</span>
+                            @if (photo.IntendedForWeb)
+                            {
+                                <span class="bh-badge bh-badge-web">Web</span>
+                            }
+                            else
+                            {
+                                <span class="bh-badge bh-badge-internal">Internal</span>
+                            }
+                        </div>
+                        <div class="bh-media-thumb">
+                            <img src="@(photo.ThumbnailUrl ?? photo.Url)" alt="@photo.Title" loading="lazy" />
+                        </div>
+                        <div class="bh-media-body">
+                            <h6>
+                                @if (HasPermission("photos.upload"))
+                                {
+                                    <a asp-action="EditPhoto" asp-route-id="@photo.Id">@photo.Title</a>
+                                }
+                                else
+                                {
+                                    @photo.Title
+                                }
+                            </h6>
+                            <div class="bh-media-meta">
+                                @if (photo.Album != null)
+                                {
+                                    <span><i class="hgi-folder-01"></i> @photo.Album.Name</span>
+                                }
+                                <span><i class="hgi-eye"></i> @photo.ViewCount</span>
+                                <span>@photo.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            </div>
+                            <div class="bh-actions">
+                                @if (HasPermission("photos.upload"))
+                                {
+                                    <a asp-action="EditPhoto" asp-route-id="@photo.Id" class="bh-btn" title="Edit">
+                                        <i class="hgi-edit-01"></i>
+                                    </a>
+                                }
+                                @if (photo.IntendedForWeb && photo.Status == ContentStatus.Draft && HasPermission("photos.upload"))
+                                {
+                                    <form asp-action="RequestPublishPhoto" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Submit for review">
+                                            <i class="hgi-cloud-upload"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (photo.Status == ContentStatus.PendingReview && HasPermission("photos.publish"))
+                                {
+                                    <form asp-action="ApprovePhoto" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-success" title="Approve">
+                                            <i class="hgi-checkmark-circle-01"></i>
+                                        </button>
+                                    </form>
+                                    <form asp-action="RejectPhoto" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-danger" title="Reject">
+                                            <i class="hgi-cancel-circle"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (photo.IntendedForWeb && !photo.IsPublishedToWeb && photo.Status == ContentStatus.Approved && HasPermission("photos.publish"))
+                                {
+                                    <form asp-action="PublishPhoto" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-success" title="Publish to website">
+                                            <i class="hgi-globe"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (photo.IsPublishedToWeb && HasPermission("photos.publish"))
+                                {
+                                    <form asp-action="UnpublishPhoto" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-warn" title="Remove from website">
+                                            <i class="hgi-cloud"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (HasPermission("photos.delete"))
+                                {
+                                    <form asp-action="DeletePhoto" asp-route-id="@photo.Id" method="post" class="d-inline"
+                                        onsubmit="return confirm('Delete this photo?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
+                                            <i class="hgi-delete-01"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="bh-empty">
+                <i class="hgi-image-not-found-01"></i>
+                <p>No photos found. @(HasPermission("photos.upload") ? "Upload the first photo to get started." : "")</p>
+            </div>
+        }
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="bh-pagination">
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <span class="current">@i</span>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-route-type="@type" asp-route-tab="@tab" asp-route-search="@Model.Search"
+                        asp-route-albumId="@Model.AlbumId" asp-route-categoryId="@Model.CategoryId" asp-route-page="@i">@i</a>
+                }
+            }
+        </div>
+    }
+</div>

@@ -1,5 +1,53 @@
+@using AppCore.Entities
+@using Web.Controllers
+@model CharityPageViewModel
 @{
     ViewData["Title"] = "TFC Charity";
+
+    static int ProgressPercent(AppCore.Entities.CharityProject p)
+    {
+        if (p.GoalAmount is null || p.GoalAmount == 0 || p.CurrentAmount is null)
+        {
+            return 0;
+        }
+        return (int)Math.Clamp(Math.Round(p.CurrentAmount.Value / p.GoalAmount.Value * 100), 0, 100);
+    }
+
+    var banner = Model.FirstFor(CharityPageSection.Banner);
+    var bannerImages = Model.ItemsFor(CharityPageSection.Banner)
+        .Where(i => !string.IsNullOrWhiteSpace(i.ImageUrl))
+        .Select(i => i.ImageUrl!)
+        .ToList();
+    var defaultGallery = new[]
+    {
+        "/charity/images/banner/banner-s1.jpg",
+        "/charity/images/banner/banner-s3.jpg",
+        "/charity/images/banner/banner-s4.jpg",
+        "/charity/images/banner/banner-s2.jpg"
+    };
+    var gallery = bannerImages.Concat(defaultGallery.Skip(bannerImages.Count)).Take(4).ToList();
+    var bannerBadges = (string.IsNullOrWhiteSpace(banner?.Meta)
+            ? "Eliminate Proverty,Better Health,Mass Education"
+            : banner!.Meta!)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    var features = Model.ItemsFor(CharityPageSection.Feature);
+    var history = Model.FirstFor(CharityPageSection.History);
+    var historyImages = Model.ItemsFor(CharityPageSection.History)
+        .Where(i => !string.IsNullOrWhiteSpace(i.ImageUrl))
+        .Select(i => i.ImageUrl!)
+        .ToList();
+    var defaultHistoryImages = new[]
+    {
+        "/charity/images/other/rs-1.jpg",
+        "/charity/images/other/rs-2.jpg",
+        "/charity/images/other/rs-3.jpg"
+    };
+    var historyGallery = historyImages.Concat(defaultHistoryImages.Skip(historyImages.Count)).Take(3).ToList();
+    var mission = Model.FirstFor(CharityPageSection.Mission);
+    var counters = Model.ItemsFor(CharityPageSection.Counter);
+    var events = Model.ItemsFor(CharityPageSection.Event);
+    var partners = Model.ItemsFor(CharityPageSection.Partner);
 }
 
 @section Styles {
@@ -17,13 +65,27 @@
         <div class="row align-items-center">
             <div class="col-lg-6 col-md-6 order-md-1 order-2">
                 <div class="banner-info pe-lg-5 mt-3 mt-sm-0">
-                    <h1 class="banner-title">Transforming <span style="color: #34afe6;">Lives</span> One Step at a Time
-                    </h1>
-                    <p>Together, we can provide hope, support, and a brighter future for those in need. Your
-                        contribution can change lives.</p>
+                    @if (banner != null && !string.IsNullOrWhiteSpace(banner.Title))
+                    {
+                        <h1 class="banner-title">
+                            @banner.Title
+                            @if (!string.IsNullOrWhiteSpace(banner.Highlight))
+                            {
+                                <span style="color: #34afe6;">@banner.Highlight</span>
+                            }
+                        </h1>
+                        <p>@banner.Text</p>
+                    }
+                    else
+                    {
+                        <h1 class="banner-title">Transforming <span style="color: #34afe6;">Lives</span> One Step at a Time
+                        </h1>
+                        <p>Together, we can provide hope, support, and a brighter future for those in need. Your
+                            contribution can change lives.</p>
+                    }
 
                     <div class="banner-btn mt-5 d-flex align-items-center">
-                        <a href="#" class="custom-btn">Get Started</a>
+                        <a asp-controller="Contact" asp-action="Index" class="custom-btn">Get Started</a>
                         <div class="video-block ms-5">
                             <div class="waves wave-1"></div>
                             <div class="waves wave-2"></div>
@@ -33,9 +95,10 @@
                         </div>
                     </div>
                     <div class="banner-meta mt-5">
-                        <span>Eliminate Proverty</span>
-                        <span>Better Health</span>
-                        <span>Mass Education</span>
+                        @foreach (var badge in bannerBadges)
+                        {
+                            <span>@badge</span>
+                        }
                     </div>
                 </div>
             </div>
@@ -43,18 +106,18 @@
                 <div class="banner-gallery position-relative row g-2 g-lg-3">
                     <div class="col">
                         <div class="bg-item">
-                            <img class="img-fluid rounded-4" src="~/charity/images/banner/banner-s1.jpg" alt="Banner">
+                            <img class="img-fluid rounded-4" src="@gallery[0]" alt="Banner">
                         </div>
                         <div class="bg-item">
-                            <img class="img-fluid rounded-4" src="~/charity/images/banner/banner-s3.jpg" alt="">
+                            <img class="img-fluid rounded-4" src="@gallery[1]" alt="">
                         </div>
                     </div>
                     <div class="col">
                         <div class="bg-item">
-                            <img class="img-fluid rounded-4" src="~/charity/images/banner/banner-s4.jpg" alt="">
+                            <img class="img-fluid rounded-4" src="@gallery[2]" alt="">
                         </div>
                         <div class="bg-item">
-                            <img class="img-fluid rounded-4" src="~/charity/images/banner/banner-s2.jpg" alt="">
+                            <img class="img-fluid rounded-4" src="@gallery[3]" alt="">
                         </div>
                     </div>
                 </div>
@@ -68,36 +131,61 @@
 <section class="feature-area2">
     <div class="container">
         <div class="row g-lg-5 g-2">
-            <div class="col-xl-4 col-md-4">
-                <div class="d-flex feature-item">
-                    <span class="icon shadow"><img src="~/charity/images/components/mis1.png" alt=""></span>
-                    <div class="feat-txt ms-4">
-                        <h3>Become a volunteer</h3>
-                        <p>We appricitate every efforts. Reiciendis inventore, quasi rem eum velit exercitationem!</p>
+            @if (features.Any())
+            {
+                var featureIcons = new[]
+                {
+                    "/charity/images/components/mis1.png",
+                    "/charity/images/components/mis2.png",
+                    "/charity/images/components/donate.png"
+                };
+                for (var i = 0; i < features.Count; i++)
+                {
+                    var feature = features[i];
+                    <div class="col-xl-4 col-md-4">
+                        <div class="d-flex feature-item">
+                            <span class="icon shadow"><img src="@(string.IsNullOrWhiteSpace(feature.ImageUrl) ? featureIcons[i % featureIcons.Length] : feature.ImageUrl)" alt=""></span>
+                            <div class="feat-txt ms-4">
+                                <h3>@feature.Title</h3>
+                                <p>@feature.Text</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-xl-4 col-md-4">
+                    <div class="d-flex feature-item">
+                        <span class="icon shadow"><img src="~/charity/images/components/mis1.png" alt=""></span>
+                        <div class="feat-txt ms-4">
+                            <h3>Become a volunteer</h3>
+                            <p>We appricitate every efforts. Reiciendis inventore, quasi rem eum velit exercitationem!</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Feature Item End -->
-            <div class="col-xl-4 col-md-4">
-                <div class="d-flex feature-item">
-                    <span class="icon shadow"><img src="~/charity/images/components/mis2.png" alt=""></span>
-                    <div class="feat-txt ms-4">
-                        <h3>Helping each Other</h3>
-                        <p>We appricitate every efforts. Reiciendis inventore, quasi rem eum velit exercitationem!</p>
+                <!-- Feature Item End -->
+                <div class="col-xl-4 col-md-4">
+                    <div class="d-flex feature-item">
+                        <span class="icon shadow"><img src="~/charity/images/components/mis2.png" alt=""></span>
+                        <div class="feat-txt ms-4">
+                            <h3>Helping each Other</h3>
+                            <p>We appricitate every efforts. Reiciendis inventore, quasi rem eum velit exercitationem!</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Feature Item End -->
-            <div class="col-xl-4 col-md-4">
-                <div class="d-flex feature-item">
-                    <span class="icon shadow"><img src="~/charity/images/components/donate.png" alt=""></span>
-                    <div class="feat-txt ms-4">
-                        <h3>Start Donating</h3>
-                        <p>We appricitate every efforts. Reiciendis inventore, quasi rem eum velit exercitationem!</p>
+                <!-- Feature Item End -->
+                <div class="col-xl-4 col-md-4">
+                    <div class="d-flex feature-item">
+                        <span class="icon shadow"><img src="~/charity/images/components/donate.png" alt=""></span>
+                        <div class="feat-txt ms-4">
+                            <h3>Start Donating</h3>
+                            <p>We appricitate every efforts. Reiciendis inventore, quasi rem eum velit exercitationem!</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Feature Item End -->
+                <!-- Feature Item End -->
+            }
         </div>
     </div>
 </section>
@@ -109,26 +197,41 @@
         <div class="row">
             <div class="col-lg-6 order-lg-1 order-2">
                 <div class="history-txt">
-                    <h2 class="section-title">Lets know<span style="color: #34afe6;"> Our History</span></h2>
-                    <p>We are starting Help at vary begining of 1900s. Quibusdam quidem alias saepe vero doloribus
-                        consequatur quis nobis molestiae fugit vel quae facilis cum ex
-                        commodi non? Reiciendis obcaecati quaerat incidunt. Saepe, sed optio eum. Suscipit.</p>
-                    <a href="#" class="custom-btn">Read more</a>
+                    @if (history != null && !string.IsNullOrWhiteSpace(history.Title))
+                    {
+                        <h2 class="section-title">@history.Title<span style="color: #34afe6;"> @history.Highlight</span></h2>
+                        <p>@history.Text</p>
+                    }
+                    else
+                    {
+                        <h2 class="section-title">Lets know<span style="color: #34afe6;"> Our History</span></h2>
+                        <p>We are starting Help at vary begining of 1900s. Quibusdam quidem alias saepe vero doloribus
+                            consequatur quis nobis molestiae fugit vel quae facilis cum ex
+                            commodi non? Reiciendis obcaecati quaerat incidunt. Saepe, sed optio eum. Suscipit.</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(history?.LinkUrl))
+                    {
+                        <a href="@history!.LinkUrl" class="custom-btn">Read more</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Pages" asp-action="About" class="custom-btn">Read more</a>
+                    }
                 </div>
             </div>
             <div class="col-lg-6 order-lg-2 order-1">
                 <div class="row g-3">
                     <div class="col-6">
                         <div class="raise-img height-2">
-                            <img src="~/charity/images/other/rs-1.jpg" alt="">
+                            <img src="@historyGallery[0]" alt="">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="raise-img">
-                            <img src="~/charity/images/other/rs-2.jpg" alt="">
+                            <img src="@historyGallery[1]" alt="">
                         </div>
                         <div class="raise-img">
-                            <img src="~/charity/images/other/rs-3.jpg" alt="">
+                            <img src="@historyGallery[2]" alt="">
                         </div>
                     </div>
                 </div>
@@ -144,23 +247,31 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="mission-vedio">
-                    <img src="~/charity/images/causes/cause1.jpg" alt="">
+                    <img src="@(string.IsNullOrWhiteSpace(mission?.ImageUrl) ? "/charity/images/causes/cause1.jpg" : mission!.ImageUrl)" alt="">
                     <div class="video-block">
                         <div class="waves wave-1"></div>
                         <div class="waves wave-2"></div>
                         <div class="waves wave-3"></div>
-                        <a href="https://www.youtube.com/watch?v=wJuuWnDrOEg" class="video vedio-popup"
+                        <a href="@(string.IsNullOrWhiteSpace(mission?.LinkUrl) ? "https://www.youtube.com/watch?v=wJuuWnDrOEg" : mission!.LinkUrl)" class="video vedio-popup"
                             data-autoplay="true" data-vbtype="video"><i class="fa fa-play"></i></a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="misson-txt">
-                    <h2 class="section-title">We care about<span style="color: #34afe6;"> Our misson</span></h2>
-                    <p>We are starting Help at vary begining of 1900s. Quibusdam quidem alias saepe vero doloribus
-                        consequatur quis nobis molestiae fugit do facilis cum ex
-                        commodi non? Reiciendis obcaecati quaerat incidunt. Saepe, sed optio eum. Suscipit.</p>
-                    <a href="#" class="custom-btn">Read more</a>
+                    @if (mission != null && !string.IsNullOrWhiteSpace(mission.Title))
+                    {
+                        <h2 class="section-title">@mission.Title<span style="color: #34afe6;"> @mission.Highlight</span></h2>
+                        <p>@mission.Text</p>
+                    }
+                    else
+                    {
+                        <h2 class="section-title">We care about<span style="color: #34afe6;"> Our misson</span></h2>
+                        <p>We are starting Help at vary begining of 1900s. Quibusdam quidem alias saepe vero doloribus
+                            consequatur quis nobis molestiae fugit do facilis cum ex
+                            commodi non? Reiciendis obcaecati quaerat incidunt. Saepe, sed optio eum. Suscipit.</p>
+                    }
+                    <a asp-controller="Pages" asp-action="About" class="custom-btn">Read more</a>
                 </div>
             </div>
         </div>
@@ -172,34 +283,58 @@
 <section class="counter-area" data-stellar-background-ratio="0.5">
     <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <div class="single-counter">
-                    <img src="~/charity/images/components/ct1.png" alt="">
-                    <span class="counter">4000</span>
-                    <h3>Volunteers</h3>
+            @if (counters.Any())
+            {
+                var counterIcons = new[]
+                {
+                    "/charity/images/components/ct1.png",
+                    "/charity/images/components/ct2.png",
+                    "/charity/images/components/ct3.png",
+                    "/charity/images/components/ct4.png"
+                };
+                for (var i = 0; i < counters.Count; i++)
+                {
+                    var counter = counters[i];
+                    <div class="col-md-3 col-sm-6">
+                        <div class="single-counter">
+                            <img src="@(string.IsNullOrWhiteSpace(counter.ImageUrl) ? counterIcons[i % counterIcons.Length] : counter.ImageUrl)" alt="">
+                            <span class="counter">@(counter.Number ?? 0)</span>
+                            <h3>@counter.Title</h3>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-counter">
+                        <img src="~/charity/images/components/ct1.png" alt="">
+                        <span class="counter">@(Model.TotalDonors > 0 ? Model.TotalDonors : 4000)</span>
+                        <h3>Volunteers</h3>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="single-counter">
-                    <img src="~/charity/images/components/ct2.png" alt="">
-                    <span class="counter">7600</span>
-                    <h3>Donation</h3>
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-counter">
+                        <img src="~/charity/images/components/ct2.png" alt="">
+                        <span class="counter">@(Model.TotalRaised > 0 ? (int)Model.TotalRaised : 7600)</span>
+                        <h3>Donation</h3>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="single-counter">
-                    <img src="~/charity/images/components/ct3.png" alt="">
-                    <span class="counter">100</span>
-                    <h3>Total Project</h3>
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-counter">
+                        <img src="~/charity/images/components/ct3.png" alt="">
+                        <span class="counter">@(Model.TotalProjects > 0 ? Model.TotalProjects : 100)</span>
+                        <h3>Total Project</h3>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="single-counter">
-                    <img src="~/charity/images/components/ct4.png" alt="">
-                    <span class="counter">200</span>
-                    <h3>Countries</h3>
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-counter">
+                        <img src="~/charity/images/components/ct4.png" alt="">
+                        <span class="counter">200</span>
+                        <h3>Countries</h3>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </section>
@@ -218,78 +353,113 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 col-sm-6">
-                <div class="single-cause">
-                    <figure class="cause-thumb">
-                        <img src="~/charity/images/causes/cs2.jpg" alt="">
-                    </figure>
-                    <div class="cause-detials">
-                        <h3><a href="#">We want to ensure education for all children</a></h3>
-                        <p>We want to maxime aliquid eveniet et vitae repellendus ab fugit error.</p>
-                        <div class="cause-donate">
-                            <div class="cause-raise">
-                                <label>Raise</label> $500
-                            </div>
-                            <div class="cause-goal">
-                                <label>Goal</label> $900
+            @if (Model.FeaturedProjects.Any())
+            {
+                var causeFallbackImages = new[] { "/charity/images/causes/cs2.jpg", "/charity/images/causes/cs1.jpg", "/charity/images/causes/cs3.jpg" };
+                for (var i = 0; i < Model.FeaturedProjects.Count; i++)
+                {
+                    var project = Model.FeaturedProjects[i];
+                    var percent = ProgressPercent(project);
+                    <div class="col-md-4 col-sm-6">
+                        <div class="single-cause">
+                            <figure class="cause-thumb">
+                                <img src="@(project.ImageUrl ?? causeFallbackImages[i % causeFallbackImages.Length])" alt="@project.Title">
+                            </figure>
+                            <div class="cause-detials">
+                                <h3><a asp-controller="Charity" asp-action="Details" asp-route-id="@project.Id">@project.Title</a></h3>
+                                <p>@(string.IsNullOrWhiteSpace(project.Description) ? "Support this cause and help us make a difference." : (project.Description.Length > 90 ? project.Description[..90] + "…" : project.Description))</p>
+                                <div class="cause-donate">
+                                    <div class="cause-raise">
+                                        <label>Raise</label> @((project.CurrentAmount ?? 0).ToString("C0"))
+                                    </div>
+                                    <div class="cause-goal">
+                                        <label>Goal</label> @((project.GoalAmount ?? 0).ToString("C0"))
+                                    </div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: @(percent)%;"
+                                        aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100">@(percent)%</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="progress">
-                            <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: 99%;"
-                                aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">99%</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="single-cause">
+                        <figure class="cause-thumb">
+                            <img src="~/charity/images/causes/cs2.jpg" alt="">
+                        </figure>
+                        <div class="cause-detials">
+                            <h3><a asp-controller="Contact" asp-action="Index">We want to ensure education for all children</a></h3>
+                            <p>We want to maxime aliquid eveniet et vitae repellendus ab fugit error.</p>
+                            <div class="cause-donate">
+                                <div class="cause-raise">
+                                    <label>Raise</label> $500
+                                </div>
+                                <div class="cause-goal">
+                                    <label>Goal</label> $900
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: 99%;"
+                                    aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">99%</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Single Cause End -->
-            <div class="col-md-4 col-sm-6">
-                <div class="single-cause">
-                    <figure class="cause-thumb">
-                        <img src="~/charity/images/causes/cs1.jpg" alt="">
-                    </figure>
-                    <div class="cause-detials">
-                        <h3><a href="#">Our child project our pride, hope they will succeed.</a></h3>
-                        <p>We want to maxime aliquid eveniet et vitae repellendus ab fugit error.</p>
-                        <div class="cause-donate">
-                            <div class="cause-raise">
-                                <label>Raise</label> $500
+                <!-- Single Cause End -->
+                <div class="col-md-4 col-sm-6">
+                    <div class="single-cause">
+                        <figure class="cause-thumb">
+                            <img src="~/charity/images/causes/cs1.jpg" alt="">
+                        </figure>
+                        <div class="cause-detials">
+                            <h3><a asp-controller="Contact" asp-action="Index">Our child project our pride, hope they will succeed.</a></h3>
+                            <p>We want to maxime aliquid eveniet et vitae repellendus ab fugit error.</p>
+                            <div class="cause-donate">
+                                <div class="cause-raise">
+                                    <label>Raise</label> $500
+                                </div>
+                                <div class="cause-goal">
+                                    <label>Goal</label> $700
+                                </div>
                             </div>
-                            <div class="cause-goal">
-                                <label>Goal</label> $700
+                            <div class="progress">
+                                <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: 65%;"
+                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
                             </div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: 65%;"
-                                aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Single Cause End -->
-            <div class="col-md-4 col-sm-6">
-                <div class="single-cause">
-                    <figure class="cause-thumb">
-                        <img src="~/charity/images/causes/cs3.jpg" alt="">
-                    </figure>
-                    <div class="cause-detials">
-                        <h3><a href="#">Education is the basic needs for all children.</a></h3>
-                        <p>We want to maxime aliquid eveniet et vitae repellendus ab fugit error.</p>
-                        <div class="cause-donate">
-                            <div class="cause-raise">
-                                <label>Raise</label> $500
+                <!-- Single Cause End -->
+                <div class="col-md-4 col-sm-6">
+                    <div class="single-cause">
+                        <figure class="cause-thumb">
+                            <img src="~/charity/images/causes/cs3.jpg" alt="">
+                        </figure>
+                        <div class="cause-detials">
+                            <h3><a asp-controller="Contact" asp-action="Index">Education is the basic needs for all children.</a></h3>
+                            <p>We want to maxime aliquid eveniet et vitae repellendus ab fugit error.</p>
+                            <div class="cause-donate">
+                                <div class="cause-raise">
+                                    <label>Raise</label> $500
+                                </div>
+                                <div class="cause-goal">
+                                    <label>Goal</label> $700
+                                </div>
                             </div>
-                            <div class="cause-goal">
-                                <label>Goal</label> $700
+                            <div class="progress">
+                                <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: 95%;"
+                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
                             </div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar wow fadeInLeft" role="progressbar" style="width: 95%;"
-                                aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Single Cause End -->
+                <!-- Single Cause End -->
+            }
         </div>
     </div>
 </section>
@@ -310,16 +480,64 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="events-wrap owl-carousel">
+                    @if (events.Any())
+                    {
+                        var eventImages = new[]
+                        {
+                            "/charity/images/events/event1.jpg",
+                            "/charity/images/events/event2.jpg",
+                            "/charity/images/events/ev1.jpg",
+                            "/charity/images/events/ev2.jpg"
+                        };
+                        for (var i = 0; i < events.Count; i++)
+                        {
+                            var ev = events[i];
+                            var evImage = string.IsNullOrWhiteSpace(ev.ImageUrl) ? eventImages[i % eventImages.Length] : ev.ImageUrl;
+                            <div class="single-event">
+                                <figure class="event-thumb"
+                                    style="background: url('@evImage')no-repeat center top / cover;">
+                                    @if (ev.Date != null)
+                                    {
+                                        <figcaption><strong>@ev.Date.Value.Day</strong> @ev.Date.Value.ToString("MMM")</figcaption>
+                                    }
+                                </figure>
+                                <div class="event-details">
+                                    <h3>
+                                        @if (!string.IsNullOrWhiteSpace(ev.LinkUrl))
+                                        {
+                                            <a href="@ev.LinkUrl">@ev.Title</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Post" asp-action="Events">@ev.Title</a>
+                                        }
+                                    </h3>
+                                    <p>@ev.Text</p>
+                                    <div class="event-countown"></div>
+                                    @if (!string.IsNullOrWhiteSpace(ev.LinkUrl))
+                                    {
+                                        <a href="@ev.LinkUrl" class="text-reset fw-bold">Read more <i class="fa fa-long-arrow-right ms-2"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Post" asp-action="Events" class="text-reset fw-bold">Read more <i class="fa fa-long-arrow-right ms-2"></i></a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
                     <div class="single-event">
                         <figure class="event-thumb"
                             style="background: url('/charity/images/events/event1.jpg')no-repeat center top / cover;">
                             <figcaption><strong>12</strong> Jun</figcaption>
                         </figure>
                         <div class="event-details">
-                            <h3><a href="#">Consert for Syria we hope a huge gathering here.</a></h3>
+                            <h3><a asp-controller="Post" asp-action="Events">Consert for Syria we hope a huge gathering here.</a></h3>
                             <p>Onsectetur adipisicing elit maxime soluta eveniet nulla pariatur.</p>
                             <div class="event-countown"></div>
-                            <a href="#" class="text-reset fw-bold">Read more <i
+                            <a asp-controller="Post" asp-action="Events" class="text-reset fw-bold">Read more <i
                                     class="fa fa-long-arrow-right ms-2"></i></a>
                         </div>
                     </div>
@@ -330,10 +548,10 @@
                             <figcaption><strong>12</strong> Jun</figcaption>
                         </figure>
                         <div class="event-details">
-                            <h3><a href="#">Food and health is our primary goal to achieve.</a></h3>
+                            <h3><a asp-controller="Post" asp-action="Events">Food and health is our primary goal to achieve.</a></h3>
                             <p>Onsectetur adipisicing elit maxime soluta eveniet nulla pariatur.</p>
                             <div class="event-countown"></div>
-                            <a href="#" class="text-reset fw-bold">Read more <i
+                            <a asp-controller="Post" asp-action="Events" class="text-reset fw-bold">Read more <i
                                     class="fa fa-long-arrow-right ms-2"></i></a>
                         </div>
                     </div>
@@ -343,10 +561,10 @@
                             <figcaption><strong>14</strong> Jan</figcaption>
                         </figure>
                         <div class="event-details">
-                            <h3><a href="#">We always love your smilling face.</a></h3>
+                            <h3><a asp-controller="Post" asp-action="Events">We always love your smilling face.</a></h3>
                             <p>Onsectetur adipisicing elit maxime soluta eveniet nulla pariatur.</p>
                             <div class="event-countown"></div>
-                            <a href="#" class="text-reset fw-bold">Read more <i
+                            <a asp-controller="Post" asp-action="Events" class="text-reset fw-bold">Read more <i
                                     class="fa fa-long-arrow-right ms-2"></i></a>
                         </div>
                     </div>
@@ -356,13 +574,14 @@
                             <figcaption><strong>22</strong> Feb</figcaption>
                         </figure>
                         <div class="event-details">
-                            <h3><a href="#">We are againest any child abusement.</a></h3>
+                            <h3><a asp-controller="Post" asp-action="Events">We are againest any child abusement.</a></h3>
                             <p>Onsectetur adipisicing elit maxime soluta eveniet nulla pariatur.</p>
                             <div class="event-countown"></div>
-                            <a href="#" class="text-reset fw-bold">Read more <i
+                            <a asp-controller="Post" asp-action="Events" class="text-reset fw-bold">Read more <i
                                     class="fa fa-long-arrow-right ms-2"></i></a>
                         </div>
                     </div>
+                    }
                 </div>
             </div>
         </div>
@@ -385,24 +604,36 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="partner-wrap owl-carousel">
-                    <div class="partner-name">
-                        <img src="~/charity/images/partner/pt1.png" alt="Partner">
-                    </div>
-                    <div class="partner-name">
-                        <img src="~/charity/images/partner/pt2.png" alt="Partner">
-                    </div>
-                    <div class="partner-name">
-                        <img src="~/charity/images/partner/pt3.png" alt="Partner">
-                    </div>
-                    <div class="partner-name">
-                        <img src="~/charity/images/partner/pt4.png" alt="Partner">
-                    </div>
-                    <div class="partner-name">
-                        <img src="~/charity/images/partner/pt5.png" alt="Partner">
-                    </div>
-                    <div class="partner-name">
-                        <img src="~/charity/images/partner/pt6.png" alt="Partner">
-                    </div>
+                    @if (partners.Any())
+                    {
+                        foreach (var partner in partners)
+                        {
+                            <div class="partner-name">
+                                <img src="@partner.ImageUrl" alt="@(partner.Title ?? "Partner")" title="@partner.Title">
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="partner-name">
+                            <img src="~/charity/images/partner/pt1.png" alt="Partner">
+                        </div>
+                        <div class="partner-name">
+                            <img src="~/charity/images/partner/pt2.png" alt="Partner">
+                        </div>
+                        <div class="partner-name">
+                            <img src="~/charity/images/partner/pt3.png" alt="Partner">
+                        </div>
+                        <div class="partner-name">
+                            <img src="~/charity/images/partner/pt4.png" alt="Partner">
+                        </div>
+                        <div class="partner-name">
+                            <img src="~/charity/images/partner/pt5.png" alt="Partner">
+                        </div>
+                        <div class="partner-name">
+                            <img src="~/charity/images/partner/pt6.png" alt="Partner">
+                        </div>
+                    }
                 </div>
             </div>
         </div>

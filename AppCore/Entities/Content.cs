@@ -284,3 +284,53 @@ public class CharityProject : PublishableEntity
 
     public bool IsFeatured { get; set; } = false;
 }
+
+/// <summary>
+/// Sections of the website charity page, in the order they appear on the page.
+/// </summary>
+public enum CharityPageSection
+{
+    Banner = 1,
+    Feature = 2,
+    History = 3,
+    Mission = 4,
+    Counter = 5,
+    Event = 6,
+    Partner = 7
+}
+
+/// <summary>
+/// A single admin-managed content item belonging to a website charity page section.
+/// Generic fields are reused per section (e.g. Number for counters, Date for events).
+/// </summary>
+public class CharityPageItem : PublishableEntity
+{
+    public CharityPageSection Section { get; set; }
+
+    [MaxLength(200)]
+    public string? Title { get; set; }
+
+    /// <summary>Optional highlighted (accent-colored) part of the title.</summary>
+    [MaxLength(200)]
+    public string? Highlight { get; set; }
+
+    public string? Text { get; set; }
+
+    [MaxLength(500)]
+    public string? ImageUrl { get; set; }
+
+    [MaxLength(500)]
+    public string? LinkUrl { get; set; }
+
+    /// <summary>Extra metadata, e.g. comma-separated banner badges.</summary>
+    [MaxLength(300)]
+    public string? Meta { get; set; }
+
+    /// <summary>Numeric value, e.g. counter total.</summary>
+    public int? Number { get; set; }
+
+    /// <summary>Date value, e.g. event date.</summary>
+    public DateTime? Date { get; set; }
+
+    public int DisplayOrder { get; set; } = 0;
+}

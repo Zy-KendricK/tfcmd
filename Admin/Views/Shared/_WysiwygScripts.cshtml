@@ -1,0 +1,38 @@
+@*
+    Shared WYSIWYG editor bootstrap.
+    Rendered INLINE (not via @section Scripts) so it works both when a view is
+    rendered directly (Create) and when it is rendered as a partial (Edit).
+    Uses the GPL-licensed TinyMCE build from jsDelivr — no API key banner.
+    Targets: textarea.wysiwyg-editor
+*@
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.0/tinymce.min.js"></script>
+<script>
+    (function () {
+        function initWysiwyg() {
+            if (!window.tinymce) return;
+            tinymce.init({
+                selector: 'textarea.wysiwyg-editor',
+                license_key: 'gpl',
+                height: 420,
+                menubar: false,
+                branding: false,
+                promotion: false,
+                plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen wordcount table',
+                toolbar: 'undo redo | blocks | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright | bullist numlist outdent indent | link image table | removeformat | preview code fullscreen',
+                content_style: 'body { font-family: "Roboto", -apple-system, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.6; color: #4b4d56; margin: 12px; } p { margin: 0 0 1em; } img { max-width: 100%; height: auto; }',
+                convert_urls: false,
+                relative_urls: false,
+                setup: function (editor) {
+                    editor.on('change keyup', function () {
+                        editor.save();
+                    });
+                }
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initWysiwyg);
+        } else {
+            initWysiwyg();
+        }
+    })();
+</script>

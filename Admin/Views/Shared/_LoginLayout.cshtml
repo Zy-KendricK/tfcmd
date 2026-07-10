@@ -9,6 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Admin Login</title>
 
+    <!-- Always light mode -->
+    <meta name="color-scheme" content="light" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/admin-favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,12 +25,14 @@
 
     <!-- Beehive Theme CSS -->
     <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/ionicons.min.css" />
-    <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/unicons.min.css" />
     <link rel="stylesheet" href="/wp-content/themes/beehive/assets/css/beehive.min.css" />
+    <!-- Hugeicons (stroke rounded, self-hosted) + legacy icon-class mapping -->
+    <link rel="stylesheet" href="/fonts/hugeicons/hgi-stroke-left.css" />
+    <link rel="stylesheet" href="/css/admin-icons.css" />
 
     <style>
         :root {
+            color-scheme: light only;
             --theme-body-font-family: 'Nunito Sans', sans-serif;
             --theme-heading-font-family: 'Quicksand', sans-serif;
             --theme-color-primary: #8224E3;
@@ -300,8 +309,8 @@
         </div>
     </section>
 
-    <script src="/wp-includes/js/jquery/jquery.min.js"></script>
-    <script src="/wp-content/themes/beehive/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

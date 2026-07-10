@@ -1,0 +1,108 @@
+@model MaintenanceViewModel
+@{
+    ViewData["Title"] = "Website Maintenance";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-arrow-reload-horizontal"></i> Website Maintenance
+        </h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="admin-card" style="background: #f8f9fa;">
+                <h5 class="mb-3"><i class="hgi-database"></i> Live Website Content</h5>
+                <p class="text-muted">Content currently published and visible on the public website.</p>
+                <div class="row text-center">
+                    <div class="col-3">
+                        <h3 class="mb-0">@Model.PublishedPosts</h3>
+                        <small class="text-muted">Posts</small>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mb-0">@Model.PublishedJobs</h3>
+                        <small class="text-muted">Jobs</small>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mb-0">@Model.PublishedAdverts</h3>
+                        <small class="text-muted">Adverts</small>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mb-0">@Model.PublishedProducts</h3>
+                        <small class="text-muted">Products</small>
+                    </div>
+                </div>
+                <hr />
+                <div class="text-center">
+                    <h3 class="mb-0">@Model.HomePagePosts</h3>
+                    <small class="text-muted">Posts placed on the Home Page (Hero, What's New, Events)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="admin-card" style="background: #fff8e6; border: 1px solid #ffc107;">
+                <h5 class="mb-3"><i class="hgi-refresh"></i> Clear Website Cache</h5>
+                <p><small>
+                    The public website caches content for performance. After making changes in the admin,
+                    clear the cache so the website picks up the new data immediately.
+                    <strong>This does not delete any data</strong> — it only refreshes what visitors see.
+                </small></p>
+                <dl class="row mb-3">
+                    <dt class="col-6"><small>Cache Version</small></dt>
+                    <dd class="col-6"><small><code>@Model.CacheVersion</code></small></dd>
+                    <dt class="col-6"><small>Last Cleared</small></dt>
+                    <dd class="col-6"><small>@(Model.LastCacheBump?.ToString("MMM dd, yyyy HH:mm") ?? "Never")</small></dd>
+                </dl>
+                <form asp-action="ClearCache" method="post"
+                    onsubmit="return confirm('Clear the website cache? Visitors will see fresh data within 30 seconds.');">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-admin btn-admin-warning w-100">
+                        <i class="hgi-arrow-reload-horizontal"></i> Clear Cache &amp; Refresh Website
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: maintenance stats + actions -->
+    <div class="widget">
+        <h5 class="widget-title">Site Status</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-news"></i> Live posts</span>
+                <strong>@Model.PublishedPosts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-briefcase-01"></i> Live jobs</span>
+                <strong>@Model.PublishedJobs.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-tv-01"></i> Live adverts</span>
+                <strong>@Model.PublishedAdverts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-shopping-basket-01"></i> Live products</span>
+                <strong>@Model.PublishedProducts.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-home-01"></i> Home page posts</span>
+                <strong>@Model.HomePagePosts.ToString("N0")</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Maintenance Links</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-controller="Audit" asp-action="Index"><i class="hgi-file-security"></i> Audit Logs</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Dashboard" asp-action="Index"><i class="hgi-home-01"></i> Dashboard</a>
+            </li>
+        </ul>
+    </div>
+}

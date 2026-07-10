@@ -1,0 +1,91 @@
+@model SocialGroup
+@{
+    ViewData["Title"] = "Group Members";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-user-group"></i> Members of @Model.Name
+        </h4>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn-admin" style="background: #e0e0e0;">
+            <i class="hgi-arrow-left-01"></i> Back to Group
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                    <th style="width: 220px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Members != null && Model.Members.Any())
+                {
+                    @foreach (var member in Model.Members)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@(member.User?.DisplayName ?? member.User?.Email ?? member.UserId)</strong>
+                            </td>
+                            <td>
+                                <span class="status-badge @(member.Role == GroupMemberRole.Owner ? "status-approved" : member.Role == GroupMemberRole.Admin ? "status-published" : "status-pending")">
+                                    @member.Role
+                                </span>
+                            </td>
+                            <td><small>@member.JoinedAt.ToString("MMM dd, yyyy")</small></td>
+                            <td>
+                                @if (member.IsBanned)
+                                {
+                                    <span class="status-badge status-rejected">Banned</span>
+                                }
+                                else if (member.IsApproved)
+                                {
+                                    <span class="status-badge status-published">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-pending">Pending</span>
+                                }
+                            </td>
+                            <td>
+                                <form asp-action="UpdateMemberRole" method="post" style="display: inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="groupId" value="@Model.Id" />
+                                    <input type="hidden" name="userId" value="@member.UserId" />
+                                    <select name="role" class="form-admin-control" style="display: inline-block; width: auto;"
+                                        onchange="this.form.submit()">
+                                        @foreach (GroupMemberRole role in Enum.GetValues<GroupMemberRole>())
+                                        {
+                                            <option value="@role" selected="@(member.Role == role)">@role</option>
+                                        }
+                                    </select>
+                                </form>
+                                <form asp-action="RemoveMember" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Remove this member from the group?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="groupId" value="@Model.Id" />
+                                    <input type="hidden" name="userId" value="@member.UserId" />
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Remove">
+                                        <i class="hgi-user-remove-01"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">No members in this group.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

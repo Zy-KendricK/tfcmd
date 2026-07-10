@@ -1,11 +1,11 @@
-@model dynamic[]
+@model IList<AppCore.Entities.Post>
 
 @foreach (var evt in Model)
 {
-    <div class="widget-post">
-        <div class="post-content">
-            <h6 class="post-title"><a href="javascript:void(0);">@evt.Title</a></h6>
-            <span class="post-date">@evt.Date</span>
-        </div>
-    </div>
+	<div class="widget-post">
+		<div class="post-content">
+			<h6 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="@evt.Id">@evt.Title</a></h6>
+			<span class="post-date">@((evt.PublishedToWebAt ?? evt.CreatedAt).ToString("MMMM dd, yyyy"))</span>
+		</div>
+	</div>
 }

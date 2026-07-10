@@ -1,0 +1,166 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Member Details";
+    var primaryGroupName = Model.GroupMemberships?
+        .Where(m => m.IsActive && !m.IsDeleted)
+        .Select(m => m.UserGroup?.Name)
+        .FirstOrDefault();
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-user"></i> @(Model.DisplayName ?? Model.Email)
+        </h4>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-admin btn-admin-primary">
+                <i class="hgi-edit-01"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="admin-card" style="background: #f8f9fa;">
+                <h5 class="mb-3">Profile</h5>
+                <dl class="row mb-0">
+                    <dt class="col-5">Email</dt>
+                    <dd class="col-7">@Model.Email</dd>
+                    <dt class="col-5">Name</dt>
+                    <dd class="col-7">
+                        @{
+                            var fullName = ($"{Model.FirstName} {Model.LastName}").Trim();
+                        }
+                        @(string.IsNullOrEmpty(fullName) ? "—" : fullName)
+                    </dd>
+                    <dt class="col-5">Status</dt>
+                    <dd class="col-7">
+                        @if (Model.IsActive)
+                        {
+                            <span class="status-badge status-published">Active</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-rejected">Inactive</span>
+                        }
+                    </dd>
+                    <dt class="col-5">Role</dt>
+                    <dd class="col-7">
+                        @if (Model.IsSuperAdmin)
+                        {
+                            <span class="status-badge status-approved">Super Admin</span>
+                        }
+                        else if (!string.IsNullOrWhiteSpace(primaryGroupName))
+                        {
+                            <span class="status-badge status-published">@primaryGroupName</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-pending">Member</span>
+                        }
+                    </dd>
+                    <dt class="col-5">Location</dt>
+                    <dd class="col-7">@(Model.Location ?? "—")</dd>
+                    <dt class="col-5">Joined</dt>
+                    <dd class="col-7">@Model.CreatedAt.ToString("MMM dd, yyyy")</dd>
+                    <dt class="col-5">Last Login</dt>
+                    <dd class="col-7">@(Model.LastLoginAt?.ToString("MMM dd, yyyy HH:mm") ?? "Never")</dd>
+                </dl>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Bio))
+            {
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Bio</h5>
+                    <p><small>@Model.Bio</small></p>
+                </div>
+            }
+
+            <div class="admin-card mt-3" style="background: #f8f9fa;">
+                <h5 class="mb-3">Groups</h5>
+                @if (Model.GroupMemberships != null && Model.GroupMemberships.Any(m => m.IsActive))
+                {
+                    @foreach (var membership in Model.GroupMemberships.Where(m => m.IsActive))
+                    {
+                        <span class="status-badge status-published mb-1" style="display: inline-block;">
+                            @membership.UserGroup?.Name
+                        </span>
+                    }
+                }
+                else
+                {
+                    <small class="text-muted">No group memberships.</small>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h5 class="mb-3">Recent Posts (@(Model.Posts?.Count ?? 0))</h5>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Posts != null && Model.Posts.Any())
+                        {
+                            @foreach (var post in Model.Posts.OrderByDescending(p => p.CreatedAt).Take(10))
+                            {
+                                <tr>
+                                    <td><strong>@post.Title</strong></td>
+                                    <td><span class="status-badge status-@post.Status.ToString().ToLower()">@post.Status</span></td>
+                                    <td><small>@post.CreatedAt.ToString("MMM dd, yyyy")</small></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">No posts by this member.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <h5 class="mb-3 mt-4">Recent Activity (@(Model.Activities?.Count ?? 0))</h5>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Content</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Activities != null && Model.Activities.Any())
+                        {
+                            @foreach (var activity in Model.Activities.OrderByDescending(a => a.CreatedAt).Take(10))
+                            {
+                                <tr>
+                                    <td><span class="status-badge status-pending">@activity.ActivityType</span></td>
+                                    <td><small>@activity.Content</small></td>
+                                    <td><small>@activity.CreatedAt.ToString("MMM dd, yyyy")</small></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">No recent activity.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

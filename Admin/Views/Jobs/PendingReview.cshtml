@@ -1,0 +1,71 @@
+@model IEnumerable<Job>
+@{
+    ViewData["Title"] = "Jobs Pending Review";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-clock-01"></i> Jobs Pending Review
+        </h4>
+        <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+            <i class="hgi-arrow-left-01"></i> All Jobs
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Category</th>
+                    <th>Posted By</th>
+                    <th>Requested</th>
+                    <th style="width: 200px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var job in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@job.Id"><strong>@job.Title</strong></a>
+                            </td>
+                            <td>@(job.CompanyName ?? "—")</td>
+                            <td>@(job.Category?.Name ?? "—")</td>
+                            <td>@(job.PostedBy?.DisplayName ?? job.PostedBy?.Email ?? "—")</td>
+                            <td><small>@(job.PublishRequestedAt?.ToString("MMM dd, yyyy") ?? "—")</small></td>
+                            <td>
+                                <form asp-action="Approve" asp-route-id="@job.Id" method="post" style="display: inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-success" title="Approve">
+                                        <i class="hgi-checkmark-circle-01"></i>
+                                    </button>
+                                </form>
+                                <form asp-action="Reject" asp-route-id="@job.Id" method="post" style="display: inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Reject">
+                                        <i class="hgi-cancel-circle"></i>
+                                    </button>
+                                </form>
+                                <a asp-action="Details" asp-route-id="@job.Id" class="btn-admin btn-admin-sm btn-admin-primary"
+                                    title="View">
+                                    <i class="hgi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">No jobs pending review.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

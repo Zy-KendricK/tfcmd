@@ -23,11 +23,12 @@ public class ShopController : BaseAdminController
         _productService = new ContentService<Product>(context);
     }
 
-    public async Task<IActionResult> Index(string? search, ContentStatus? status, int? categoryId, int page = 1, int pageSize = 20)
+    public async Task<IActionResult> Index(string? search, ContentStatus? status, int? categoryId, string? orderby, int page = 1, int pageSize = 12)
     {
         var query = _context.Products
             .Include(p => p.Category)
             .Include(p => p.Seller)
+            .Include(p => p.Images)
             .Where(p => !p.IsDeleted)
             .AsQueryable();
 
@@ -49,15 +50,35 @@ public class ShopController : BaseAdminController
             query = query.Where(p => p.CategoryId == categoryId.Value);
         }
 
+        query = orderby switch
+        {
+            "popularity" => query.OrderByDescending(p => p.SoldCount).ThenByDescending(p => p.ViewCount),
+            "rating" => query.OrderByDescending(p => p.AverageRating ?? 0),
+            "date" => query.OrderByDescending(p => p.CreatedAt),
+            "price" => query.OrderBy(p => p.Price),
+            "price-desc" => query.OrderByDescending(p => p.Price),
+            _ => query.OrderByDescending(p => p.CreatedAt)
+        };
+
         var totalCount = await query.CountAsync();
         var products = await query
-            .OrderByDescending(p => p.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
         ViewBag.Categories = await GetCategoriesSelectListAsync();
         ViewBag.PendingReviewCount = await _context.Products.CountAsync(p => p.Status == ContentStatus.PendingReview && !p.IsDeleted);
+        ViewBag.Orderby = orderby;
+
+        // Sidebar widgets: latest products + status overview (template-style widgets)
+        ViewBag.LatestProducts = await _context.Products
+            .Include(p => p.Images)
+            .Where(p => !p.IsDeleted)
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(5)
+            .ToListAsync();
+        ViewBag.PublishedCount = await _context.Products.CountAsync(p => p.Status == ContentStatus.Published && !p.IsDeleted);
+        ViewBag.DraftCount = await _context.Products.CountAsync(p => p.Status == ContentStatus.Draft && !p.IsDeleted);
 
         var viewModel = new ProductListViewModel
         {

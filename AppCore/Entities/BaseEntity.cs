@@ -32,6 +32,13 @@ public abstract class PublishableEntity : BaseEntity
     public ContentStatus Status { get; set; } = ContentStatus.Draft;
 
     /// <summary>
+    /// Whether the author intends this item to appear on the public website.
+    /// Items without this flag stay internal to the admin portal and can never
+    /// enter the publish-to-web workflow.
+    /// </summary>
+    public bool IntendedForWeb { get; set; } = false;
+
+    /// <summary>
     /// Whether the creator has requested publication
     /// </summary>
     public bool PublishRequested { get; set; } = false;
@@ -50,6 +57,12 @@ public abstract class PublishableEntity : BaseEntity
     public string? ReviewedById { get; set; }
     public DateTime? ReviewedAt { get; set; }
     public string? ReviewNotes { get; set; }
+
+    /// <summary>
+    /// Whether this item appears on the website home page in a non-featured slot.
+    /// Featured items (IsFeatured on the concrete entity) always appear on the home page.
+    /// </summary>
+    public bool ShowOnHomePage { get; set; } = false;
 }
 
 public enum ContentStatus

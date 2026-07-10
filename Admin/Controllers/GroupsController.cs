@@ -32,6 +32,12 @@ public class GroupsController : BaseAdminController
             .OrderBy(g => g.Name)
             .ToListAsync();
 
+        // Sidebar stats
+        ViewBag.TotalGroups = groups.Count;
+        ViewBag.SystemGroups = groups.Count(g => g.IsSystemGroup);
+        ViewBag.ActiveGroups = groups.Count(g => g.IsActive);
+        ViewBag.TotalMemberships = groups.Sum(g => g.Members?.Count ?? 0);
+
         return View(groups);
     }
 

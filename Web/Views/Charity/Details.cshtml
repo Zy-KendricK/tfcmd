@@ -1,0 +1,113 @@
+@using Web.Controllers
+@model CharityProjectDetailsViewModel
+@{
+    ViewData["Title"] = Model.Project.Title;
+
+    static int ProgressPercent(AppCore.Entities.CharityProject p)
+    {
+        if (p.GoalAmount is null || p.GoalAmount == 0 || p.CurrentAmount is null)
+        {
+            return 0;
+        }
+        return (int)Math.Clamp(Math.Round(p.CurrentAmount.Value / p.GoalAmount.Value * 100), 0, 100);
+    }
+
+    var percent = ProgressPercent(Model.Project);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/charity/css/font/flaticon.css">
+    <link rel="stylesheet" href="~/charity/css/animate.css">
+    <link rel="stylesheet" href="~/charity/css/nice-select.css">
+    <link rel="stylesheet" href="~/charity/css/style.css">
+}
+
+<!-- Cause Details Start -->
+<section class="causes-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="single-cause">
+                    <figure class="cause-thumb">
+                        <img src="@(Model.Project.ImageUrl ?? "/charity/images/causes/cause1.jpg")" alt="@Model.Project.Title" class="img-fluid rounded-4 w-100">
+                    </figure>
+                    <div class="cause-detials p-4">
+                        <h2 class="section-title mb-3">@Model.Project.Title</h2>
+                        @if (Model.Project.Charity != null)
+                        {
+                            <p class="text-muted mb-3">
+                                A cause by <strong>@Model.Project.Charity.Name</strong>
+                                @if (!string.IsNullOrWhiteSpace(Model.Project.Charity.Website))
+                                {
+                                    <text> &middot; </text><a href="@Model.Project.Charity.Website" target="_blank" rel="noopener">Visit website</a>
+                                }
+                            </p>
+                        }
+                        <div class="cause-donate mb-3">
+                            <div class="cause-raise">
+                                <label>Raised</label> @((Model.Project.CurrentAmount ?? 0).ToString("C0"))
+                            </div>
+                            <div class="cause-goal">
+                                <label>Goal</label> @((Model.Project.GoalAmount ?? 0).ToString("C0"))
+                            </div>
+                            <div class="cause-goal">
+                                <label>Donors</label> @Model.Project.DonorCount
+                            </div>
+                        </div>
+                        <div class="progress mb-4">
+                            <div class="progress-bar" role="progressbar" style="width: @(percent)%;"
+                                aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100">@(percent)%</div>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Project.Description))
+                        {
+                            <div class="cause-description">
+                                @Html.Raw(Model.Project.Description)
+                            </div>
+                        }
+                        @if (Model.Project.StartDate.HasValue || Model.Project.EndDate.HasValue)
+                        {
+                            <p class="text-muted mt-4">
+                                @if (Model.Project.StartDate.HasValue)
+                                {
+                                    <span>Starts: @Model.Project.StartDate.Value.ToString("MMMM dd, yyyy")</span>
+                                }
+                                @if (Model.Project.EndDate.HasValue)
+                                {
+                                    <span class="ms-3">Ends: @Model.Project.EndDate.Value.ToString("MMMM dd, yyyy")</span>
+                                }
+                            </p>
+                        }
+                        <div class="mt-4">
+                            <a asp-controller="Contact" asp-action="Index" class="custom-btn">Donate / Get Involved</a>
+                            <a asp-controller="Charity" asp-action="Index" class="ms-3 text-reset fw-bold">Back to Charity <i class="fa fa-long-arrow-left ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h4 class="mb-4">Other Causes</h4>
+                @foreach (var other in Model.OtherProjects)
+                {
+                    var otherPercent = ProgressPercent(other);
+                    <div class="single-cause mb-4">
+                        <figure class="cause-thumb">
+                            <img src="@(other.ImageUrl ?? "/charity/images/causes/cs1.jpg")" alt="@other.Title" class="img-fluid w-100">
+                        </figure>
+                        <div class="cause-detials p-3">
+                            <h5><a asp-controller="Charity" asp-action="Details" asp-route-id="@other.Id">@other.Title</a></h5>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" style="width: @(otherPercent)%;"
+                                    aria-valuenow="@otherPercent" aria-valuemin="0" aria-valuemax="100">@(otherPercent)%</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (!Model.OtherProjects.Any())
+                {
+                    <p class="text-muted">No other causes right now. <a asp-controller="Charity" asp-action="Index">Back to charity page</a>.</p>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Cause Details End -->

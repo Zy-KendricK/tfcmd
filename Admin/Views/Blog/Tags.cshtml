@@ -1,0 +1,63 @@
+@model IEnumerable<Tag>
+@{
+    ViewData["Title"] = "Post Tags";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-bookmark-01"></i> Post Tags
+        </h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th>Posts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var tag in Model)
+                            {
+                                <tr>
+                                    <td><strong>@tag.Name</strong></td>
+                                    <td><small class="text-muted">@(tag.Slug ?? "—")</small></td>
+                                    <td>@(tag.Posts?.Count ?? 0)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">No tags yet.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="admin-card" style="background: #f8f9fa;">
+                <h5 class="mb-3">Add Tag</h5>
+                <form asp-action="CreateTag" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-admin-group">
+                        <label class="form-admin-label">Name *</label>
+                        <input type="text" name="name" class="form-admin-control" required />
+                    </div>
+                    <button type="submit" class="btn-admin btn-admin-primary">
+                        <i class="hgi-add-square"></i> Add Tag
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

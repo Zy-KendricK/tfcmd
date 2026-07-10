@@ -1,0 +1,58 @@
+@model Admin.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-user"></i> Your Profile
+        </h4>
+    </div>
+
+    <form asp-action="Profile" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-admin-group">
+                    <label class="form-admin-label" for="FirstName">First Name</label>
+                    <input asp-for="FirstName" class="form-admin-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-admin-group">
+                    <label class="form-admin-label" for="LastName">Last Name</label>
+                    <input asp-for="LastName" class="form-admin-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-admin-group">
+            <label class="form-admin-label" for="DisplayName">Display Name</label>
+            <input asp-for="DisplayName" class="form-admin-control" />
+        </div>
+
+        <div class="form-admin-group">
+            <label class="form-admin-label" for="Bio">Bio</label>
+            <textarea asp-for="Bio" class="form-admin-control" rows="4"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-admin-group">
+                    <label class="form-admin-label" for="Location">Location</label>
+                    <input asp-for="Location" class="form-admin-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-admin-group">
+                    <label class="form-admin-label" for="Website">Website</label>
+                    <input asp-for="Website" class="form-admin-control" />
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-admin btn-admin-primary">
+            <i class="hgi-floppy-disk"></i> Save Profile
+        </button>
+    </form>
+</div>

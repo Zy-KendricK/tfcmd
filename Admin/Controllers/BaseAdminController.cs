@@ -44,6 +44,18 @@ public abstract class BaseAdminController : Controller
             return;
         }
 
+        var controllerName = context.RouteData.Values["controller"]?.ToString();
+        var actionName = context.RouteData.Values["action"]?.ToString();
+        var requiresPasswordChange = User.HasClaim("RequirePasswordChange", "true");
+        var isPasswordChangeAllowed = (controllerName == "Dashboard" && actionName == "Settings") ||
+                                      (controllerName == "Account" && (actionName == "Logout" || actionName == "Login"));
+
+        if (requiresPasswordChange && !isPasswordChangeAllowed)
+        {
+            context.Result = new RedirectToActionResult("Settings", "Dashboard", new { forceChange = true });
+            return;
+        }
+
         // Pass user permissions to ViewBag
         if (!string.IsNullOrEmpty(CurrentUserId))
         {
@@ -61,11 +73,11 @@ public abstract class BaseAdminController : Controller
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequirePermissionAttribute : Attribute, IAsyncActionFilter
 {
-    private readonly string _permissionCode;
+    private readonly string[] _permissionCodes;
 
-    public RequirePermissionAttribute(string permissionCode)
+    public RequirePermissionAttribute(params string[] permissionCodes)
     {
-        _permissionCode = permissionCode;
+        _permissionCodes = permissionCodes ?? Array.Empty<string>();
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -86,7 +98,7 @@ public class RequirePermissionAttribute : Attribute, IAsyncActionFilter
             return;
         }
 
-        if (!await permissionService.HasPermissionAsync(userId, _permissionCode))
+        if (_permissionCodes.Length == 0 || !await permissionService.HasAnyPermissionAsync(userId, _permissionCodes))
         {
             context.Result = new RedirectToActionResult("AccessDenied", "Account", null);
             return;

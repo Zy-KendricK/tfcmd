@@ -1,0 +1,120 @@
+@model AnnouncementViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? "Edit Announcement" : "Create Announcement";
+    var priorityUsed = (int?)ViewBag.PriorityUsed ?? 0;
+    var priorityCap = (int?)ViewBag.PriorityCap ?? 12;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-megaphone-01"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" enctype="multipart/form-data">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="bh-web-intent">
+            <label>
+                <input asp-for="IntendedForWeb" type="checkbox" />
+                <span>
+                    <b>Intended for the public website</b>
+                    <small>Tick this if the announcement should go to the internet after moderator approval.
+                        Unticked items stay internal to the member portal and never enter the publish flow.</small>
+                </span>
+            </label>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="Announcement title" required />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="TickerText" class="form-admin-label">Ticker text</label>
+                    <input asp-for="TickerText" class="form-admin-control"
+                        placeholder="Short text for the scrolling ticker (falls back to the title)" />
+                    <small class="text-muted">Shown in the right-to-left scrolling strip on the website home page</small>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Content" class="form-admin-label">Details</label>
+                    <textarea asp-for="Content" id="Content" class="form-admin-control wysiwyg-editor" rows="10"
+                        placeholder="Full announcement details shown when a visitor clicks the announcement..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Notice Board Settings</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsPriority" type="checkbox" style="margin-right: 10px;" />
+                            Priority announcement
+                        </label>
+                        <small class="text-muted">Priority slots used: @priorityUsed / @priorityCap. Priority announcements
+                            stay pinned on the notice board.</small>
+                        <span asp-validation-for="IsPriority" class="text-danger d-block"></span>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="ExpiresAt" class="form-admin-label">Expires</label>
+                        <input asp-for="ExpiresAt" type="datetime-local" class="form-admin-control" />
+                        <small class="text-muted">Optional — after this time the announcement no longer shows on the website</small>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="SocialGroupId" class="form-admin-label">Group notice board</label>
+                        <select asp-for="SocialGroupId" class="form-admin-control"
+                            asp-items="@(ViewBag.GroupOptions as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)">
+                            <option value="">— Site-wide notice board —</option>
+                        </select>
+                        <small class="text-muted">Assign to a group to show it on that group's page instead</small>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Image</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="ImageFile" class="form-admin-label">Upload image</label>
+                        <input asp-for="ImageFile" type="file" accept="image/*" class="form-admin-control" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="ImageUrl" class="form-admin-label">…or image URL</label>
+                        <input asp-for="ImageUrl" class="form-admin-control" placeholder="https://…" />
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model?.ImageUrl))
+                    {
+                        <div class="mt-2">
+                            <img src="@Model.ImageUrl" alt="Announcement image"
+                                style="max-width: 100%; border-radius: 8px;" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Announcement" : "Create Announcement")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_WysiwygScripts")

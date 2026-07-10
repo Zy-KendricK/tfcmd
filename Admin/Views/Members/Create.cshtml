@@ -1,0 +1,74 @@
+@model CreateMemberViewModel
+@{
+    ViewData["Title"] = "Create Member";
+    var groups = ViewBag.Groups as IEnumerable<UserGroup> ?? Enumerable.Empty<UserGroup>();
+    var selectedGroupId = Model?.GroupId;
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-user-add-01"></i> Create Member
+        </h4>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Email" class="form-admin-label">Email *</label>
+                    <input asp-for="Email" type="email" class="form-admin-control" placeholder="user@example.com" required />
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    <i class="hgi-information-circle"></i> A temporary password will be generated and sent to the email address provided below.
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="FirstName" class="form-admin-label">First Name</label>
+                            <input asp-for="FirstName" class="form-admin-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-admin-group">
+                            <label asp-for="LastName" class="form-admin-label">Last Name</label>
+                            <input asp-for="LastName" class="form-admin-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Bio" class="form-admin-label">Bio</label>
+                    <textarea asp-for="Bio" class="form-admin-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3"><i class="hgi-layers-01"></i> Primary Group</h5>
+                    <div class="form-admin-group">
+                        <label asp-for="GroupId" class="form-admin-label">Assign a single user group</label>
+                        <select asp-for="GroupId" class="form-admin-control">
+                            <option value="">No group</option>
+                            @foreach (var group in groups)
+                            {
+                                <option value="@group.Id" selected="@(selectedGroupId == group.Id)">@group.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> Create Member
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>

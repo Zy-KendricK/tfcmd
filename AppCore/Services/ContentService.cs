@@ -103,6 +103,7 @@ public class ContentService<T> : IContentService<T> where T : PublishableEntity
             entity.IsDeleted = true;
             entity.UpdatedById = userId;
             entity.UpdatedAt = DateTime.UtcNow;
+            await HomeContentService.TouchCacheVersionAsync(_context, userId);
             await _context.SaveChangesAsync();
         }
     }
@@ -112,6 +113,10 @@ public class ContentService<T> : IContentService<T> where T : PublishableEntity
         var entity = await _dbSet.FindAsync(id);
         if (entity != null)
         {
+            if (!entity.IntendedForWeb)
+            {
+                throw new InvalidOperationException("This item is not marked as intended for the website. Edit it and tick 'Intended for website' before requesting publication.");
+            }
             entity.PublishRequested = true;
             entity.PublishRequestedAt = DateTime.UtcNow;
             entity.Status = ContentStatus.PendingReview;
@@ -154,6 +159,10 @@ public class ContentService<T> : IContentService<T> where T : PublishableEntity
         var entity = await _dbSet.FindAsync(id);
         if (entity != null)
         {
+            if (!entity.IntendedForWeb)
+            {
+                throw new InvalidOperationException("This item is not marked as intended for the website and cannot be published to the web.");
+            }
             entity.Status = ContentStatus.Published;
             entity.IsPublishedToWeb = true;
             entity.PublishedToWebAt = DateTime.UtcNow;
@@ -161,6 +170,7 @@ public class ContentService<T> : IContentService<T> where T : PublishableEntity
             entity.ReviewedById = reviewerId;
             entity.ReviewedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
+            await HomeContentService.TouchCacheVersionAsync(_context, reviewerId);
             await _context.SaveChangesAsync();
         }
     }
@@ -174,6 +184,7 @@ public class ContentService<T> : IContentService<T> where T : PublishableEntity
             entity.Status = ContentStatus.Draft;
             entity.UpdatedById = userId;
             entity.UpdatedAt = DateTime.UtcNow;
+            await HomeContentService.TouchCacheVersionAsync(_context, userId);
             await _context.SaveChangesAsync();
         }
     }
@@ -187,6 +198,7 @@ public class ContentService<T> : IContentService<T> where T : PublishableEntity
             entity.IsPublishedToWeb = false;
             entity.UpdatedById = userId;
             entity.UpdatedAt = DateTime.UtcNow;
+            await HomeContentService.TouchCacheVersionAsync(_context, userId);
             await _context.SaveChangesAsync();
         }
     }

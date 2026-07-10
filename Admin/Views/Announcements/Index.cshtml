@@ -1,0 +1,186 @@
+@model AnnouncementListViewModel
+@{
+    ViewData["Title"] = "Announcements";
+    var priorityUsed = (int?)ViewBag.PriorityUsed ?? 0;
+    var priorityCap = (int?)ViewBag.PriorityCap ?? 12;
+    var pendingCount = (int?)ViewBag.PendingCount ?? 0;
+    var liveCount = (int?)ViewBag.LiveCount ?? 0;
+    var totalCount = (int?)ViewBag.TotalCount ?? 0;
+    var internalCount = (int?)ViewBag.InternalCount ?? 0;
+    var tab = (string?)ViewBag.Tab;
+
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+
+    static string StatusBadge(ContentStatus status) => status switch
+    {
+        ContentStatus.Draft => "bh-badge-draft",
+        ContentStatus.PendingReview => "bh-badge-pending",
+        ContentStatus.Approved => "bh-badge-approved",
+        ContentStatus.Published => "bh-badge-published",
+        ContentStatus.Rejected => "bh-badge-rejected",
+        _ => "bh-badge-archived"
+    };
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-megaphone-01"></i> Announcements
+        </h4>
+        @if (HasPermission("posts.create"))
+        {
+            <a asp-action="Create" class="bh-btn bh-btn-primary">
+                <i class="hgi-add-square"></i> New Announcement
+            </a>
+        }
+    </div>
+
+    <!-- Template-style tab bar -->
+    <div class="bh-tabbar">
+        <a asp-action="Index" class="bh-tab @(string.IsNullOrEmpty(tab) ? "active" : "")">
+            All <span class="bh-count">@totalCount</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="pending" class="bh-tab @(tab == "pending" ? "active" : "")">
+            Pending Review <span class="bh-count">@pendingCount</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="live" class="bh-tab @(tab == "live" ? "active" : "")">
+            Live on Website <span class="bh-count">@liveCount</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="priority" class="bh-tab @(tab == "priority" ? "active" : "")">
+            Priority <span class="bh-count">@priorityUsed/@priorityCap</span>
+        </a>
+        <a asp-action="Index" asp-route-tab="internal" class="bh-tab @(tab == "internal" ? "active" : "")">
+            Internal Only <span class="bh-count">@internalCount</span>
+        </a>
+    </div>
+
+    @if (priorityUsed >= priorityCap)
+    {
+        <div class="alert alert-warning">
+            <i class="hgi-alert-square"></i>
+            The notice board has reached its limit of <strong>@priorityCap priority announcements</strong>.
+            To flag a new one, remove the priority flag from an existing announcement — it will fall in line chronologically.
+        </div>
+    }
+
+    <!-- Filter bar -->
+    <form asp-action="Index" method="get" class="bh-filterbar">
+        <input type="hidden" name="tab" value="@tab" />
+        <input type="text" name="search" value="@Model.Search" class="form-admin-control bh-filter-grow"
+            placeholder="Search announcements..." />
+        <select name="status" class="form-admin-control">
+            <option value="">All Status</option>
+            <option value="Draft" selected="@(Model.Status == ContentStatus.Draft)">Draft</option>
+            <option value="PendingReview" selected="@(Model.Status == ContentStatus.PendingReview)">Pending Review</option>
+            <option value="Approved" selected="@(Model.Status == ContentStatus.Approved)">Approved</option>
+            <option value="Published" selected="@(Model.Status == ContentStatus.Published)">Published</option>
+            <option value="Rejected" selected="@(Model.Status == ContentStatus.Rejected)">Rejected</option>
+        </select>
+        <button type="submit" class="bh-btn bh-btn-primary">
+            <i class="hgi-filter"></i> Filter
+        </button>
+    </form>
+
+    <!-- Forum-style announcement rows -->
+    <div id="announcements-list" class="bh-forum-list" data-next-page="@(Model.TotalPages > Model.CurrentPage ? Model.CurrentPage + 1 : 0)">
+        @if (Model.Announcements != null && Model.Announcements.Any())
+        {
+            @await Html.PartialAsync("_ListItems", Model)
+        }
+        else
+        {
+            <div class="bh-empty">
+                <i class="hgi-megaphone-01"></i>
+                <p>No announcements found.</p>
+                @if (HasPermission("posts.create"))
+                {
+                    <a asp-action="Create" class="bh-btn bh-btn-primary">Create your first announcement</a>
+                }
+            </div>
+        }
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="bh-pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <span class="current">@i</span>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search"
+                        asp-route-status="@Model.Status" asp-route-tab="@tab">@i</a>
+                }
+            }
+        </div>
+    }
+
+    @section Scripts {
+        <script>
+            const announcementsList = document.getElementById('announcements-list');
+            if (announcementsList) {
+                const loadMore = () => {
+                    const nextPage = parseInt(announcementsList.dataset.nextPage || '0', 10);
+                    if (!nextPage) return;
+                    const url = '@Url.Action("Index", "Announcements")?page=' + nextPage + '&search=@(Model.Search ?? "")&status=@(Model.Status?.ToString() ?? "")&tab=@(tab ?? "")&ajax=true';
+                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(response => response.text())
+                        .then(html => {
+                            if (!html.trim()) return;
+                            announcementsList.insertAdjacentHTML('beforeend', html);
+                            const newNextPage = parseInt(announcementsList.dataset.nextPage || '0', 10) + 1;
+                            announcementsList.dataset.nextPage = newNextPage;
+                        });
+                };
+                window.addEventListener('scroll', () => {
+                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                        loadMore();
+                    }
+                });
+            }
+        </script>
+    }
+</div>
+
+@section Sidebar {
+    <div class="widget">
+        <h5 class="widget-title">Notice Board Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-megaphone-01"></i> Total announcements</span>
+                <strong>@totalCount.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-globe"></i> Live on website</span>
+                <strong>@liveCount.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-clock-01"></i> Pending review</span>
+                <strong>@pendingCount.ToString("N0")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-star"></i> Priority slots</span>
+                <strong>@priorityUsed / @priorityCap</strong>
+            </li>
+        </ul>
+    </div>
+    @if (HasPermission("posts.create"))
+    {
+        <div class="widget widget_nav_menu">
+            <h5 class="widget-title">Announcement Actions</h5>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a asp-action="Create"><i class="hgi-add-square"></i> New Announcement</a>
+                </li>
+                <li class="menu-item">
+                    <a asp-action="Index" asp-route-tab="pending"><i class="hgi-clock-01"></i> Pending Review</a>
+                </li>
+            </ul>
+        </div>
+    }
+}

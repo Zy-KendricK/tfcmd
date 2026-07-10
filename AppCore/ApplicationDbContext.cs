@@ -6,6 +6,10 @@ namespace AppCore;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
+    // Static seed timestamp so the model stays deterministic between builds
+    // (dynamic DateTime.UtcNow in HasData causes perpetual pending-model-change warnings).
+    private static readonly DateTime SeedDate = new(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -92,6 +96,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<TeamMember> TeamMembers { get; set; }
     public DbSet<Charity> Charities { get; set; }
     public DbSet<CharityProject> CharityProjects { get; set; }
+    public DbSet<CharityPageItem> CharityPageItems { get; set; }
+    public DbSet<Announcement> Announcements { get; set; }
     public DbSet<Page> Pages { get; set; }
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuItem> MenuItems { get; set; }
@@ -311,6 +317,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(c => c.ParentCommentId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Entity<Post>()
+            .HasOne(p => p.SocialGroup)
+            .WithMany()
+            .HasForeignKey(p => p.SocialGroupId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Announcement>()
+            .HasOne(a => a.SocialGroup)
+            .WithMany()
+            .HasForeignKey(a => a.SocialGroupId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         builder.Entity<ActivityComment>()
             .HasOne(c => c.ParentComment)
             .WithMany(c => c.Replies)
@@ -377,77 +395,87 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         // Seed default user groups
         builder.Entity<UserGroup>().HasData(
-            new UserGroup { Id = 1, Name = "Administrators", Description = "Full system access", IsSystemGroup = true, IsActive = true, CreatedAt = DateTime.UtcNow },
-            new UserGroup { Id = 2, Name = "Reviewers", Description = "Can review and publish content", IsSystemGroup = true, IsActive = true, CreatedAt = DateTime.UtcNow },
-            new UserGroup { Id = 3, Name = "Editors", Description = "Can create and edit content", IsSystemGroup = true, IsActive = true, CreatedAt = DateTime.UtcNow },
-            new UserGroup { Id = 4, Name = "Members", Description = "Regular platform members", IsSystemGroup = true, IsActive = true, CreatedAt = DateTime.UtcNow }
+            new UserGroup { Id = 1, Name = "Administrators", Description = "Full system access", IsSystemGroup = true, IsActive = true, CreatedAt = SeedDate },
+            new UserGroup { Id = 2, Name = "Reviewers", Description = "Can review and publish content", IsSystemGroup = true, IsActive = true, CreatedAt = SeedDate },
+            new UserGroup { Id = 3, Name = "Editors", Description = "Can create and edit content", IsSystemGroup = true, IsActive = true, CreatedAt = SeedDate },
+            new UserGroup { Id = 4, Name = "Members", Description = "Regular platform members", IsSystemGroup = true, IsActive = true, CreatedAt = SeedDate }
         );
 
         // Seed permissions
         var permissions = new List<Permission>
         {
             // Dashboard
-            new() { Id = 1, Code = "dashboard.view", Name = "View Dashboard", Category = "Dashboard", Module = "Dashboard", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 1, Code = "dashboard.view", Name = "View Dashboard", Category = "Dashboard", Module = "Dashboard", IsActive = true, CreatedAt = SeedDate },
             
             // Users
-            new() { Id = 2, Code = "users.view", Name = "View Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 3, Code = "users.create", Name = "Create Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 4, Code = "users.edit", Name = "Edit Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 5, Code = "users.delete", Name = "Delete Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 2, Code = "users.view", Name = "View Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 3, Code = "users.create", Name = "Create Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 4, Code = "users.edit", Name = "Edit Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 5, Code = "users.delete", Name = "Delete Users", Category = "Users", Module = "Users", IsActive = true, CreatedAt = SeedDate },
             
             // Groups
-            new() { Id = 6, Code = "groups.view", Name = "View Groups", Category = "Groups", Module = "Groups", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 7, Code = "groups.manage", Name = "Manage Groups", Category = "Groups", Module = "Groups", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 6, Code = "groups.view", Name = "View Groups", Category = "Groups", Module = "Groups", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 7, Code = "groups.manage", Name = "Manage Groups", Category = "Groups", Module = "Groups", IsActive = true, CreatedAt = SeedDate },
             
             // Posts
-            new() { Id = 8, Code = "posts.view", Name = "View Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 9, Code = "posts.create", Name = "Create Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 10, Code = "posts.edit", Name = "Edit Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 11, Code = "posts.delete", Name = "Delete Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 12, Code = "posts.publish", Name = "Publish Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 8, Code = "posts.view", Name = "View Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 9, Code = "posts.create", Name = "Create Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 10, Code = "posts.edit", Name = "Edit Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 11, Code = "posts.delete", Name = "Delete Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 12, Code = "posts.publish", Name = "Publish Posts", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = SeedDate },
             
             // Jobs
-            new() { Id = 13, Code = "jobs.view", Name = "View Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 14, Code = "jobs.create", Name = "Create Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 15, Code = "jobs.edit", Name = "Edit Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 16, Code = "jobs.delete", Name = "Delete Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 17, Code = "jobs.publish", Name = "Publish Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 13, Code = "jobs.view", Name = "View Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 14, Code = "jobs.create", Name = "Create Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 15, Code = "jobs.edit", Name = "Edit Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 16, Code = "jobs.delete", Name = "Delete Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 17, Code = "jobs.publish", Name = "Publish Jobs", Category = "Content", Module = "Jobs", IsActive = true, CreatedAt = SeedDate },
             
             // Adverts
-            new() { Id = 18, Code = "adverts.view", Name = "View Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 19, Code = "adverts.create", Name = "Create Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 20, Code = "adverts.edit", Name = "Edit Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 21, Code = "adverts.delete", Name = "Delete Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 22, Code = "adverts.publish", Name = "Publish Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 18, Code = "adverts.view", Name = "View Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 19, Code = "adverts.create", Name = "Create Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 20, Code = "adverts.edit", Name = "Edit Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 21, Code = "adverts.delete", Name = "Delete Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 22, Code = "adverts.publish", Name = "Publish Adverts", Category = "Content", Module = "Adverts", IsActive = true, CreatedAt = SeedDate },
             
             // Shop
-            new() { Id = 23, Code = "products.view", Name = "View Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 24, Code = "products.create", Name = "Create Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 25, Code = "products.edit", Name = "Edit Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 26, Code = "products.delete", Name = "Delete Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 27, Code = "products.publish", Name = "Publish Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 23, Code = "products.view", Name = "View Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 24, Code = "products.create", Name = "Create Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 25, Code = "products.edit", Name = "Edit Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 26, Code = "products.delete", Name = "Delete Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 27, Code = "products.publish", Name = "Publish Products", Category = "Shop", Module = "Products", IsActive = true, CreatedAt = SeedDate },
             
             // Photos
-            new() { Id = 28, Code = "photos.view", Name = "View Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 29, Code = "photos.upload", Name = "Upload Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 30, Code = "photos.delete", Name = "Delete Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 28, Code = "photos.view", Name = "View Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 29, Code = "photos.upload", Name = "Upload Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 30, Code = "photos.delete", Name = "Delete Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = SeedDate },
             
             // Videos
-            new() { Id = 31, Code = "videos.view", Name = "View Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 32, Code = "videos.upload", Name = "Upload Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 33, Code = "videos.delete", Name = "Delete Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 31, Code = "videos.view", Name = "View Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 32, Code = "videos.upload", Name = "Upload Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 33, Code = "videos.delete", Name = "Delete Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = SeedDate },
             
             // Forums
-            new() { Id = 34, Code = "forums.view", Name = "View Forums", Category = "Community", Module = "Forums", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 35, Code = "forums.manage", Name = "Manage Forums", Category = "Community", Module = "Forums", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 36, Code = "forums.moderate", Name = "Moderate Forums", Category = "Community", Module = "Forums", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 34, Code = "forums.view", Name = "View Forums", Category = "Community", Module = "Forums", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 35, Code = "forums.manage", Name = "Manage Forums", Category = "Community", Module = "Forums", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 36, Code = "forums.moderate", Name = "Moderate Forums", Category = "Community", Module = "Forums", IsActive = true, CreatedAt = SeedDate },
             
             // Settings
-            new() { Id = 37, Code = "settings.view", Name = "View Settings", Category = "System", Module = "Settings", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = 38, Code = "settings.edit", Name = "Edit Settings", Category = "System", Module = "Settings", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new() { Id = 37, Code = "settings.view", Name = "View Settings", Category = "System", Module = "Settings", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 38, Code = "settings.edit", Name = "Edit Settings", Category = "System", Module = "Settings", IsActive = true, CreatedAt = SeedDate },
             
             // Audit
-            new() { Id = 39, Code = "audit.view", Name = "View Audit Logs", Category = "System", Module = "Audit", IsActive = true, CreatedAt = DateTime.UtcNow }
+            new() { Id = 39, Code = "audit.view", Name = "View Audit Logs", Category = "System", Module = "Audit", IsActive = true, CreatedAt = SeedDate },
+
+            // Maintenance
+            new() { Id = 40, Code = "maintenance.cache", Name = "Clear Website Cache & Data", Category = "System", Module = "Maintenance", IsActive = true, CreatedAt = SeedDate },
+
+            // Home page content control
+            new() { Id = 41, Code = "content.homepage", Name = "Manage Home Page Content", Category = "Content", Module = "Posts", IsActive = true, CreatedAt = SeedDate },
+
+            // Gallery publishing
+            new() { Id = 42, Code = "photos.publish", Name = "Publish Photos", Category = "Media", Module = "Photos", IsActive = true, CreatedAt = SeedDate },
+            new() { Id = 43, Code = "videos.publish", Name = "Publish Videos", Category = "Media", Module = "Videos", IsActive = true, CreatedAt = SeedDate }
         };
         builder.Entity<Permission>().HasData(permissions);
 
@@ -459,18 +487,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             PermissionId = p.Id,
             IsGranted = true,
             IsActive = true,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = SeedDate,
+            AssignedAt = SeedDate
         }).ToList();
         builder.Entity<GroupPermission>().HasData(adminPermissions);
 
         // Seed settings
         builder.Entity<Setting>().HasData(
-            new Setting { Id = 1, Key = "site.name", Value = "Social Platform", Group = "General", Description = "Site name", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new Setting { Id = 2, Key = "site.description", Value = "A modern social networking platform", Group = "General", Description = "Site description", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new Setting { Id = 3, Key = "site.logo", Value = "/images/logo.png", Group = "General", Description = "Site logo URL", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new Setting { Id = 4, Key = "registration.enabled", Value = "true", Group = "Registration", ValueType = SettingValueType.Boolean, Description = "Allow user registration", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new Setting { Id = 5, Key = "registration.requireApproval", Value = "false", Group = "Registration", ValueType = SettingValueType.Boolean, Description = "Require admin approval for new users", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new Setting { Id = 6, Key = "content.requireReview", Value = "true", Group = "Content", ValueType = SettingValueType.Boolean, Description = "Require review before publishing", IsActive = true, CreatedAt = DateTime.UtcNow }
+            new Setting { Id = 1, Key = "site.name", Value = "Social Platform", Group = "General", Description = "Site name", IsActive = true, CreatedAt = SeedDate },
+            new Setting { Id = 2, Key = "site.description", Value = "A modern social networking platform", Group = "General", Description = "Site description", IsActive = true, CreatedAt = SeedDate },
+            new Setting { Id = 3, Key = "site.logo", Value = "/images/logo.png", Group = "General", Description = "Site logo URL", IsActive = true, CreatedAt = SeedDate },
+            new Setting { Id = 4, Key = "registration.enabled", Value = "true", Group = "Registration", ValueType = SettingValueType.Boolean, Description = "Allow user registration", IsActive = true, CreatedAt = SeedDate },
+            new Setting { Id = 5, Key = "registration.requireApproval", Value = "false", Group = "Registration", ValueType = SettingValueType.Boolean, Description = "Require admin approval for new users", IsActive = true, CreatedAt = SeedDate },
+            new Setting { Id = 6, Key = "content.requireReview", Value = "true", Group = "Content", ValueType = SettingValueType.Boolean, Description = "Require review before publishing", IsActive = true, CreatedAt = SeedDate },
+            new Setting { Id = 7, Key = "site.cacheVersion", Value = "1", Group = "System", ValueType = SettingValueType.Number, Description = "Website cache version stamp; bumping it forces the website to reload data from the database", IsActive = true, CreatedAt = SeedDate }
         );
     }
 

@@ -1,19 +1,29 @@
+using AppCore;
+using AppCore.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.ViewComponents
 {
-    public class LatestEventsViewComponent : ViewComponent
-    {
-        public IViewComponentResult Invoke()
-        {
-            // TODO: Replace with actual data from your database
-            var events = new[]
-            {
-                new { Title = "Annual Charity Gala", Date = "August 15, 2025" },
-                new { Title = "Community Outreach", Date = "September 1, 2025" }
-            };
+	public class LatestEventsViewComponent : ViewComponent
+	{
+		private readonly ApplicationDbContext _context;
 
-            return View(events);
-        }
-    }
+		public LatestEventsViewComponent(ApplicationDbContext context)
+		{
+			_context = context;
+		}
+
+		public async Task<IViewComponentResult> InvokeAsync()
+		{
+			var events = await _context.Posts
+				.AsNoTracking()
+				.Where(p => p.IsPublishedToWeb && p.IsActive && !p.IsDeleted && p.HomeSection == HomeSection.Events)
+				.OrderByDescending(p => p.PublishedToWebAt ?? p.CreatedAt)
+				.Take(3)
+				.ToListAsync();
+
+			return View(events);
+		}
+	}
 }

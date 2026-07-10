@@ -33,6 +33,12 @@ public class Post : PublishableEntity
     /// </summary>
     public PostFormat Format { get; set; } = PostFormat.Standard;
 
+    /// <summary>
+    /// What kind of content this is: Blog post, News item, or Event.
+    /// News items are managed in the dedicated Admin News screen.
+    /// </summary>
+    public PostKind Kind { get; set; } = PostKind.Blog;
+
     [MaxLength(500)]
     public string? VideoUrl { get; set; }
 
@@ -55,6 +61,24 @@ public class Post : PublishableEntity
     /// Whether this post is featured
     /// </summary>
     public bool IsFeatured { get; set; } = false;
+
+    /// <summary>
+    /// Home page section this post belongs to (Hero, WhatsNew, Events).
+    /// Combined with IsFeatured/ShowOnHomePage it controls home page placement:
+    /// featured = the single large slot of the section, ShowOnHomePage = smaller slots.
+    /// </summary>
+    public HomeSection HomeSection { get; set; } = HomeSection.None;
+
+    /// <summary>
+    /// Optional social group this post/event belongs to (shown on the group's page)
+    /// </summary>
+    public int? SocialGroupId { get; set; }
+    public virtual SocialGroup? SocialGroup { get; set; }
+
+    /// <summary>
+    /// Event date for event posts; used to split upcoming vs past events
+    /// </summary>
+    public DateTime? EventDate { get; set; }
 
     /// <summary>
     /// SEO meta title
@@ -85,6 +109,27 @@ public enum PostFormat
 }
 
 /// <summary>
+/// Kind of post content
+/// </summary>
+public enum PostKind
+{
+    Blog = 0,
+    News = 1,
+    Event = 2
+}
+
+/// <summary>
+/// Home page sections a post can be assigned to
+/// </summary>
+public enum HomeSection
+{
+    None = 0,
+    Hero = 1,
+    WhatsNew = 2,
+    Events = 3
+}
+
+/// <summary>
 /// Comment on a post
 /// </summary>
 public class PostComment : BaseEntity
@@ -94,6 +139,12 @@ public class PostComment : BaseEntity
 
     public string UserId { get; set; } = string.Empty;
     public virtual ApplicationUser User { get; set; } = null!;
+
+    /// <summary>
+    /// Where the comment was made. Website comments and admin (internal) comments
+    /// for the same post are kept separate and never mixed.
+    /// </summary>
+    public CommentSource Source { get; set; } = CommentSource.Website;
 
     [Required]
     [MaxLength(2000)]
@@ -105,6 +156,15 @@ public class PostComment : BaseEntity
     public bool IsApproved { get; set; } = true;
 
     public virtual ICollection<PostComment> Replies { get; set; } = new List<PostComment>();
+}
+
+/// <summary>
+/// Origin of a post comment; keeps admin-side and website-side conversations separate
+/// </summary>
+public enum CommentSource
+{
+    Website = 0,
+    Admin = 1
 }
 
 /// <summary>

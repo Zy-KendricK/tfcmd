@@ -1,463 +1,845 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@model AppCore.Services.HomePageContent
+@using AppCore.Entities
+@{
+	ViewData["Title"] = "Home";
+
+	static string PostDate(Post p) => (p.PublishedToWebAt ?? p.CreatedAt).ToString("MMMM dd, yyyy");
+	static string PostTag(Post p) => p.Category?.Name ?? "General";
+	static string AuthorName(Post p)
+	{
+		if (!string.IsNullOrWhiteSpace(p.Author?.DisplayName))
+		{
+			return p.Author.DisplayName;
+		}
+		var fullName = $"{p.Author?.FirstName} {p.Author?.LastName}".Trim();
+		return fullName.Length > 0 ? fullName : "TFC Maryland";
+	}
 }
 
 <section class="section-space3-tp">
-    <div class="container">
-        <div class="row mb-md-30">
-            <div class="col-xl-5 col-md-12 order-xl-1 mb-50">
-                <div class="post-card post-card-large">
-                    <div class="post-thumb">
-                        <a asp-controller="Post" asp-action="Details" asp-route-id="1">
-                            <img src="~/images/posts/middle-post/middle-post1.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <h3 class="post-title">
-                            <a asp-controller="Post" asp-action="Details" asp-route-id="1">
-                                The benefits of a healthy lifestyle how to live a fulfilling life
-                            </a>
-                        </h3>
-                        <ul class="post-meta">
-                            <li class="author">
-                                <img src="~/images/posts/middle-post/middle-post1.jpg" alt="">
-                                By <a href="javascript:void(0);">Velma D. Sills</a>
-                            </li>
-                            <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                            <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-5 widget-post-separate mb-50">
-                <div class="widget widget-about">
-                    <h6 class="widget-title-lg text-primary">ABOUT</h6>
-                    <p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
-                        and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
-                    <a asp-controller="Pages" asp-action="About">Read More</a>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6 col-md-7 order-xl-2 mb-30">
-                <div class="widget widget-post-wrapper mb-30">
-                    <div class="widget-post-inner">
-                        <div class="widget-post widget-post-large">
-                            <div class="post-content">
-                                <div class="post-header">
-                                    <h5 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                            asp-route-id="2">Celebrating
-                                            Life's Simple Pleasures</a></h5>
-                                </div>
-                                <ul class="post-meta">
-                                    <li class="date"><a href="javascript:void(0);">June 28, 2024</a></li>
-                                </ul>
-                            </div>
-                            <div class="post-thumb">
-                                <a asp-controller="Post" asp-action="Details" asp-route-id="2">
-                                    <img src="~/images/widget-post/post-large/post1.jpg" alt="">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="widget-post widget-post-large">
-                            <div class="post-content">
-                                <div class="post-header">
-                                    <h5 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                            asp-route-id="3">Exploring the
-                                            World with Varsha</a></h5>
-                                </div>
-                                <ul class="post-meta">
-                                    <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                                </ul>
-                            </div>
-                            <div class="post-thumb">
-                                <a asp-controller="Post" asp-action="Details" asp-route-id="3">
-                                    <img src="~/images/widget-post/post-large/post2.jpg" alt="">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="widget-post widget-post-large">
-                            <div class="post-content">
-                                <div class="post-header">
-                                    <h5 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                            asp-route-id="4">Lifestyle changes
-                                            to transform your life</a></h5>
-                                </div>
-                                <ul class="post-meta">
-                                    <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                                </ul>
-                            </div>
-                            <div class="post-thumb">
-                                <a asp-controller="Post" asp-action="Details" asp-route-id="4">
-                                    <img src="~/images/widget-post/post-large/post3.jpg" alt="">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="row mb-md-30">
+			<div class="col-xl-5 col-md-12 order-xl-1 mb-50">
+				<div class="post-card post-card-large">
+					@if (Model.HeroFeatured != null)
+					{
+						<div class="post-thumb">
+							<a asp-controller="Post" asp-action="Details" asp-route-id="@Model.HeroFeatured.Id">
+								<img src="@(Model.HeroFeatured.FeaturedImageUrl ?? "/images/posts/middle-post/middle-post1.jpg")" alt="@Model.HeroFeatured.Title">
+							</a>
+						</div>
+						<div class="post-content">
+							<h3 class="post-title">
+								<a asp-controller="Post" asp-action="Details" asp-route-id="@Model.HeroFeatured.Id">
+									@Model.HeroFeatured.Title
+								</a>
+							</h3>
+							<ul class="post-meta">
+								<li class="author">
+									<img src="@(Model.HeroFeatured.Author?.AvatarUrl ?? "/images/posts/middle-post/middle-post1.jpg")" alt="">
+									By <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.HeroFeatured.Id">@AuthorName(Model.HeroFeatured)</a>
+								</li>
+								<li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@Model.HeroFeatured.Id">@PostDate(Model.HeroFeatured)</a></li>
+								<li class="tag"><a asp-controller="Post" asp-action="Category" asp-route-id="@(Model.HeroFeatured.Category?.Slug ?? Model.HeroFeatured.CategoryId?.ToString() ?? "")">@PostTag(Model.HeroFeatured)</a></li>
+							</ul>
+						</div>
+					}
+					else
+					{
+						<div class="post-thumb">
+							<a asp-controller="Post" asp-action="Index">
+								<img src="~/images/posts/middle-post/middle-post1.jpg" alt="">
+							</a>
+						</div>
+						<div class="post-content">
+							<h3 class="post-title">
+								<a asp-controller="Post" asp-action="Index">
+									The benefits of a healthy lifestyle how to live a fulfilling life
+								</a>
+							</h3>
+							<ul class="post-meta">
+								<li class="author">
+									<img src="~/images/posts/middle-post/middle-post1.jpg" alt="">
+									By <a asp-controller="Post" asp-action="Index">Velma D. Sills</a>
+								</li>
+								<li class="date"><a asp-controller="Post" asp-action="Index">March 14, 2024</a></li>
+								<li class="tag"><a asp-controller="Post" asp-action="Index">Lifestyle</a></li>
+							</ul>
+						</div>
+					}
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-6 col-md-5 widget-post-separate mb-50">
+				<div class="widget widget-about">
+					<h6 class="widget-title-lg text-primary">ABOUT</h6>
+					<p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
+						and daughters of the Motherland Ghana.</p>
+					<a asp-controller="Pages" asp-action="About">Read More</a>
+				</div>
+			</div>
+			<div class="col-xl-4 col-lg-6 col-md-7 order-xl-2 mb-30">
+				<div class="widget widget-post-wrapper mb-30">
+					<div class="widget-post-inner">
+						@if (Model.HeroSecondary.Any())
+						{
+							var heroFallbackImages = new[] { "/images/widget-post/post-large/post1.jpg", "/images/widget-post/post-large/post2.jpg", "/images/widget-post/post-large/post3.jpg" };
+							for (var i = 0; i < Model.HeroSecondary.Count; i++)
+							{
+								var post = Model.HeroSecondary[i];
+								<div class="widget-post widget-post-large">
+									<div class="post-content">
+										<div class="post-header">
+											<h5 class="post-title"><a asp-controller="Post" asp-action="Details"
+													asp-route-id="@post.Id">@post.Title</a></h5>
+										</div>
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@PostDate(post)</a></li>
+										</ul>
+									</div>
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+											<img src="@(post.FeaturedImageUrl ?? heroFallbackImages[i % heroFallbackImages.Length])" alt="@post.Title">
+										</a>
+									</div>
+								</div>
+							}
+						}
+						else
+						{
+							<div class="widget-post widget-post-large">
+								<div class="post-content">
+									<div class="post-header">
+										<h5 class="post-title"><a asp-controller="Post" asp-action="Index">Celebrating
+												Life's Simple Pleasures</a></h5>
+									</div>
+									<ul class="post-meta">
+										<li class="date"><a asp-controller="Post" asp-action="Index">June 28, 2024</a></li>
+									</ul>
+								</div>
+								<div class="post-thumb">
+									<a asp-controller="Post" asp-action="Index">
+										<img src="~/images/widget-post/post-large/post1.jpg" alt="">
+									</a>
+								</div>
+							</div>
+							<div class="widget-post widget-post-large">
+								<div class="post-content">
+									<div class="post-header">
+										<h5 class="post-title"><a asp-controller="Post" asp-action="Index">Exploring the
+												World with Varsha</a></h5>
+									</div>
+									<ul class="post-meta">
+										<li class="date"><a asp-controller="Post" asp-action="Index">March 14, 2024</a></li>
+									</ul>
+								</div>
+								<div class="post-thumb">
+									<a asp-controller="Post" asp-action="Index">
+										<img src="~/images/widget-post/post-large/post2.jpg" alt="">
+									</a>
+								</div>
+							</div>
+							<div class="widget-post widget-post-large">
+								<div class="post-content">
+									<div class="post-header">
+										<h5 class="post-title"><a asp-controller="Post" asp-action="Index">Lifestyle changes
+												to transform your life</a></h5>
+									</div>
+									<ul class="post-meta">
+										<li class="date"><a asp-controller="Post" asp-action="Index">March 14, 2024</a></li>
+									</ul>
+								</div>
+								<div class="post-thumb">
+									<a asp-controller="Post" asp-action="Index">
+										<img src="~/images/widget-post/post-large/post3.jpg" alt="">
+									</a>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
+@if (Model.Announcements.Any())
+{
+	<div class="announcement-ticker-bar">
+		<div class="container">
+			<div class="announcement-ticker-inner">
+				<span class="announcement-ticker-label"><i class="feather icon-volume-2 me-1"></i> ANNOUNCEMENTS</span>
+				<div class="announcement-ticker-viewport">
+					<div class="announcement-ticker-track">
+						@foreach (var notice in Model.Announcements)
+						{
+							<a class="announcement-ticker-item" asp-controller="NoticeBoard" asp-action="Details" asp-route-id="@notice.Id">
+								@if (notice.IsPriority)
+								{
+									<i class="feather icon-star"></i>
+								}
+								@(string.IsNullOrWhiteSpace(notice.TickerText) ? notice.Title : notice.TickerText)
+							</a>
+						}
+						@foreach (var notice in Model.Announcements)
+						{
+							<a class="announcement-ticker-item" aria-hidden="true" tabindex="-1" asp-controller="NoticeBoard" asp-action="Details" asp-route-id="@notice.Id">
+								@if (notice.IsPriority)
+								{
+									<i class="feather icon-star"></i>
+								}
+								@(string.IsNullOrWhiteSpace(notice.TickerText) ? notice.Title : notice.TickerText)
+							</a>
+						}
+					</div>
+				</div>
+				<a class="announcement-ticker-all" asp-controller="NoticeBoard" asp-action="Index">VIEW ALL</a>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.announcement-ticker-bar {
+			background: #fff;
+			border-top: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+			padding: 10px 0;
+		}
+
+		.announcement-ticker-inner {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+		}
+
+		.announcement-ticker-label {
+			flex: 0 0 auto;
+			font-weight: 700;
+			font-size: 12px;
+			letter-spacing: 1px;
+			color: #fff;
+			background: var(--theme-color-primary, #0d6efd);
+			padding: 6px 12px;
+			border-radius: 20px;
+			white-space: nowrap;
+		}
+
+		.announcement-ticker-viewport {
+			flex: 1 1 auto;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.announcement-ticker-track {
+			display: inline-flex;
+			gap: 48px;
+			white-space: nowrap;
+			will-change: transform;
+			animation: ticker-scroll 40s linear infinite;
+		}
+
+		.announcement-ticker-viewport:hover .announcement-ticker-track {
+			animation-play-state: paused;
+		}
+
+		.announcement-ticker-item {
+			color: #333;
+			text-decoration: none;
+			font-size: 14px;
+		}
+
+		.announcement-ticker-item i {
+			color: #f5a623;
+			margin-right: 4px;
+		}
+
+		.announcement-ticker-item:hover {
+			color: var(--theme-color-primary, #0d6efd);
+		}
+
+		.announcement-ticker-all {
+			flex: 0 0 auto;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 1px;
+			text-decoration: none;
+			white-space: nowrap;
+		}
+
+		@@keyframes ticker-scroll {
+			0% {
+				transform: translateX(0);
+			}
+
+			100% {
+				transform: translateX(-50%);
+			}
+		}
+	</style>
+}
+
 <div class="section-space bg-white section-hidden">
-    <div class="container">
-        <h5 class="widget-title mb-30">Groups</h5>
-        <div class="swiper swiper-catogary swiper-mobile">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="card-catogary">
-                        <img class="media" src="~/images/category/category1.jpg" alt="">
-                        <a asp-controller="Post" asp-action="Category" asp-route-id="lifestyle"
-                            class="btn btn-light btn-tag">LIFESTYLE</a>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card-catogary">
-                        <img class="media" src="~/images/category/category2.jpg" alt="">
-                        <a asp-controller="Post" asp-action="Category" asp-route-id="fitness"
-                            class="btn btn-light btn-tag">FITNESS</a>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card-catogary">
-                        <img class="media" src="~/images/category/category3.jpg" alt="">
-                        <a asp-controller="Post" asp-action="Category" asp-route-id="travel"
-                            class="btn btn-light btn-tag">TRAVEL</a>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card-catogary">
-                        <img class="media" src="~/images/category/category4.jpg" alt="">
-                        <a asp-controller="Post" asp-action="Category" asp-route-id="beauty"
-                            class="btn btn-light btn-tag">BEAUTY</a>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card-catogary">
-                        <img class="media" src="~/images/category/category5.jpg" alt="">
-                        <a asp-controller="Post" asp-action="Category" asp-route-id="fashion"
-                            class="btn btn-light btn-tag">FASHION</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<h5 class="widget-title mb-30">Groups</h5>
+		<div class="swiper swiper-catogary swiper-mobile">
+			<div class="swiper-wrapper">
+				@if (Model.HomeGroups.Any())
+				{
+					var groupFallbackImages = new[] { "/images/category/category1.jpg", "/images/category/category2.jpg", "/images/category/category3.jpg", "/images/category/category4.jpg", "/images/category/category5.jpg" };
+					var randomGroups = Model.HomeGroups.OrderBy(_ => Guid.NewGuid()).Take(3).ToList();
+					for (var i = 0; i < randomGroups.Count; i++)
+					{
+						var group = randomGroups[i];
+						<div class="swiper-slide">
+							<div class="card-catogary">
+								<img class="media" src="@(group.CoverImageUrl ?? group.AvatarUrl ?? groupFallbackImages[i % groupFallbackImages.Length])" alt="@group.Name">
+								<a asp-controller="Groups" asp-action="Details" asp-route-id="@(group.Slug ?? group.Id.ToString())"
+									class="btn btn-light btn-tag">@group.Name.ToUpper()</a>
+							</div>
+						</div>
+					}
+				}
+				else if (Model.HomeCategories.Any())
+				{
+					var groupFallbackImages = new[] { "/images/category/category1.jpg", "/images/category/category2.jpg", "/images/category/category3.jpg", "/images/category/category4.jpg", "/images/category/category5.jpg" };
+					for (var i = 0; i < Model.HomeCategories.Count; i++)
+					{
+						var category = Model.HomeCategories[i];
+						<div class="swiper-slide">
+							<div class="card-catogary">
+								<img class="media" src="@(category.IconUrl ?? groupFallbackImages[i % groupFallbackImages.Length])" alt="@category.Name">
+								<a asp-controller="Post" asp-action="Category" asp-route-id="@(category.Slug ?? category.Id.ToString())"
+									class="btn btn-light btn-tag">@category.Name.ToUpper()</a>
+							</div>
+						</div>
+					}
+				}
+				else
+				{
+					<div class="swiper-slide">
+						<div class="card-catogary">
+							<img class="media" src="~/images/category/category1.jpg" alt="">
+							<a asp-controller="Post" asp-action="Index"
+								class="btn btn-light btn-tag">LIFESTYLE</a>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="card-catogary">
+							<img class="media" src="~/images/category/category2.jpg" alt="">
+							<a asp-controller="Post" asp-action="Index"
+								class="btn btn-light btn-tag">FITNESS</a>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="card-catogary">
+							<img class="media" src="~/images/category/category3.jpg" alt="">
+							<a asp-controller="Post" asp-action="Index"
+								class="btn btn-light btn-tag">TRAVEL</a>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="card-catogary">
+							<img class="media" src="~/images/category/category4.jpg" alt="">
+							<a asp-controller="Post" asp-action="Index"
+								class="btn btn-light btn-tag">BEAUTY</a>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="card-catogary">
+							<img class="media" src="~/images/category/category5.jpg" alt="">
+							<a asp-controller="Post" asp-action="Index"
+								class="btn btn-light btn-tag">FASHION</a>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 </div>
 
 <section class="section-space3">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-9 col-lg-8">
-                <div class="content-wrapper left-side">
-                    <h5 class="widget-title mb-30">Whats New?</h5>
-                    <div class="row row-post">
-                        <div class="col-lg-12">
-                            <div class="post-card mb-50">
-                                <div class="post-thumb">
-                                    <a asp-controller="Post" asp-action="Details" asp-route-id="5"><img
-                                            src="~/images/posts/large-post/large-post1.jpg" alt=""></a>
-                                </div>
-                                <div class="post-content">
-                                    <ul class="post-meta">
-                                        <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                                        <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
-                                    </ul>
-                                    <h3 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                            asp-route-id="5">The Connection
-                                            Between Happiness and Health</a></h3>
-                                    <p>It is a long established fact that a reader will be distracted by the
-                                        readable content of a page when looking at its layout. The point of
-                                        using Lorem Ipsum is that it has a more-or-less normal distribution
-                                        of letters, as opposed to using 'Content here, content here', making
-                                        it look like readable English. Many desktop publishing packages and
-                                        web page.</p>
-                                    <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="5">READ
-                                        MORE <i class="feather icon-arrow-right ms-1"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="post-card mb-50">
-                                <div class="post-thumb">
-                                    <a asp-controller="Post" asp-action="Details" asp-route-id="6"><img
-                                            src="~/images/posts/img1.jpg" alt=""></a>
-                                </div>
-                                <div class="post-content">
-                                    <ul class="post-meta">
-                                        <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                                        <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
-                                    </ul>
-                                    <h4 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                            asp-route-id="6">Tips and Tricks
-                                            for Navigating the Parenthood Journey</a></h4>
-                                    <p>It is a long established fact that a reader will be distracted by the
-                                        readable content of a page when looking at its layout. The point of
-                                        using Lorem Ipsum is that it has.</p>
-                                    <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="6">READ
-                                        MORE <i class="feather icon-arrow-right ms-1"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="post-card mb-50">
-                                <div class="post-thumb">
-                                    <a asp-controller="Post" asp-action="Details" asp-route-id="7"><img
-                                            src="~/images/posts/img2.jpg" alt=""></a>
-                                </div>
-                                <div class="post-content">
-                                    <ul class="post-meta">
-                                        <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                                        <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
-                                    </ul>
-                                    <h4 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                            asp-route-id="7">Workout Outfits
-                                            that Combine Style and Function</a></h4>
-                                    <p>It is a long established fact that a reader will be distracted by the
-                                        readable content of a page when looking at its layout. The point of
-                                        using Lorem Ipsum is that it has.</p>
-                                    <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="7">READ
-                                        MORE <i class="feather icon-arrow-right ms-1"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center mb-30">
-                        <a href="javascript:void(0);" class="btn btn-light btn-line">LOAD MORE</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4">
-                <aside class="aside-wrapper">
-                    <div class="widget widget-newsletter text-center">
-                        <img class="mb-4" src="~/images/icons/envelope.svg" alt="">
-                        <h4 class="mb-1">Our Newsletter</h4>
-                        <p>Get every weekly update & insight feed</p>
-                        <form action="#">
-                            <input type="text" class="form-control" placeholder="Your Email Address">
-                            <button class="btn btn-primary w-100 mt-3">Subscribe Now</button>
-                        </form>
-                    </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-9 col-lg-8">
+				<div class="content-wrapper left-side">
+					<h5 class="widget-title mb-30">Whats New?</h5>
+					<div class="row row-post">
+						<div class="col-lg-12">
+							<div class="post-card mb-50">
+								@if (Model.WhatsNewFeatured != null)
+								{
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="Details" asp-route-id="@Model.WhatsNewFeatured.Id"><img
+												src="@(Model.WhatsNewFeatured.FeaturedImageUrl ?? "/images/posts/large-post/large-post1.jpg")" alt="@Model.WhatsNewFeatured.Title"></a>
+									</div>
+									<div class="post-content">
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@Model.WhatsNewFeatured.Id">@PostDate(Model.WhatsNewFeatured)</a></li>
+											<li class="tag"><a asp-controller="Post" asp-action="Category" asp-route-id="@(Model.WhatsNewFeatured.Category?.Slug ?? Model.WhatsNewFeatured.CategoryId?.ToString() ?? "")">@PostTag(Model.WhatsNewFeatured)</a></li>
+										</ul>
+										<h3 class="post-title"><a asp-controller="Post" asp-action="Details"
+												asp-route-id="@Model.WhatsNewFeatured.Id">@Model.WhatsNewFeatured.Title</a></h3>
+										<p>@Model.WhatsNewFeatured.Excerpt</p>
+										<a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="@Model.WhatsNewFeatured.Id">READ
+											MORE <i class="feather icon-arrow-right ms-1"></i></a>
+									</div>
+								}
+								else
+								{
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="News"><img
+												src="~/images/posts/large-post/large-post1.jpg" alt=""></a>
+									</div>
+									<div class="post-content">
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="News">March 14, 2024</a></li>
+											<li class="tag"><a asp-controller="Post" asp-action="News">Lifestyle</a></li>
+										</ul>
+										<h3 class="post-title"><a asp-controller="Post" asp-action="News">The Connection
+												Between Happiness and Health</a></h3>
+										<p>It is a long established fact that a reader will be distracted by the
+											readable content of a page when looking at its layout. The point of
+											using Lorem Ipsum is that it has a more-or-less normal distribution
+											of letters, as opposed to using 'Content here, content here', making
+											it look like readable English. Many desktop publishing packages and
+											web page.</p>
+										<a class="btn-link" asp-controller="Post" asp-action="News">READ
+											MORE <i class="feather icon-arrow-right ms-1"></i></a>
+									</div>
+								}
+							</div>
+						</div>
+						@if (Model.WhatsNewSecondary.Any())
+						{
+							var whatsNewFallbackImages = new[] { "/images/posts/img1.jpg", "/images/posts/img2.jpg" };
+							for (var i = 0; i < Model.WhatsNewSecondary.Count; i++)
+							{
+								var post = Model.WhatsNewSecondary[i];
+								<div class="col-md-6">
+									<div class="post-card mb-50">
+										<div class="post-thumb">
+											<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id"><img
+													src="@(post.FeaturedImageUrl ?? whatsNewFallbackImages[i % whatsNewFallbackImages.Length])" alt="@post.Title"></a>
+										</div>
+										<div class="post-content">
+											<ul class="post-meta">
+												<li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@PostDate(post)</a></li>
+												<li class="tag"><a asp-controller="Post" asp-action="Category" asp-route-id="@(post.Category?.Slug ?? post.CategoryId?.ToString() ?? "")">@PostTag(post)</a></li>
+											</ul>
+											<h4 class="post-title"><a asp-controller="Post" asp-action="Details"
+													asp-route-id="@post.Id">@post.Title</a></h4>
+											<p>@post.Excerpt</p>
+											<a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">READ
+												MORE <i class="feather icon-arrow-right ms-1"></i></a>
+										</div>
+									</div>
+								</div>
+							}
+						}
+						else
+						{
+							<div class="col-md-6">
+								<div class="post-card mb-50">
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="News"><img
+												src="~/images/posts/img1.jpg" alt=""></a>
+									</div>
+									<div class="post-content">
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="News">March 14, 2024</a></li>
+											<li class="tag"><a asp-controller="Post" asp-action="News">Lifestyle</a></li>
+										</ul>
+										<h4 class="post-title"><a asp-controller="Post" asp-action="News">Tips and Tricks
+												for Navigating the Parenthood Journey</a></h4>
+										<p>It is a long established fact that a reader will be distracted by the
+											readable content of a page when looking at its layout. The point of
+											using Lorem Ipsum is that it has.</p>
+										<a class="btn-link" asp-controller="Post" asp-action="News">READ
+											MORE <i class="feather icon-arrow-right ms-1"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="post-card mb-50">
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="News"><img
+												src="~/images/posts/img2.jpg" alt=""></a>
+									</div>
+									<div class="post-content">
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="News">March 14, 2024</a></li>
+											<li class="tag"><a asp-controller="Post" asp-action="News">Lifestyle</a></li>
+										</ul>
+										<h4 class="post-title"><a asp-controller="Post" asp-action="News">Workout Outfits
+												that Combine Style and Function</a></h4>
+										<p>It is a long established fact that a reader will be distracted by the
+											readable content of a page when looking at its layout. The point of
+											using Lorem Ipsum is that it has.</p>
+										<a class="btn-link" asp-controller="Post" asp-action="News">READ
+											MORE <i class="feather icon-arrow-right ms-1"></i></a>
+									</div>
+								</div>
+							</div>
+						}
+					</div>
+					<div class="text-center mb-30">
+						<a asp-controller="Post" asp-action="News" class="btn btn-light btn-line">LOAD MORE</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-4">
+				<aside class="aside-wrapper">
+					<div class="widget widget-newsletter text-center">
+						<img class="mb-4" src="~/images/icons/envelope.svg" alt="">
+						<h4 class="mb-1">Our Newsletter</h4>
+						<p>Get every weekly update & insight feed</p>
+						<form asp-controller="Contact" asp-action="Join" method="post">
+							<input type="email" name="email" class="form-control" placeholder="Your Email Address">
+							<button class="btn btn-primary w-100 mt-3" type="submit">Subscribe Now</button>
+						</form>
+					</div>
 
-                    <div class="widget widget-categories">
-                        <h5 class="widget-title">Category</h5>
-                        <ul>
-                            <li>
-                                <a asp-controller="Post" asp-action="Category" asp-route-id="fitness"
-                                    style="background-image: url(/images/category/category-list/category1.jpg);">
-                                    <span>Fitness</span>
-                                    <span class="num">15</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Post" asp-action="Category" asp-route-id="travel"
-                                    style="background-image: url(/images/category/category-list/category2.jpg);">
-                                    <span>Travel</span>
-                                    <span class="num">07</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Post" asp-action="Category" asp-route-id="beauty"
-                                    style="background-image: url(/images/category/category-list/category3.jpg);">
-                                    <span>Beauty</span>
-                                    <span class="num">12</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Post" asp-action="Category" asp-route-id="lifestyle"
-                                    style="background-image: url(/images/category/category-list/category4.jpg);">
-                                    <span>Lifestyle</span>
-                                    <span class="num">03</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Post" asp-action="Category" asp-route-id="fashion"
-                                    style="background-image: url(/images/category/category-list/category5.jpg);">
-                                    <span>Fashion</span>
-                                    <span class="num">05</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+					<div class="widget widget-categories">
+						<h5 class="widget-title">Category</h5>
+						<ul>
+							@if (Model.SidebarCategories.Any())
+							{
+								var sidebarFallbackImages = new[] { "/images/category/category-list/category1.jpg", "/images/category/category-list/category2.jpg", "/images/category/category-list/category3.jpg", "/images/category/category-list/category4.jpg", "/images/category/category-list/category5.jpg" };
+								for (var i = 0; i < Model.SidebarCategories.Count; i++)
+								{
+									var category = Model.SidebarCategories[i];
+									<li>
+										<a asp-controller="Post" asp-action="Category" asp-route-id="@(category.Slug ?? category.Id.ToString())"
+											style="background-image: url(@(category.IconUrl ?? sidebarFallbackImages[i % sidebarFallbackImages.Length]));">
+											<span>@category.Name</span>
+											<span class="num">@category.ItemCount.ToString("00")</span>
+										</a>
+									</li>
+								}
+							}
+							else
+							{
+								<li>
+									<a asp-controller="Post" asp-action="Index"
+										style="background-image: url(/images/category/category-list/category1.jpg);">
+										<span>Fitness</span>
+										<span class="num">15</span>
+									</a>
+								</li>
+								<li>
+									<a asp-controller="Post" asp-action="Index"
+										style="background-image: url(/images/category/category-list/category2.jpg);">
+										<span>Travel</span>
+										<span class="num">07</span>
+									</a>
+								</li>
+								<li>
+									<a asp-controller="Post" asp-action="Index"
+										style="background-image: url(/images/category/category-list/category3.jpg);">
+										<span>Beauty</span>
+										<span class="num">12</span>
+									</a>
+								</li>
+								<li>
+									<a asp-controller="Post" asp-action="Index"
+										style="background-image: url(/images/category/category-list/category4.jpg);">
+										<span>Lifestyle</span>
+										<span class="num">03</span>
+									</a>
+								</li>
+								<li>
+									<a asp-controller="Post" asp-action="Index"
+										style="background-image: url(/images/category/category-list/category5.jpg);">
+										<span>Fashion</span>
+										<span class="num">05</span>
+									</a>
+								</li>
+							}
+						</ul>
+					</div>
 
-                    <div class="widget widget-post-wrapper">
-                        <h5 class="widget-title">Latest Posts</h5>
-                        <div class="widget-post-inner">
-                            <div class="widget-post">
-                                <div class="post-content">
-                                    <div class="post-header">
-                                        <h6 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                                asp-route-id="8">Lifestyle changes
-                                                to transform your life</a></h6>
-                                    </div>
-                                    <ul class="post-meta">
-                                        <li class="date"><a href="javascript:void(0);">June 28, 2024</a></li>
-                                    </ul>
-                                </div>
-                                <div class="post-thumb">
-                                    <a asp-controller="Post" asp-action="Details" asp-route-id="8">
-                                        <img src="~/images/widget-post/post1.jpg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="widget-post">
-                                <div class="post-content">
-                                    <div class="post-header">
-                                        <h6 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                                asp-route-id="9">Exploring the
-                                                World with Varsha</a></h6>
-                                    </div>
-                                    <ul class="post-meta">
-                                        <li class="date"><a href="javascript:void(0);">July 01, 2024</a></li>
-                                    </ul>
-                                </div>
-                                <div class="post-thumb">
-                                    <a asp-controller="Post" asp-action="Details" asp-route-id="9">
-                                        <img src="~/images/widget-post/post2.jpg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="widget-post">
-                                <div class="post-content">
-                                    <div class="post-header">
-                                        <h6 class="post-title"><a asp-controller="Post" asp-action="Details"
-                                                asp-route-id="10">Celebrating Life's
-                                                Simple Pleasures</a></h6>
-                                    </div>
-                                    <ul class="post-meta">
-                                        <li class="date"><a href="javascript:void(0);">May 22, 2024</a></li>
-                                    </ul>
-                                </div>
-                                <div class="post-thumb">
-                                    <a asp-controller="Post" asp-action="Details" asp-route-id="10">
-                                        <img src="~/images/widget-post/post3.jpg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </div>
-    </div>
+					<div class="widget widget-post-wrapper">
+						<h5 class="widget-title">Latest Posts</h5>
+						<div class="widget-post-inner">
+							@if (Model.LatestPosts.Any())
+							{
+								var latestFallbackImages = new[] { "/images/widget-post/post1.jpg", "/images/widget-post/post2.jpg", "/images/widget-post/post3.jpg" };
+								for (var i = 0; i < Model.LatestPosts.Count; i++)
+								{
+									var post = Model.LatestPosts[i];
+									<div class="widget-post">
+										<div class="post-content">
+											<div class="post-header">
+												<h6 class="post-title"><a asp-controller="Post" asp-action="Details"
+														asp-route-id="@post.Id">@post.Title</a></h6>
+											</div>
+											<ul class="post-meta">
+												<li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@PostDate(post)</a></li>
+											</ul>
+										</div>
+										<div class="post-thumb">
+											<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+												<img src="@(post.FeaturedImageUrl ?? latestFallbackImages[i % latestFallbackImages.Length])" alt="@post.Title">
+											</a>
+										</div>
+									</div>
+								}
+							}
+							else
+							{
+								<div class="widget-post">
+									<div class="post-content">
+										<div class="post-header">
+											<h6 class="post-title"><a asp-controller="Post" asp-action="Index">Lifestyle changes
+													to transform your life</a></h6>
+										</div>
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="Index">June 28, 2024</a></li>
+										</ul>
+									</div>
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="Index">
+											<img src="~/images/widget-post/post1.jpg" alt="">
+										</a>
+									</div>
+								</div>
+								<div class="widget-post">
+									<div class="post-content">
+										<div class="post-header">
+											<h6 class="post-title"><a asp-controller="Post" asp-action="Index">Exploring the
+													World with Varsha</a></h6>
+										</div>
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="Index">July 01, 2024</a></li>
+										</ul>
+									</div>
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="Index">
+											<img src="~/images/widget-post/post2.jpg" alt="">
+										</a>
+									</div>
+								</div>
+								<div class="widget-post">
+									<div class="post-content">
+										<div class="post-header">
+											<h6 class="post-title"><a asp-controller="Post" asp-action="Index">Celebrating Life's
+													Simple Pleasures</a></h6>
+										</div>
+										<ul class="post-meta">
+											<li class="date"><a asp-controller="Post" asp-action="Index">May 22, 2024</a></li>
+										</ul>
+									</div>
+									<div class="post-thumb">
+										<a asp-controller="Post" asp-action="Index">
+											<img src="~/images/widget-post/post3.jpg" alt="">
+										</a>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
+				</aside>
+			</div>
+		</div>
+	</div>
 </section>
 
 <section class="section-space3 bg-white">
-    <div class="container">
-        <h5 class="widget-title mb-30">Events
-            <a asp-controller="Post" asp-action="Events" class="btn-link float-end">View All Post</a>
-        </h5>
-        <div class="row post-grid-wrapper mb-30">
-            <div class="col-lg-3 col-6 post-grid-column order-2">
-                <div class="post-card post-card-small">
-                    <div class="post-thumb">
-                        <a asp-controller="Post" asp-action="Details" asp-route-id="11">
-                            <img src="~/images/posts/popular-post/post1.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <h5 class="post-title">
-                            <a asp-controller="Post" asp-action="Details" asp-route-id="11">Exploring Passions and
-                                Unlocking
-                                Personal Potential
-                            </a>
-                        </h5>
-                    </div>
-                </div>
-                <div class="post-card post-card-small">
-                    <div class="post-thumb">
-                        <a asp-controller="Post" asp-action="Details" asp-route-id="12"><img
-                                src="~/images/posts/popular-post/post2.jpg" alt=""></a>
-                    </div>
-                    <div class="post-content">
-                        <h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="12">Lifestyle
-                                changes to
-                                transform your life</a></h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6 post-grid-column order-2 order-lg-1">
-                <div class="post-card post-card-small">
-                    <div class="post-thumb">
-                        <a asp-controller="Post" asp-action="Details" asp-route-id="13"><img
-                                src="~/images/posts/popular-post/post3.jpg" alt=""></a>
-                    </div>
-                    <div class="post-content">
-                        <h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="13">Tips for
-                                Stunning Travel and
-                                Lifestyle Photography</a></h5>
-                    </div>
-                </div>
-                <div class="post-card post-card-small">
-                    <div class="post-thumb">
-                        <a asp-controller="Post" asp-action="Details" asp-route-id="14"><img
-                                src="~/images/posts/popular-post/post4.jpg" alt=""></a>
-                    </div>
-                    <div class="post-content">
-                        <h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="14">Workout
-                                Outfits that Combine
-                                Style and Function</a></h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 order-1">
-                <div class="post-grid-center">
-                    <div class="post-card post-card-large">
-                        <div class="post-thumb">
-                            <a asp-controller="Post" asp-action="Details" asp-route-id="15"><img
-                                    src="~/images/posts/large-post/large-post2.jpg" alt=""></a>
-                        </div>
-                        <div class="post-content">
-                            <h3 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="15">Tips
-                                    for Stunning Travel and
-                                    Lifestyle Photography</a></h3>
-                            <ul class="post-meta">
-                                <li class="author">
-                                    <img src="~/images/posts/middle-post/middle-post1.jpg" alt="">By
-                                    <a href="javascript:void(0);"> Velma D. Sills</a>
-                                </li>
-                                <li class="date"><a href="javascript:void(0);">March 14, 2024</a></li>
-                                <li class="tag"><a href="javascript:void(0);">Lifestyle</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<h5 class="widget-title mb-30">Events
+			<a asp-controller="Post" asp-action="Events" class="btn-link float-end">View All Post</a>
+		</h5>
+		<div class="row post-grid-wrapper mb-30">
+			@if (Model.EventsFeatured != null || Model.EventsSecondary.Any())
+			{
+				var eventFallbackImages = new[] { "/images/posts/popular-post/post1.jpg", "/images/posts/popular-post/post2.jpg", "/images/posts/popular-post/post3.jpg", "/images/posts/popular-post/post4.jpg" };
+				var leftEvents = Model.EventsSecondary.Take(2).ToList();
+				var rightEvents = Model.EventsSecondary.Skip(2).Take(2).ToList();
+				<div class="col-lg-3 col-6 post-grid-column order-2">
+					@for (var i = 0; i < leftEvents.Count; i++)
+					{
+						var post = leftEvents[i];
+						<div class="post-card post-card-small">
+							<div class="post-thumb">
+								<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+									<img src="@(post.FeaturedImageUrl ?? eventFallbackImages[i % eventFallbackImages.Length])" alt="@post.Title">
+								</a>
+							</div>
+							<div class="post-content">
+								<h5 class="post-title">
+									<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Title</a>
+								</h5>
+							</div>
+						</div>
+					}
+				</div>
+				<div class="col-lg-3 col-6 post-grid-column order-2 order-lg-1">
+					@for (var i = 0; i < rightEvents.Count; i++)
+					{
+						var post = rightEvents[i];
+						<div class="post-card post-card-small">
+							<div class="post-thumb">
+								<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+									<img src="@(post.FeaturedImageUrl ?? eventFallbackImages[(i + 2) % eventFallbackImages.Length])" alt="@post.Title">
+								</a>
+							</div>
+							<div class="post-content">
+								<h5 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Title</a></h5>
+							</div>
+						</div>
+					}
+				</div>
+				<div class="col-lg-6 order-1">
+					<div class="post-grid-center">
+						@if (Model.EventsFeatured != null)
+						{
+							<div class="post-card post-card-large">
+								<div class="post-thumb">
+									<a asp-controller="Post" asp-action="Details" asp-route-id="@Model.EventsFeatured.Id"><img
+											src="@(Model.EventsFeatured.FeaturedImageUrl ?? "/images/posts/large-post/large-post2.jpg")" alt="@Model.EventsFeatured.Title"></a>
+								</div>
+								<div class="post-content">
+									<h3 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="@Model.EventsFeatured.Id">@Model.EventsFeatured.Title</a></h3>
+									<ul class="post-meta">
+										<li class="author">
+											<img src="@(Model.EventsFeatured.Author?.AvatarUrl ?? "/images/posts/middle-post/middle-post1.jpg")" alt="">By
+											<a asp-controller="Post" asp-action="Details" asp-route-id="@Model.EventsFeatured.Id"> @AuthorName(Model.EventsFeatured)</a>
+										</li>
+										<li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@Model.EventsFeatured.Id">@PostDate(Model.EventsFeatured)</a></li>
+										<li class="tag"><a asp-controller="Post" asp-action="Events">@PostTag(Model.EventsFeatured)</a></li>
+									</ul>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			}
+			else
+			{
+				<div class="col-lg-3 col-6 post-grid-column order-2">
+					<div class="post-card post-card-small">
+						<div class="post-thumb">
+							<a asp-controller="Post" asp-action="Events">
+								<img src="~/images/posts/popular-post/post1.jpg" alt="">
+							</a>
+						</div>
+						<div class="post-content">
+							<h5 class="post-title">
+								<a asp-controller="Post" asp-action="Events">Exploring Passions and
+									Unlocking
+									Personal Potential
+								</a>
+							</h5>
+						</div>
+					</div>
+					<div class="post-card post-card-small">
+						<div class="post-thumb">
+							<a asp-controller="Post" asp-action="Events"><img
+									src="~/images/posts/popular-post/post2.jpg" alt=""></a>
+						</div>
+						<div class="post-content">
+							<h5 class="post-title"><a asp-controller="Post" asp-action="Events">Lifestyle
+									changes to
+									transform your life</a></h5>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-6 post-grid-column order-2 order-lg-1">
+					<div class="post-card post-card-small">
+						<div class="post-thumb">
+							<a asp-controller="Post" asp-action="Events"><img
+									src="~/images/posts/popular-post/post3.jpg" alt=""></a>
+						</div>
+						<div class="post-content">
+							<h5 class="post-title"><a asp-controller="Post" asp-action="Events">Tips for
+									Stunning Travel and
+									Lifestyle Photography</a></h5>
+						</div>
+					</div>
+					<div class="post-card post-card-small">
+						<div class="post-thumb">
+							<a asp-controller="Post" asp-action="Events"><img
+									src="~/images/posts/popular-post/post4.jpg" alt=""></a>
+						</div>
+						<div class="post-content">
+							<h5 class="post-title"><a asp-controller="Post" asp-action="Events">Workout
+									Outfits that Combine
+									Style and Function</a></h5>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 order-1">
+					<div class="post-grid-center">
+						<div class="post-card post-card-large">
+							<div class="post-thumb">
+								<a asp-controller="Post" asp-action="Events"><img
+										src="~/images/posts/large-post/large-post2.jpg" alt=""></a>
+							</div>
+							<div class="post-content">
+								<h3 class="post-title"><a asp-controller="Post" asp-action="Events">Tips
+										for Stunning Travel and
+										Lifestyle Photography</a></h3>
+								<ul class="post-meta">
+									<li class="author">
+										<img src="~/images/posts/middle-post/middle-post1.jpg" alt="">By
+										<a asp-controller="Post" asp-action="Events"> Velma D. Sills</a>
+									</li>
+									<li class="date"><a asp-controller="Post" asp-action="Events">March 14, 2024</a></li>
+									<li class="tag"><a asp-controller="Post" asp-action="Events">Lifestyle</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
 </section>
 
 <section class="instagram-wrapper">
-    <h5 class="main-title">Gallery</h5>
-    <div class="swiper swiper-insta">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post2.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post3.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post4.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post5.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post6.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post7.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post8.jpg" alt=""></div>
-            </div>
-            <div class="swiper-slide">
-                <div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
-            </div>
-        </div>
-        <a asp-controller="Pages" asp-action="Gallery" class="btn btn-light btn-insta"><i
-                class="feather icon-image me-2"></i> Go to Gallery</a>
-    </div>
+	<h5 class="main-title">Gallery</h5>
+	<div class="swiper swiper-insta">
+		<div class="swiper-wrapper">
+			@if (Model.GalleryPhotos.Any())
+			{
+				foreach (var photo in Model.GalleryPhotos)
+				{
+					<div class="swiper-slide">
+						<div class="insta-media"><img src="@(photo.ThumbnailUrl ?? photo.Url)" alt="@photo.Title"></div>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post2.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post3.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post4.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post5.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post6.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post7.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post8.jpg" alt=""></div>
+				</div>
+				<div class="swiper-slide">
+					<div class="insta-media"><img src="~/images/instagram/post1.jpg" alt=""></div>
+				</div>
+			}
+		</div>
+		<a asp-controller="Pages" asp-action="Gallery" class="btn btn-light btn-insta"><i
+				class="feather icon-image me-2"></i> Go to Gallery</a>
+	</div>
 </section>

@@ -6,60 +6,46 @@
 
 <h2 class="animated fadeInDown">Welcome</h2>
 <p class="subtitle animated fadeInDown" style="animation-delay: 0.1s;">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis.
+    Sign in to manage the Tema Friends Club of Maryland website.
 </p>
 
 <div class="beehive-login-element beehive-element compact on-dark animated fadeInUp" style="animation-delay: 0.2s;">
     <div class="login-form-wrapper">
         <form asp-action="Login" method="post" id="element-login-form" class="beehive-login-form element-login-form"
             name="element-login">
-            <div asp-validation-summary="ModelOnly" class="beehive-login-result">
-                @if (!string.IsNullOrEmpty(ViewBag.Error))
-                {
-                    <div class="alert alert-danger">
-                        <i class="uil-times-circle"></i> @ViewBag.Error
-                    </div>
-                }
-            </div>
+            <div asp-validation-summary="All" class="beehive-login-result"></div>
 
             <div class="form-group">
                 <div class="user-name">
-                    <label class="screen-reader-text">Email/username</label>
-                    <span class="icon"><i class="uil-user"></i></span>
+                    <label class="screen-reader-text" for="element-username">Email/username</label>
+                    <span class="icon"><i class="hgi-user"></i></span>
                     <input type="email" asp-for="Email" id="element-username" class="username-control" required
-                        name="Email" placeholder="Email or username">
+                        autocomplete="username" placeholder="Email or username">
                     <span asp-validation-for="Email" class="field-validation-error"></span>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="pass">
-                    <label class="screen-reader-text">Password</label>
-                    <span class="icon"><i class="uil-key-skeleton-alt"></i></span>
+                    <label class="screen-reader-text" for="element-password">Password</label>
+                    <span class="icon"><i class="hgi-lock"></i></span>
                     <input type="password" asp-for="Password" id="element-password" class="password-control" required
-                        name="Password" placeholder="Password">
+                        autocomplete="current-password" placeholder="Password">
                     <span asp-validation-for="Password" class="field-validation-error"></span>
                 </div>
             </div>
 
             <div class="form-options">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="forgetmenot">
                             <label for="element-rememberme">
-                                <input asp-for="RememberMe" id="element-rememberme" type="checkbox" /> Remember
+                                <input asp-for="RememberMe" id="element-rememberme" type="checkbox" /> Remember me
                             </label>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="forgot-password">
-                            <a href="#">Lost Password?</a>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="beehive-login-result"></div>
 
             <div class="submit">
                 <button type="submit" id="element_login_submit" class="wide submit-login ellipsis">Log into your
@@ -67,7 +53,7 @@
             </div>
 
             <div class="register-link">
-                <p class="color-primary">&copy; @DateTime.Now.Year Admin Dashboard</p>
+                <p class="color-primary">&copy; @DateTime.Now.Year Tema Friends Club of Maryland</p>
             </div>
         </form>
     </div>

@@ -1,0 +1,111 @@
+@model AnnouncementListViewModel
+@using AppCore.Entities
+@{
+    var permissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string code) => isSuperAdmin || permissions.Contains(code);
+}
+@foreach (var item in Model.Announcements)
+{
+    <div class="bh-forum-row">
+        <div class="bh-forum-icon">
+            @if (!string.IsNullOrEmpty(item.ImageUrl))
+            {
+                <img src="@item.ImageUrl" alt="@item.Title" />
+            }
+            else
+            {
+                <i class="hgi-stroke-left hgi-megaphone-02"></i>
+            }
+        </div>
+        <div class="bh-forum-main">
+            <h5>
+                <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+            </h5>
+            @if (!string.IsNullOrEmpty(item.TickerText))
+            {
+                <p class="bh-forum-excerpt">@item.TickerText</p>
+            }
+            <div class="bh-forum-meta">
+                <span><i class="hgi-calendar-01"></i> @item.CreatedAt.ToString("MMM dd, yyyy")</span>
+                <span><i class="hgi-user-group"></i> @(item.SocialGroup?.Name ?? "Site-wide")</span>
+            </div>
+        </div>
+        <div class="bh-forum-actions">
+            <div class="bh-actions">
+                <span class="bh-badge @((item.Status == ContentStatus.PendingReview ? "bh-badge-pending" : item.Status == ContentStatus.Published ? "bh-badge-published" : "bh-badge-draft"))">@item.Status</span>
+                @if (item.IntendedForWeb)
+                {
+                    <span class="bh-badge bh-badge-web"><i class="hgi-globe"></i> Web</span>
+                }
+                else
+                {
+                    <span class="bh-badge bh-badge-internal"><i class="hgi-lock"></i> Internal</span>
+                }
+            </div>
+            <div class="bh-actions" style="margin-top:6px;">
+                @if (HasPermission("posts.edit"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="bh-btn" title="Edit">
+                        <i class="hgi-edit-01"></i>
+                    </a>
+                    @if (item.IntendedForWeb && (item.Status == ContentStatus.Draft || item.Status == ContentStatus.Rejected))
+                    {
+                        <form asp-action="RequestPublish" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="bh-btn bh-btn-warn" title="Submit for review">
+                                <i class="hgi-file-upload"></i>
+                            </button>
+                        </form>
+                    }
+                }
+                @if (HasPermission("posts.publish"))
+                {
+                    @if (item.Status == ContentStatus.PendingReview)
+                    {
+                        <form asp-action="Approve" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="bh-btn bh-btn-success" title="Approve">
+                                <i class="hgi-checkmark-circle-01"></i>
+                            </button>
+                        </form>
+                        <form asp-action="Reject" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="bh-btn bh-btn-danger" title="Reject">
+                                <i class="hgi-cancel-circle"></i>
+                            </button>
+                        </form>
+                    }
+                    @if (item.Status == ContentStatus.Approved && !item.IsPublishedToWeb && item.IntendedForWeb)
+                    {
+                        <form asp-action="PublishToWeb" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="bh-btn bh-btn-success" title="Publish to website">
+                                <i class="hgi-globe"></i>
+                            </button>
+                        </form>
+                    }
+                    @if (item.IsPublishedToWeb)
+                    {
+                        <form asp-action="Unpublish" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="bh-btn bh-btn-warn" title="Unpublish">
+                                <i class="hgi-cloud"></i>
+                            </button>
+                        </form>
+                    }
+                }
+                @if (HasPermission("posts.delete"))
+                {
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;"
+                        onsubmit="return confirm('Delete this announcement?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="bh-btn bh-btn-danger" title="Delete">
+                            <i class="hgi-delete-01"></i>
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+}

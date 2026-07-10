@@ -1,0 +1,134 @@
+@model Web.Controllers.PostListPageViewModel
+@using AppCore.Entities
+@{
+    ViewData["Title"] = Model.Title;
+    var sidebarFallbackImages = new[] { "/images/category/category-list/category1.jpg", "/images/category/category-list/category2.jpg", "/images/category/category-list/category3.jpg", "/images/category/category-list/category4.jpg", "/images/category/category-list/category5.jpg" };
+    var latestFallbackImages = new[] { "/images/widget-post/post1.jpg", "/images/widget-post/post2.jpg", "/images/widget-post/post3.jpg" };
+    var cardFallbackImages = new[] { "/images/posts/img1.jpg", "/images/posts/img2.jpg", "/images/posts/popular-post/post1.jpg", "/images/posts/popular-post/post2.jpg", "/images/posts/popular-post/post3.jpg", "/images/posts/popular-post/post4.jpg" };
+}
+
+<section class="section-space3">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8">
+                <div class="content-wrapper left-side">
+                    <h5 class="widget-title mb-30">@Model.Title</h5>
+                    <div class="row row-post">
+                        @if (Model.Posts.Any())
+                        {
+                            for (var i = 0; i < Model.Posts.Count; i++)
+                            {
+                                var post = Model.Posts[i];
+                                <div class="col-md-6">
+                                    <div class="post-card mb-50">
+                                        <div class="post-thumb">
+                                            <a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id"><img
+                                                    src="@(post.FeaturedImageUrl ?? cardFallbackImages[i % cardFallbackImages.Length])" alt="@post.Title"></a>
+                                        </div>
+                                        <div class="post-content">
+                                            <ul class="post-meta">
+                                                <li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@((post.PublishedToWebAt ?? post.CreatedAt).ToString("MMMM dd, yyyy"))</a></li>
+                                                <li class="tag">
+                                                    @if (post.Category != null)
+                                                    {
+                                                        <a asp-controller="Post" asp-action="Category" asp-route-id="@(post.Category.Slug ?? post.Category.Id.ToString())">@post.Category.Name</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-controller="Post" asp-action="Index">General</a>
+                                                    }
+                                                </li>
+                                            </ul>
+                                            <h4 class="post-title"><a asp-controller="Post" asp-action="Details"
+                                                    asp-route-id="@post.Id">@post.Title</a></h4>
+                                            <p>@post.Excerpt</p>
+                                            <a class="btn-link" asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">READ
+                                                MORE <i class="feather icon-arrow-right ms-1"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-12">
+                                <p class="mb-50">No posts have been published in this section yet. Please check back soon.</p>
+                            </div>
+                        }
+                    </div>
+                    @if (Model.TotalPages > 1)
+                    {
+                        <div class="text-center mb-30">
+                            @if (Model.CurrentPage > 1)
+                            {
+                                <a asp-action="@ViewContext.RouteData.Values["action"]" asp-route-page="@(Model.CurrentPage - 1)"
+                                    class="btn btn-light btn-line me-2">PREVIOUS</a>
+                            }
+                            @if (Model.CurrentPage < Model.TotalPages)
+                            {
+                                <a asp-action="@ViewContext.RouteData.Values["action"]" asp-route-page="@(Model.CurrentPage + 1)"
+                                    class="btn btn-light btn-line">LOAD MORE</a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4">
+                <aside class="aside-wrapper">
+
+                    <div class="widget widget-about">
+                        <h5 class="widget-title">About Us</h5>
+                        <p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
+                            and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+                        <a asp-controller="Pages" asp-action="About">Read More</a>
+                    </div>
+
+                    <div class="widget widget-categories">
+                        <h5 class="widget-title">Category</h5>
+                        <ul>
+                            @if (Model.SidebarCategories.Any())
+                            {
+                                for (var i = 0; i < Model.SidebarCategories.Count; i++)
+                                {
+                                    var category = Model.SidebarCategories[i];
+                                    <li>
+                                        <a asp-controller="Post" asp-action="Category" asp-route-id="@(category.Slug ?? category.Id.ToString())"
+                                            style="background-image: url(@(category.IconUrl ?? sidebarFallbackImages[i % sidebarFallbackImages.Length]));">
+                                            <span>@category.Name</span>
+                                            <span class="num">@category.ItemCount.ToString("00")</span>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="widget widget-post-wrapper">
+                        <h5 class="widget-title">Latest Posts</h5>
+                        <div class="widget-post-inner">
+                            @for (var i = 0; i < Model.LatestPosts.Count; i++)
+                            {
+                                var latest = Model.LatestPosts[i];
+                                <div class="widget-post">
+                                    <div class="post-content">
+                                        <div class="post-header">
+                                            <h6 class="post-title"><a asp-controller="Post" asp-action="Details" asp-route-id="@latest.Id">@latest.Title</a></h6>
+                                        </div>
+                                        <ul class="post-meta">
+                                            <li class="date"><a asp-controller="Post" asp-action="Details" asp-route-id="@latest.Id">@((latest.PublishedToWebAt ?? latest.CreatedAt).ToString("MMMM dd, yyyy"))</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="post-thumb">
+                                        <a asp-controller="Post" asp-action="Details" asp-route-id="@latest.Id">
+                                            <img src="@(latest.FeaturedImageUrl ?? latestFallbackImages[i % latestFallbackImages.Length])" alt="@latest.Title">
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
