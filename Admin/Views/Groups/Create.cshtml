@@ -1,0 +1,76 @@
+@model GroupViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? "Edit Group" : "Create Group";
+    var allPermissions = ViewBag.AllPermissions as IEnumerable<Permission> ?? Enumerable.Empty<Permission>();
+    var selectedIds = Model?.PermissionIds ?? new List<int>();
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-layers-01"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsSystemGroup" />
+        }
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Name" class="form-admin-label">Group Name *</label>
+                    <input asp-for="Name" class="form-admin-control" placeholder="e.g. Editors" required />
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Description</label>
+                    <textarea asp-for="Description" class="form-admin-control" rows="4"
+                        placeholder="What can members of this group do?"></textarea>
+                </div>
+
+                @if (isEdit && Model!.IsSystemGroup)
+                {
+                    <div class="alert alert-warning">
+                        <i class="hgi-alert-square"></i> This is a system group. Its name cannot be changed.
+                    </div>
+                }
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3"><i class="hgi-shield-user"></i> Permissions</h5>
+                    @foreach (var categoryGroup in allPermissions.GroupBy(p => p.Category ?? "Other").OrderBy(g => g.Key))
+                    {
+                        <h6 class="mt-3 mb-2 text-muted">@categoryGroup.Key</h6>
+                        <div class="row">
+                            @foreach (var permission in categoryGroup.OrderBy(p => p.DisplayOrder))
+                            {
+                                <div class="col-md-6">
+                                    <label class="d-flex align-items-center mb-2">
+                                        <input type="checkbox" name="PermissionIds" value="@permission.Id"
+                                            checked="@(selectedIds.Contains(permission.Id))" style="margin-right: 8px;" />
+                                        <span>@permission.Name <small class="text-muted">(@permission.Code)</small></span>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Group" : "Create Group")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>

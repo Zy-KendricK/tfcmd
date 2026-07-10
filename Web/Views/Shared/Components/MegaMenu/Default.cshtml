@@ -1,0 +1,90 @@
+@using Web.ViewComponents
+@model MegaMenuViewModel
+
+<div class="mega-menu">
+    <div class="menu-category-wrapper">
+        <div class="menu-category-nav">
+            <ul>
+                <li><a data-name="linkALL" href="javascript:void(0);">ALL</a></li>
+                @foreach (var category in Model.Categories)
+                {
+                    <li><a data-name="link@(category.Id)" href="javascript:void(0);">@category.Name.ToUpperInvariant()</a></li>
+                }
+            </ul>
+        </div>
+        <div class="menu-category-item">
+            <div data-target="linkALL" class="swiper swiper-menu-category show">
+                <div class="swiper-wrapper">
+                    @foreach (var post in Model.LatestPosts)
+                    {
+                        <div class="swiper-slide">
+                            <div class="menu-post-category">
+                                <div class="post-thumb">
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+                                        <img src="@(string.IsNullOrEmpty(post.FeaturedImageUrl) ? Url.Content("~/images/posts/header/post.jpg") : post.FeaturedImageUrl)"
+                                            alt="@post.Title">
+                                    </a>
+                                </div>
+                                <div class="post-content">
+                                    <h6 class="post-title">
+                                        <a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Title</a>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (!Model.LatestPosts.Any())
+                    {
+                        <div class="swiper-slide">
+                            <div class="menu-post-category">
+                                <div class="post-content">
+                                    <h6 class="post-title"><a asp-controller="Post" asp-action="Index">Browse all posts</a></h6>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            @foreach (var category in Model.Categories)
+            {
+                var posts = Model.PostsByCategory.TryGetValue(category.Id, out var list) ? list : new List<AppCore.Entities.Post>();
+                <div data-target="link@(category.Id)" class="swiper swiper-menu-category">
+                    <div class="swiper-wrapper">
+                        @foreach (var post in posts)
+                        {
+                            <div class="swiper-slide">
+                                <div class="menu-post-category">
+                                    <div class="post-thumb">
+                                        <a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+                                            <img src="@(string.IsNullOrEmpty(post.FeaturedImageUrl) ? Url.Content("~/images/posts/header/post.jpg") : post.FeaturedImageUrl)"
+                                                alt="@post.Title">
+                                        </a>
+                                    </div>
+                                    <div class="post-content">
+                                        <h6 class="post-title">
+                                            <a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Title</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (!posts.Any())
+                        {
+                            <div class="swiper-slide">
+                                <div class="menu-post-category">
+                                    <div class="post-content">
+                                        <h6 class="post-title">
+                                            <a asp-controller="Post" asp-action="Category" asp-route-id="@(category.Slug ?? category.Id.ToString())">
+                                                View all @category.Name posts
+                                            </a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

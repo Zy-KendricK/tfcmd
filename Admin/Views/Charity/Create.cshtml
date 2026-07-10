@@ -1,0 +1,88 @@
+@model CharityViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? "Edit Charity" : "Add Charity";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-heart-add"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Name" class="form-admin-label">Charity Name *</label>
+                    <input asp-for="Name" class="form-admin-control" placeholder="Charity name" required />
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Tagline" class="form-admin-label">Tagline</label>
+                    <input asp-for="Tagline" class="form-admin-control" placeholder="Short mission statement" />
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Description</label>
+                    <textarea asp-for="Description" class="form-admin-control wysiwyg-editor" rows="8"
+                        placeholder="About this charity..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Contact</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Website" class="form-admin-label">Website</label>
+                        <input asp-for="Website" class="form-admin-control" placeholder="https://example.org" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Email" class="form-admin-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-admin-control" placeholder="info@example.org" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Phone" class="form-admin-label">Phone</label>
+                        <input asp-for="Phone" class="form-admin-control" placeholder="+1 555 000 0000" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Address" class="form-admin-label">Address</label>
+                        <textarea asp-for="Address" class="form-admin-control" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Visibility</h5>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured Charity
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Charity" : "Add Charity")
+            </button>
+            <a asp-action="Charities" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+
+    @await Html.PartialAsync("_WysiwygScripts")
+</div>

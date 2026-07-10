@@ -1,0 +1,116 @@
+@model VideoViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? "Edit Video" : "Add Video";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-video-01"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "EditVideo" : "UploadVideo")" method="post" enctype="multipart/form-data">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="bh-web-intent">
+            <label>
+                <input asp-for="IntendedForWeb" type="checkbox" />
+                <span>
+                    <b>Intended for the public website</b>
+                    <small>Tick this if the video should go to the internet after moderator approval.
+                        Unticked videos stay internal to the member portal and never enter the publish flow.</small>
+                </span>
+            </label>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Title" class="form-admin-label">Title *</label>
+                    <input asp-for="Title" class="form-admin-control" placeholder="Video title" required />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Description</label>
+                    <textarea asp-for="Description" class="form-admin-control" rows="4"
+                        placeholder="Optional description..."></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Url" class="form-admin-label">Video URL *</label>
+                    <input asp-for="Url" class="form-admin-control"
+                        placeholder="YouTube, Vimeo or direct video link" required />
+                    <small class="text-muted">YouTube and Vimeo links are detected automatically and embedded</small>
+                    <span asp-validation-for="Url" class="text-danger"></span>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="ThumbnailFile" class="form-admin-label">Thumbnail image</label>
+                    <input asp-for="ThumbnailFile" type="file" accept="image/*" class="form-admin-control" />
+                    <small class="text-muted">Optional — YouTube videos get a thumbnail automatically</small>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="ThumbnailUrl" class="form-admin-label">…or thumbnail URL</label>
+                    <input asp-for="ThumbnailUrl" class="form-admin-control" placeholder="https://…" />
+                </div>
+
+                @if (isEdit && !string.IsNullOrEmpty(Model?.ThumbnailUrl))
+                {
+                    <div class="form-admin-group">
+                        <img src="@Model.ThumbnailUrl" alt="Current thumbnail" style="max-width: 320px; border-radius: 8px;" />
+                    </div>
+                }
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Details</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="CategoryId" class="form-admin-label">Category</label>
+                        <select asp-for="CategoryId" class="form-admin-control"
+                            asp-items="@(ViewBag.Categories as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)">
+                            <option value="">— No category —</option>
+                        </select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label asp-for="DurationSeconds" class="form-admin-label">Duration (seconds)</label>
+                        <input asp-for="DurationSeconds" type="number" min="0" class="form-admin-control"
+                            placeholder="e.g. 185" />
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsFeatured" type="checkbox" style="margin-right: 10px;" />
+                            Featured video
+                        </label>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="AllowComments" type="checkbox" style="margin-right: 10px;" />
+                            Allow comments
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Video" : "Add Video")
+            </button>
+            <a asp-action="Index" asp-route-type="videos" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>

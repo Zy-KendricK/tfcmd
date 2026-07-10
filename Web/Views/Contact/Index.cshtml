@@ -1,7 +1,114 @@
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Contact";
+    ViewData["Title"] = "Contact Us";
 }
-<section class="contact-content">
-    <!-- contact-us.html content goes here -->
+
+<div class="breadcrumb-wrapper breadcrumb-contact breadcrumb-wrapper-lg dark-layer"
+    style="background-image: url('/images/page-banner/banner.jpg')">
+    <div class="container">
+        <div class="breadcrumb-entry text-center">
+            <h1>CONTACT US</h1>
+        </div>
+    </div>
+</div>
+
+<section class="section-space pt-0">
+    <div class="container">
+        <div class="bg-white contact-wrapper">
+            <div class="row">
+                <div class="col-lg-7 mb-30">
+                    <div class="form-wrapper">
+                        <div class="mb-25">
+                            <h3 class="mb-5">Contact Us</h3>
+                            <p class="mb-0">Any question or remarks? Just write us a message!</p>
+                        </div>
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success" role="alert">@TempData["ContactSuccess"]</div>
+                        }
+                        @if (TempData["ContactError"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">@TempData["ContactError"]</div>
+                        }
+                        <form asp-action="Send" method="post" class="needs-validation" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="Name" placeholder="Name" required>
+                                    <div class="invalid-feedback">Please enter your name.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" name="Email" placeholder="Email Address"
+                                        required>
+                                    <div class="invalid-feedback">Please enter email address.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="tel" class="form-control mobile-number" name="Phone"
+                                        placeholder="Phone Number" required>
+                                    <div class="invalid-feedback">Enter your phone number.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <textarea class="form-control" rows="5" name="Message" placeholder="Message"
+                                        required></textarea>
+                                    <div class="invalid-feedback">Type message.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary-light btn-line">SUBMIT NOW</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-5 mb-30">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3008641.456285223!2d-103.1818945777658!3d34.25019252195961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1685641541086!5m2!1sen!2sin"
+                        style="border:0; width: 100%; height: 100%; min-height: 350px;" allowfullscreen=""
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<div class="section-space bg-white section-hidden">
+    <div class="container">
+        <h5 class="widget-title mb-30">Find Our Socials</h5>
+        <div class="swiper swiper-catogary swiper-mobile">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <a href="https://www.facebook.com/" target="_blank">
+                        <div class="card-catogary">
+                            <img class="media" src="~/images/icons/facebook.png" alt="Facebook">
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="https://www.instagram.com/" target="_blank">
+                        <div class="card-catogary">
+                            <img class="media" src="~/images/icons/insta.png" alt="Instagram">
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="https://www.twitter.com/" target="_blank">
+                        <div class="card-catogary">
+                            <img class="media" src="~/images/icons/x.png" alt="X (Twitter)">
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="https://www.youtube.com/" target="_blank">
+                        <div class="card-catogary">
+                            <img class="media" src="~/images/icons/you-tube.png" alt="YouTube">
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="https://www.tiktok.com/" target="_blank">
+                        <div class="card-catogary">
+                            <img class="media" src="~/images/icons/tik-tok.png" alt="TikTok">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

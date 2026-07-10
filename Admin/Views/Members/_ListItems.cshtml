@@ -1,0 +1,23 @@
+@model MembersListViewModel
+@using AppCore.Entities
+@foreach (var member in Model.Users)
+{
+    var primaryGroupName = member.GroupMemberships?
+        .Where(m => m.IsActive && !m.IsDeleted)
+        .Select(m => m.UserGroup?.Name)
+        .FirstOrDefault();
+
+    <div class="bh-member-card">
+        @await Html.PartialAsync("_UserAvatar", member, new ViewDataDictionary(ViewData) { ["size"] = 56 })
+        <h6 class="bh-member-name">
+            <a asp-action="Details" asp-route-id="@member.Id">@(member.DisplayName ?? member.UserName)</a>
+        </h6>
+        <div class="bh-member-sub">
+            <span>@(member.Email ?? "")</span>
+            @if (!string.IsNullOrWhiteSpace(primaryGroupName))
+            {
+                <span class="status-badge status-published" style="display: inline-block; margin-top: 6px;">@primaryGroupName</span>
+            }
+        </div>
+    </div>
+}

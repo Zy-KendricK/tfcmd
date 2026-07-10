@@ -1,0 +1,181 @@
+@model Job
+@{
+    ViewData["Title"] = "Job Details";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-briefcase-01"></i> @Model.Title
+        </h4>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-admin btn-admin-primary">
+                <i class="hgi-edit-01"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="mb-3">
+                <span class="status-badge status-@Model.Status.ToString().ToLower()">@Model.Status</span>
+                @if (Model.IsFeatured)
+                {
+                    <span class="status-badge" style="background: gold; color: #333;">Featured</span>
+                }
+                @if (Model.IsUrgent)
+                {
+                    <span class="status-badge" style="background: #dc3545; color: #fff;">Urgent</span>
+                }
+                @if (Model.IsPublishedToWeb)
+                {
+                    <span class="status-badge status-published">Live on Website</span>
+                }
+            </div>
+
+            <h5>Description</h5>
+            <p style="white-space: pre-wrap;">@Model.Description</p>
+
+            @if (!string.IsNullOrEmpty(Model.RequiredSkills))
+            {
+                <h5 class="mt-4">Required Skills</h5>
+                <p style="white-space: pre-wrap;">@Model.RequiredSkills</p>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Benefits))
+            {
+                <h5 class="mt-4">Benefits</h5>
+                <p style="white-space: pre-wrap;">@Model.Benefits</p>
+            }
+
+            @if (Model.Applications != null && Model.Applications.Any())
+            {
+                <h5 class="mt-4">Applications (@Model.Applications.Count)</h5>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var application in Model.Applications)
+                            {
+                                <tr>
+                                    <td>@(application.Applicant?.DisplayName ?? application.Applicant?.Email ?? "—")</td>
+                                    <td><span class="status-badge status-pending">@application.Status</span></td>
+                                    <td><small>@application.CreatedAt.ToString("MMM dd, yyyy")</small></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Sidebar {
+    <div class="widget">
+        <h5 class="widget-title">Job Details</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-building-01"></i> Company</span>
+                <strong>@(Model.CompanyName ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-folder-01"></i> Category</span>
+                <strong>@(Model.Category?.Name ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-briefcase-01"></i> Type</span>
+                <strong>@Model.Type</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-cellular-network"></i> Remote</span>
+                <strong>@Model.RemoteOption</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-dashboard-square-01"></i> Experience</span>
+                <strong>@(Model.ExperienceLevel?.ToString() ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-location-01"></i> Location</span>
+                <strong>@(Model.Location ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-dollar-circle"></i> Salary</span>
+                <strong>@(Model.SalaryMin.HasValue || Model.SalaryMax.HasValue ? $"{Model.SalaryCurrency} {Model.SalaryMin:N0} - {Model.SalaryMax:N0}" : "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-calendar-01"></i> Deadline</span>
+                <strong>@(Model.ApplicationDeadline?.ToString("MMM dd, yyyy") ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-user"></i> Posted By</span>
+                <strong>@(Model.PostedBy?.DisplayName ?? Model.PostedBy?.Email ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-eye"></i> Views</span>
+                <strong>@Model.ViewCount</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-calendar-01"></i> Created</span>
+                <strong>@Model.CreatedAt.ToString("MMM dd, yyyy")</strong>
+            </li>
+        </ul>
+    </div>
+
+    <div class="widget">
+        <h5 class="widget-title">Application Channel</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-copy-link"></i> URL</span>
+                <strong>@(Model.ApplicationUrl ?? "—")</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; gap: 12px; padding: 8px 0;">
+                <span><i class="hgi-mail-01"></i> Email</span>
+                <strong>@(Model.ApplicationEmail ?? "—")</strong>
+            </li>
+        </ul>
+    </div>
+
+    @if (Model.Status == ContentStatus.PendingReview)
+    {
+        <div class="widget">
+            <h5 class="widget-title">Website Review</h5>
+            <div class="d-grid gap-2">
+                <form asp-action="Approve" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-admin btn-admin-success w-100">
+                        <i class="hgi-checkmark-circle-01"></i> Approve
+                    </button>
+                </form>
+                <form asp-action="Reject" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-admin btn-admin-danger w-100">
+                        <i class="hgi-cancel-circle"></i> Reject
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+
+    @if (!Model.IsPublishedToWeb && Model.Status == ContentStatus.Approved)
+    {
+        <div class="widget">
+            <h5 class="widget-title">Website Review</h5>
+            <form asp-action="PublishToWeb" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-admin btn-admin-success w-100">
+                    <i class="hgi-cloud-upload"></i> Publish to Website
+                </button>
+            </form>
+        </div>
+    }
+}

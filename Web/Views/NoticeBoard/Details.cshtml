@@ -1,0 +1,79 @@
+@model Web.Controllers.NoticeDetailsViewModel
+@using AppCore.Entities
+@{
+    var notice = Model.Announcement;
+    ViewData["Title"] = notice.Title;
+
+    static string NoticeDate(Announcement a) => (a.PublishedToWebAt ?? a.CreatedAt).ToString("MMMM dd, yyyy");
+}
+
+<section class="section-space3">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-7">
+                <div class="content-wrapper left-side">
+                    <div class="post-card mb-30">
+                        @if (!string.IsNullOrEmpty(notice.ImageUrl))
+                        {
+                            <div class="post-thumb mb-3">
+                                <img src="@notice.ImageUrl" alt="@notice.Title" style="width: 100%; border-radius: 12px;">
+                            </div>
+                        }
+                        <div class="post-content">
+                            <ul class="post-meta">
+                                <li class="date">@NoticeDate(notice)</li>
+                                @if (notice.IsPriority)
+                                {
+                                    <li class="tag"><span class="badge bg-warning text-dark">Priority</span></li>
+                                }
+                            </ul>
+                            <h2 class="post-title">@notice.Title</h2>
+                            @if (!string.IsNullOrEmpty(notice.Content))
+                            {
+                                <div class="mt-3">@Html.Raw(notice.Content)</div>
+                            }
+                            else if (!string.IsNullOrEmpty(notice.TickerText))
+                            {
+                                <p class="mt-3">@notice.TickerText</p>
+                            }
+                        </div>
+                    </div>
+                    <a asp-action="Index" class="btn btn-light btn-line">
+                        <i class="feather icon-arrow-left me-1"></i> BACK TO NOTICE BOARD
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5">
+                <aside class="aside-wrapper">
+                    <div class="widget widget-post-wrapper">
+                        <h5 class="widget-title">More Announcements</h5>
+                        <div class="widget-post-inner">
+                            @if (Model.RecentAnnouncements.Any())
+                            {
+                                @foreach (var item in Model.RecentAnnouncements)
+                                {
+                                    <div class="widget-post">
+                                        <div class="post-content">
+                                            <div class="post-header">
+                                                <h6 class="post-title">
+                                                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                                                </h6>
+                                            </div>
+                                            <ul class="post-meta">
+                                                <li class="date"><a asp-action="Details" asp-route-id="@item.Id">@NoticeDate(item)</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted">No other announcements.</p>
+                            }
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>

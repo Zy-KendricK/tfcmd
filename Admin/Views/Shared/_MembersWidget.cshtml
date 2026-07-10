@@ -1,0 +1,54 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var widgetMembers = UserManager.Users
+        .Where(u => u.IsActive && !u.IsDeleted)
+        .OrderByDescending(u => u.LastLoginAt ?? u.CreatedAt)
+        .Take(6)
+        .ToList();
+
+    string WidgetRelativeTime(DateTime utc)
+    {
+        var span = DateTime.UtcNow - utc;
+        if (span.TotalMinutes < 5) return "right now";
+        if (span.TotalHours < 1) return $"{(int)span.TotalMinutes} minutes ago";
+        if (span.TotalDays < 1) return $"{(int)span.TotalHours} hour{((int)span.TotalHours == 1 ? "" : "s")} ago";
+        if (span.TotalDays < 30) return $"{(int)span.TotalDays} day{((int)span.TotalDays == 1 ? "" : "s")} ago";
+        if (span.TotalDays < 365) return $"{(int)(span.TotalDays / 30)} month{((int)(span.TotalDays / 30) == 1 ? "" : "s")} ago";
+        return $"{(int)(span.TotalDays / 365)} year{((int)(span.TotalDays / 365) == 1 ? "" : "s")} ago";
+    }
+}
+<!-- Members widget (template: buddy-bridge-dynamic-members-list) -->
+<div class="widget buddy-bridge-dynamic-members-list buddypress">
+    <h5 class="widget-title">Members</h5>
+    <div class="item-options">
+        <a asp-controller="Members" asp-action="Index">Newest</a>
+        <span class="bp-separator" role="separator">|</span>
+        <a asp-controller="Members" asp-action="Index" class="selected">Active</a>
+    </div>
+    <ul class="item-list" aria-live="polite" aria-relevant="all" aria-atomic="true">
+        @foreach (var member in widgetMembers)
+        {
+            var memberName = member.DisplayName ?? member.UserName;
+            <li class="vcard">
+                <div class="item-avatar">
+                    <a asp-controller="Members" asp-action="Details" asp-route-id="@member.Id">
+                        @await Html.PartialAsync("_UserAvatar", member, new ViewDataDictionary(ViewData) { ["size"] = 50 })
+                    </a>
+                </div>
+                <div class="item">
+                    <div class="item-title fn">
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@member.Id">@memberName</a>
+                    </div>
+                    <div class="item-meta">
+                        <span class="activity">
+                            @(member.LastLoginAt.HasValue
+                                ? $"Active {WidgetRelativeTime(member.LastLoginAt.Value)}"
+                                : "Not recently active")
+                        </span>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

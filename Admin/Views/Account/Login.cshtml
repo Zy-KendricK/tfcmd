@@ -1,44 +1,60 @@
+@model Admin.Models.LoginViewModel
 @{
-    Layout = null;
-    ViewData["Title"] = "Admin Login";
+    ViewData["Title"] = "Login";
+    Layout = "_LoginLayout";
 }
-<!-- Beehive-inspired login page using Tailwind CSS -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-lg">
-        <div class="flex flex-col items-center mb-6">
-            <img src="/assets/images/favicon.png" alt="Logo" class="w-16 h-16 mb-2">
-            <h1 class="text-2xl font-bold text-gray-800">Admin Login</h1>
-            <p class="text-gray-500">Sign in to your dashboard</p>
-        </div>
-        <form method="post" asp-action="Login">
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2" for="Email">Email</label>
-                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" type="email" name="Email" required>
+
+<h2 class="animated fadeInDown">Welcome</h2>
+<p class="subtitle animated fadeInDown" style="animation-delay: 0.1s;">
+    Sign in to manage the Tema Friends Club of Maryland website.
+</p>
+
+<div class="beehive-login-element beehive-element compact on-dark animated fadeInUp" style="animation-delay: 0.2s;">
+    <div class="login-form-wrapper">
+        <form asp-action="Login" method="post" id="element-login-form" class="beehive-login-form element-login-form"
+            name="element-login">
+            <div asp-validation-summary="All" class="beehive-login-result"></div>
+
+            <div class="form-group">
+                <div class="user-name">
+                    <label class="screen-reader-text" for="element-username">Email/username</label>
+                    <span class="icon"><i class="hgi-user"></i></span>
+                    <input type="email" asp-for="Email" id="element-username" class="username-control" required
+                        autocomplete="username" placeholder="Email or username">
+                    <span asp-validation-for="Email" class="field-validation-error"></span>
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2" for="Password">Password</label>
-                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" type="password" name="Password" required>
+
+            <div class="form-group">
+                <div class="pass">
+                    <label class="screen-reader-text" for="element-password">Password</label>
+                    <span class="icon"><i class="hgi-lock"></i></span>
+                    <input type="password" asp-for="Password" id="element-password" class="password-control" required
+                        autocomplete="current-password" placeholder="Password">
+                    <span asp-validation-for="Password" class="field-validation-error"></span>
+                </div>
             </div>
-            <div class="flex items-center justify-between mb-6">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600">
-                    <span class="ml-2 text-gray-600">Remember me</span>
-                </label>
-                <a href="#" class="text-blue-500 hover:underline text-sm">Forgot password?</a>
+
+            <div class="form-options">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="forgetmenot">
+                            <label for="element-rememberme">
+                                <input asp-for="RememberMe" id="element-rememberme" type="checkbox" /> Remember me
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">Sign In</button>
+
+            <div class="submit">
+                <button type="submit" id="element_login_submit" class="wide submit-login ellipsis">Log into your
+                    account</button>
+            </div>
+
+            <div class="register-link">
+                <p class="color-primary">&copy; @DateTime.Now.Year Tema Friends Club of Maryland</p>
+            </div>
         </form>
-        <div class="mt-6 text-center text-gray-500 text-sm">
-            &copy; 2025 TFC Admin. All rights reserved.
-        </div>
     </div>
-</body>
-</html>
+</div>

@@ -5,40 +5,41 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="TFC: Tema Friends Club of Maryland">
-    <meta name="description"
-        content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
-    <meta name="keywords"
-        content="temafriendsclub, tema, tfc, tfcmd, tfc charity, charity, health, fitness,  personal development, inspiration">
-    <meta property="og:title" content="TFC: Tema Friends Club of Maryland">
-    <meta property="og:description"
-        content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="">
-    <meta property="og:url" content="">
-    <link rel="icon" type="image/png" href="~/images/favicon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="~/images/apple-touch-icon.png">
-    <title>@ViewData["Title"] - TFC: Tema Friends Club of Maryland</title>
-    <link rel="stylesheet" type="text/css" href="~/libraries/fontawesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="~/libraries/feather-font/css/iconfont.css">
-    <link rel="stylesheet" type="text/css" href="~/libraries/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" type="text/css" href="~/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/about.css">
-    <link rel="stylesheet" type="text/css" href="~/css/custom.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="TFC: Tema Friends Club of Maryland">
+	<meta name="description"
+		content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
+	<meta name="keywords"
+		content="temafriendsclub, tema, tfc, tfcmd, tfc charity, charity, health, fitness,  personal development, inspiration">
+	<meta property="og:title" content="TFC: Tema Friends Club of Maryland">
+	<meta property="og:description"
+		content="Tema Friends club is open to friends and citizens of Tema, resident outside Ghana.Tema is a city on the Atlantic coast of Ghana.">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="">
+	<meta property="og:url" content="">
+	<link rel="icon" type="image/png" href="~/images/favicon.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="~/images/apple-touch-icon.png">
+	<title>@ViewData["Title"] - TFC: Tema Friends Club of Maryland</title>
+	<link rel="stylesheet" type="text/css" href="~/libraries/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="~/libraries/feather-font/css/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="~/libraries/swiper/swiper-bundle.min.css">
+	<link rel="stylesheet" type="text/css" href="~/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="~/css/about.css">
+	<link rel="stylesheet" type="text/css" href="~/css/custom.css">
+	@await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
-    <div class="page-layout">
-<header class="header">
+	<div class="page-layout">
+		<header class="header">
 			<!-- Menu Header -->
 			<div class="main-header fixed-header navbar-expand-lg">
 				<div class="menu-bar">
 					<div class="container">
 
 						<div class="website-logo">
-							<a href="index.html" class="main-logo">
+							<a asp-controller="Home" asp-action="Index" class="main-logo">
 								<img src="~/images/logo.png" alt="TFC" style="width: 65px !important;">
 							</a>
 						</div>
@@ -70,8 +71,8 @@
 						</div>
 
 						<div class="search-modal" aria-hidden="true">
-							<form action="#">
-								<input type="text" class="form-control" placeholder="Type here...">
+							<form asp-controller="Post" asp-action="Search" method="get">
+								<input type="text" name="q" class="form-control" placeholder="Type here...">
 								<button type="button" class="search-close"><i class="feather icon-x"></i></button>
 							</form>
 						</div>
@@ -80,488 +81,25 @@
 						<nav class="navigation-list navbar-collapse collapse justify-content-center" id="navbarToggler"
 							aria-label="Main">
 							<div class="website-logo">
-								<a href="index.html"><img src="~/images/logo-light.png" alt=""></a>
+								<a asp-controller="Home" asp-action="Index"><img src="~/images/logo-light.png"
+										alt=""></a>
 							</div>
 							<ul class="nav navbar-nav">
-								<li><a href="index.html">Home</a></li>
-								<li><a href="about-us.html">About Us</a></li>
+								<li><a asp-controller="Home" asp-action="Index">Home</a></li>
+								<li><a asp-controller="Pages" asp-action="About">About Us</a></li>
 								<li class="menu-down-item">
-									<a href="javascript:void(0);">Groups</a>
-									<ul class="sub-menu">
-										<li><a href="charity.html">Charity</a></li>
-									</ul>
+									<a asp-controller="Groups" asp-action="Index">Groups</a>
+									@await Component.InvokeAsync("GroupsMenu")
 								</li>
 
 								<li class="menu-down-item mega-menu-down menu-down-category">
-									<a href="javascript:void(0);">Latest Posts</a>
-									<div class="mega-menu">
-										<div class="menu-category-wrapper">
-											<div class="menu-category-nav">
-												<ul>
-													<li><a data-name="linkALL" href="javascript:void(0);">ALL</a></li>
-													<li><a data-name="linkFashion"
-															href="javascript:void(0);">FASHION</a></li>
-													<li><a data-name="linkFitness"
-															href="javascript:void(0);">FITNESS</a></li>
-													<li><a data-name="linkLifestyle"
-															href="javascript:void(0);">LIFESTYLE</a></li>
-													<li><a data-name="linkTravel" href="javascript:void(0);">TRAVEL</a>
-													</li>
-													<li><a data-name="linkBeauty" href="javascript:void(0);">BEAUTY</a>
-													</li>
-												</ul>
-											</div>
-											<div class="menu-category-item">
-												<div data-target="linkALL" class="swiper swiper-menu-category show">
-													<div class="swiper-wrapper">
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-standard.html"><img
-																			src="~/images/posts/header/post.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-pagination.html">Exploring Life's
-																			Adventures and Trends</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-audio.html"><img
-																			src="~/images/posts/header/post2.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-audio.html">Lifestyle changes to
-																			transform your life</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-boxed-media.html"><img
-																			src="~/images/posts/header/post3.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-boxed-media.html">Exploring the
-																			World with Panache and Grace</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-full-width.html"><img
-																			src="~/images/posts/header/post4.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-full-width.html">Embracing the
-																			Colors of Fashion</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-gallary.html"><img
-																			src="~/images/posts/header/post5.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-gallary.html">Exploring the World
-																			with Varsha</a></h6>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div data-target="linkFashion" class="swiper swiper-menu-category">
-													<div class="swiper-wrapper">
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-audio.html"><img
-																			src="~/images/posts/header/post2.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-audio.html">Lifestyle changes to
-																			transform your life</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-standard.html"><img
-																			src="~/images/posts/header/post.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-pagination.html">Exploring Life's
-																			Adventures and Trends</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-boxed-media.html"><img
-																			src="~/images/posts/header/post3.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-boxed-media.html">Exploring the
-																			World with Panache and Grace</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-gallary.html"><img
-																			src="~/images/posts/header/post5.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-gallary.html">Exploring the World
-																			with Varsha</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-full-width.html"><img
-																			src="~/images/posts/header/post4.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-full-width.html">Embracing the
-																			Colors of Fashion</a></h6>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div data-target="linkFitness" class="swiper swiper-menu-category">
-													<div class="swiper-wrapper">
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-standard.html"><img
-																			src="~/images/posts/header/post.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-pagination.html">Exploring Life's
-																			Adventures and Trends</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-boxed-media.html"><img
-																			src="~/images/posts/header/post3.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-boxed-media.html">Exploring the
-																			World with Panache and Grace</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-audio.html"><img
-																			src="~/images/posts/header/post2.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-audio.html">Lifestyle changes to
-																			transform your life</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-gallary.html"><img
-																			src="~/images/posts/header/post5.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-gallary.html">Exploring the World
-																			with Varsha</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-full-width.html"><img
-																			src="~/images/posts/header/post4.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-full-width.html">Embracing the
-																			Colors of Fashion</a></h6>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div data-target="linkLifestyle" class="swiper swiper-menu-category">
-													<div class="swiper-wrapper">
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-audio.html"><img
-																			src="~/images/posts/header/post2.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-audio.html">Lifestyle changes to
-																			transform your life</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-gallary.html"><img
-																			src="~/images/posts/header/post5.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-gallary.html">Exploring the World
-																			with Varsha</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-boxed-media.html"><img
-																			src="~/images/posts/header/post3.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-boxed-media.html">Exploring the
-																			World with Panache and Grace</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-full-width.html"><img
-																			src="~/images/posts/header/post4.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-full-width.html">Embracing the
-																			Colors of Fashion</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-standard.html"><img
-																			src="~/images/posts/header/post.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-pagination.html">Exploring Life's
-																			Adventures and Trends</a></h6>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div data-target="linkTravel" class="swiper swiper-menu-category">
-													<div class="swiper-wrapper">
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-boxed-media.html"><img
-																			src="~/images/posts/header/post3.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-boxed-media.html">Exploring the
-																			World with Panache and Grace</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-full-width.html"><img
-																			src="~/images/posts/header/post4.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-full-width.html">Embracing the
-																			Colors of Fashion</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-standard.html"><img
-																			src="~/images/posts/header/post.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-pagination.html">Exploring Life's
-																			Adventures and Trends</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-audio.html"><img
-																			src="~/images/posts/header/post2.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-audio.html">Lifestyle changes to
-																			transform your life</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-gallary.html"><img
-																			src="~/images/posts/header/post5.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-gallary.html">Exploring the World
-																			with Varsha</a></h6>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div data-target="linkBeauty" class="swiper swiper-menu-category">
-													<div class="swiper-wrapper">
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-standard.html"><img
-																			src="~/images/posts/header/post.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-pagination.html">Exploring Life's
-																			Adventures and Trends</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-full-width.html"><img
-																			src="~/images/posts/header/post4.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-full-width.html">Embracing the
-																			Colors of Fashion</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-boxed-media.html"><img
-																			src="~/images/posts/header/post3.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-boxed-media.html">Exploring the
-																			World with Panache and Grace</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-gallary.html"><img
-																			src="~/images/posts/header/post5.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-gallary.html">Exploring the World
-																			with Varsha</a></h6>
-																</div>
-															</div>
-														</div>
-														<div class="swiper-slide">
-															<div class="menu-post-category">
-																<div class="post-thumb">
-																	<a href="post-audio.html"><img
-																			src="~/images/posts/header/post2.jpg"
-																			alt=""></a>
-																</div>
-																<div class="post-content">
-																	<h6 class="post-title"><a
-																			href="post-audio.html">Lifestyle changes to
-																			transform your life</a></h6>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
+									<a asp-controller="Post" asp-action="Index">Latest Posts</a>
+									@await Component.InvokeAsync("MegaMenu")
 								</li>
-								<li><a href="contact-us.html">Gallery</a></li>
-								<li><a href="contact-us.html">Contact Us</a></li>
+								<li><a asp-controller="NoticeBoard" asp-action="Index">Notice Board</a></li>
+								<li><a asp-controller="Post" asp-action="News">News</a></li>
+								<li><a asp-controller="Pages" asp-action="Gallery">Gallery</a></li>
+								<li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
 							</ul>
 						</nav>
 					</div>
@@ -569,147 +107,149 @@
 			</div>
 		</header>
 
-        <div class="offcanvas offcanvas-end offcanvas-sidebar" tabindex="-1" id="offcanvasSidebar">
-            <div class="offcanvas-body">
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		<div class="offcanvas offcanvas-end offcanvas-sidebar" tabindex="-1" id="offcanvasSidebar">
+			<div class="offcanvas-body">
+				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 
-                <div class="website-logo mb-30">
-                    <a asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="TFC"></a>
-                </div>
+				<div class="website-logo mb-30">
+					<a asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="TFC"></a>
+				</div>
 
-                <div class="widget widget-about">
-                    <h5 class="widget-title">About</h5>
-                    <p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
-                        and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
-                    <a asp-controller="Pages" asp-action="About">Read More</a>
-                </div>
+				<div class="widget widget-about">
+					<h5 class="widget-title">About</h5>
+					<p>The Tema Friends Club of Maryland is a nonprofit organization, aiming to bring together the sons
+						and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+					<a asp-controller="Pages" asp-action="About">Read More</a>
+				</div>
 
-                <div class="widget mb-0">
-                    <h5 class="widget-title">Get in touch with us</h5>
-                    <form asp-controller="Contact" asp-action="Send" method="post">
-                        <input type="text" class="form-control mb-15" placeholder="Name" name="Name">
-                        <input type="email" class="form-control mb-15" placeholder="Email Address" name="Email">
-                        <textarea class="form-control mb-15" rows="5" placeholder="Message" name="Message"></textarea>
-                        <button type="submit" class="btn btn-primary-light btn-line">SUBMIT</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+				<div class="widget mb-0">
+					<h5 class="widget-title">Get in touch with us</h5>
+					<form asp-controller="Contact" asp-action="Send" method="post">
+						<input type="text" class="form-control mb-15" placeholder="Name" name="Name">
+						<input type="email" class="form-control mb-15" placeholder="Email Address" name="Email">
+						<textarea class="form-control mb-15" rows="5" placeholder="Message" name="Message"></textarea>
+						<button type="submit" class="btn btn-primary-light btn-line">SUBMIT</button>
+					</form>
+				</div>
+			</div>
+		</div>
 
-        <div class="modal fade modal-subscribe" id="modalSubscribe" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body p-0">
-                        <div class="row g-0">
-                            <div class="col-sm-5 d-none d-sm-block">
-                                <img class="object-cover" src="~/images/subscribe.jpg" alt="">
-                            </div>
-                            <div class="col-sm-7">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                                <div class="subscribe-body">
-                                    <div class="mb-20">
-                                        <h4>Join Tema Friends Club!</h4>
-                                        <p>We'll contact you to continue the process to become one of us.</p>
-                                    </div>
-                                    <form asp-controller="Contact" asp-action="Join" method="post">
-                                        <input type="email" class="form-control mb-15" placeholder="Email Address"
-                                            name="Email">
-                                        <button type="submit" class="btn btn-primary-light btn-line w-100">SEND
-                                            REQUEST</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="modal fade modal-subscribe" id="modalSubscribe" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body p-0">
+						<div class="row g-0">
+							<div class="col-sm-5 d-none d-sm-block">
+								<img class="object-cover" src="~/images/subscribe.jpg" alt="">
+							</div>
+							<div class="col-sm-7">
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+								<div class="subscribe-body">
+									<div class="mb-20">
+										<h4>Join Tema Friends Club!</h4>
+										<p>We'll contact you to continue the process to become one of us.</p>
+									</div>
+									<form asp-controller="Contact" asp-action="Join" method="post">
+										<input type="email" class="form-control mb-15" placeholder="Email Address"
+											name="Email">
+										<button type="submit" class="btn btn-primary-light btn-line w-100">SEND
+											REQUEST</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <main class="main-wrapper">
-            @RenderBody()
-        </main>
-        <footer class="footer-wrapper">
-            <div class="footer-main">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="widget">
-                                <div class="widget-logo mb-4">
-                                    <img src="~/images/logo.png" alt="TFC">
-                                </div>
-                                <p class="mb-4">The Tema Friends Club of Maryland is a nonprofit organization, aiming to
-                                    bring
-                                    together the sons and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
-                                <ul class="widget-social">
-                                    <li><a target="_blank" href="https://www.facebook.com/" class="btn btn-social"><i
-                                                class="feather icon-facebook"></i></a></li>
-                                    <li><a target="_blank" href="https://www.instagram.com/" class="btn btn-social"><i
-                                                class="feather icon-instagram"></i></a></li>
-                                    <li><a target="_blank" href="https://www.youtube.com/" class="btn btn-social"><i
-                                                class="feather icon-youtube"></i></a></li>
-                                    <li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-social"><i
-                                                class="feather icon-linkedin"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="widget widget_link">
-                                <h5 class="widget-title">Useful Links</h5>
-                                <ul>
-                                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                    <li><a asp-controller="Pages" asp-action="About">About Us</a></li>
-                                    <li><a asp-controller="Post" asp-action="Index">Posts</a></li>
-                                    <li><a asp-controller="Post" asp-action="News">News</a></li>
-                                    <li><a asp-controller="Pages" asp-action="Gallery">Gallery</a></li>
-                                    <li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="widget widget-post-wrapper">
-                                <h5 class="widget-title">Latest Events</h5>
-                                <div class="widget-post-inner">
-                                    @await Component.InvokeAsync("LatestEvents")
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="widget widget-post-wrapper">
-                                <h5 class="widget-title">Latest Posts</h5>
-                                <div class="widget-post-inner">
-                                    @await Component.InvokeAsync("LatestPosts")
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-copyright">
-                <div class="container">
-                    <small>© <span class="year">@DateTime.Now.Year</span>. Proudly powered by Ience Software
-                        Solutions.</small>
-                </div>
-            </div>
-        </footer>
-    </div>
-    <script src="~/libraries/globle/main.js"></script>
-    <script src="~/libraries/swiper/swiper-bundle.min.js"></script>
-    <script src="~/js/slide-init.js"></script>
-    <script src="~/js/script.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        // Initialize Swiper for categories
-        new Swiper('.swiper-catogary', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            breakpoints: {
-                640: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 3 }
-            }
-        });
-    </script>
+		<main class="main-wrapper">
+			@RenderBody()
+		</main>
+		<footer class="footer-wrapper">
+			<div class="footer-main">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="widget">
+								<div class="widget-logo mb-4">
+									<img src="~/images/logo.png" alt="TFC">
+								</div>
+								<p class="mb-4">The Tema Friends Club of Maryland is a nonprofit organization, aiming to
+									bring
+									together the sons and daughters of the Motherland Ghana 🇬🇭🇺🇸 🙌🏿.</p>
+								<ul class="widget-social">
+									<li><a target="_blank" href="https://www.facebook.com/" class="btn btn-social"><i
+												class="feather icon-facebook"></i></a></li>
+									<li><a target="_blank" href="https://www.instagram.com/" class="btn btn-social"><i
+												class="feather icon-instagram"></i></a></li>
+									<li><a target="_blank" href="https://www.youtube.com/" class="btn btn-social"><i
+												class="feather icon-youtube"></i></a></li>
+									<li><a target="_blank" href="https://www.linkedin.com/" class="btn btn-social"><i
+												class="feather icon-linkedin"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-3 col-sm-6">
+							<div class="widget widget_link">
+								<h5 class="widget-title">Useful Links</h5>
+								<ul>
+									<li><a asp-controller="Home" asp-action="Index">Home</a></li>
+									<li><a asp-controller="Pages" asp-action="About">About Us</a></li>
+									<li><a asp-controller="Post" asp-action="Index">Posts</a></li>
+									<li><a asp-controller="Post" asp-action="News">News</a></li>
+									<li><a asp-controller="NoticeBoard" asp-action="Index">Notice Board</a></li>
+									<li><a asp-controller="Groups" asp-action="Index">Groups</a></li>
+									<li><a asp-controller="Pages" asp-action="Gallery">Gallery</a></li>
+									<li><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-3 col-sm-6">
+							<div class="widget widget-post-wrapper">
+								<h5 class="widget-title">Latest Events</h5>
+								<div class="widget-post-inner">
+									@await Component.InvokeAsync("LatestEvents")
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="widget widget-post-wrapper">
+								<h5 class="widget-title">Latest Posts</h5>
+								<div class="widget-post-inner">
+									@await Component.InvokeAsync("LatestPosts")
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer-copyright">
+				<div class="container">
+					<small>© <span class="year">@DateTime.Now.Year</span>. Proudly powered by Ience Software
+						Solutions.</small>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<script src="~/libraries/globle/main.js"></script>
+	<script src="~/libraries/swiper/swiper-bundle.min.js"></script>
+	<script src="~/js/silde-init.js"></script>
+	<script src="~/js/script.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+	<script>
+		// Initialize Swiper for categories
+		new Swiper('.swiper-catogary', {
+			slidesPerView: 1,
+			spaceBetween: 20,
+			breakpoints: {
+				640: { slidesPerView: 2 },
+				768: { slidesPerView: 3 },
+				1024: { slidesPerView: 3 }
+			}
+		});
+	</script>
 </body>
 
 </html>

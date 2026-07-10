@@ -1,0 +1,98 @@
+@model SocialGroup
+@{
+    ViewData["Title"] = "Social Group Details";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-user-group"></i> @Model.Name
+        </h4>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-admin btn-admin-primary">
+                <i class="hgi-edit-01"></i> Edit
+            </a>
+            <a asp-action="Members" asp-route-id="@Model.Id" class="btn-admin btn-admin-success">
+                <i class="hgi-user-group"></i> Members
+            </a>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="admin-card" style="background: #f8f9fa;">
+                <h5 class="mb-3">Overview</h5>
+                <dl class="row mb-0">
+                    <dt class="col-5">Type</dt>
+                    <dd class="col-7">@Model.Type</dd>
+                    <dt class="col-5">Members</dt>
+                    <dd class="col-7">@(Model.Members?.Count ?? Model.MemberCount)</dd>
+                    <dt class="col-5">Posts</dt>
+                    <dd class="col-7">@(Model.Posts?.Count ?? 0)</dd>
+                    <dt class="col-5">Active</dt>
+                    <dd class="col-7">
+                        @if (Model.IsActive)
+                        {
+                            <span class="text-success"><i class="hgi-checkmark-circle-01"></i> Yes</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted"><i class="hgi-minus-sign-circle"></i> No</span>
+                        }
+                    </dd>
+                    <dt class="col-5">Created</dt>
+                    <dd class="col-7">@Model.CreatedAt.ToString("MMM dd, yyyy")</dd>
+                </dl>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Rules))
+            {
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Rules</h5>
+                    <p style="white-space: pre-wrap;"><small>@Model.Rules</small></p>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-8">
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <h5>Description</h5>
+                <p style="white-space: pre-wrap;">@Model.Description</p>
+            }
+
+            <h5 class="mt-4">Recent Posts</h5>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Content</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Posts != null && Model.Posts.Any())
+                        {
+                            @foreach (var post in Model.Posts.OrderByDescending(p => p.CreatedAt).Take(10))
+                            {
+                                <tr>
+                                    <td><small>@post.Content</small></td>
+                                    <td><small>@post.CreatedAt.ToString("MMM dd, yyyy")</small></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center text-muted py-4">No posts in this group.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+@model IEnumerable<JobCategory>
+@{
+    ViewData["Title"] = "Job Categories";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-layers-01"></i> Job Categories
+        </h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Parent</th>
+                            <th>Jobs</th>
+                            <th>Active</th>
+                            <th style="width: 80px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var category in Model)
+                            {
+                                <tr>
+                                    <td><strong>@category.Name</strong></td>
+                                    <td>@(category.ParentCategory?.Name ?? "—")</td>
+                                    <td>@(category.Jobs?.Count ?? 0)</td>
+                                    <td>
+                                        @if (category.IsActive)
+                                        {
+                                            <span class="text-success"><i class="hgi-checkmark-circle-01"></i></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted"><i class="hgi-minus-sign-circle"></i></span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <form asp-action="DeleteCategory" asp-route-id="@category.Id" method="post"
+                                            style="display: inline;" onsubmit="return confirm('Delete this category?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                                <i class="hgi-delete-01"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">No categories yet.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="admin-card" style="background: #f8f9fa;">
+                <h5 class="mb-3">Add Category</h5>
+                <form asp-action="CreateCategory" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-admin-group">
+                        <label class="form-admin-label">Name *</label>
+                        <input type="text" name="name" class="form-admin-control" required />
+                    </div>
+                    <div class="form-admin-group">
+                        <label class="form-admin-label">Description</label>
+                        <textarea name="description" class="form-admin-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-admin-group">
+                        <label class="form-admin-label">Parent Category</label>
+                        <select name="parentId" class="form-admin-control">
+                            <option value="">-- None --</option>
+                            @if (Model != null)
+                            {
+                                @foreach (var category in Model.Where(c => c.IsActive))
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-admin btn-admin-primary">
+                        <i class="hgi-add-square"></i> Add Category
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

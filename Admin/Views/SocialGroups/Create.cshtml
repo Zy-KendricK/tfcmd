@@ -1,0 +1,97 @@
+@model SocialGroupViewModel
+@{
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? "Edit Social Group" : "Create Social Group";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-user-group"></i> @ViewData["Title"]
+        </h4>
+    </div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" enctype="multipart/form-data">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-admin-group">
+                    <label asp-for="Name" class="form-admin-label">Group Name *</label>
+                    <input asp-for="Name" class="form-admin-control" placeholder="e.g. Photography Enthusiasts" required />
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Description" class="form-admin-label">Description</label>
+                    <textarea asp-for="Description" class="form-admin-control" rows="6"
+                        placeholder="What is this group about?"></textarea>
+                </div>
+
+                <div class="form-admin-group">
+                    <label asp-for="Rules" class="form-admin-label">Group Rules</label>
+                    <textarea asp-for="Rules" class="form-admin-control" rows="4"
+                        placeholder="Rules members should follow (optional)"></textarea>
+                </div>
+            </div>
+
+            <div class="form-aside-panels">
+                <div class="admin-card" style="background: #f8f9fa;">
+                    <h5 class="mb-3">Settings</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="Type" class="form-admin-label">Group Type</label>
+                        <select asp-for="Type" class="form-admin-control"
+                            asp-items="Html.GetEnumSelectList<GroupType>()"></select>
+                    </div>
+
+                    <div class="form-admin-group">
+                        <label class="d-flex align-items-center">
+                            <input asp-for="IsActive" type="checkbox" style="margin-right: 10px;" />
+                            Active
+                        </label>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-3" style="background: #f8f9fa;">
+                    <h5 class="mb-3"><i class="hgi-image-01"></i> Group Images</h5>
+
+                    <div class="form-admin-group">
+                        <label asp-for="AvatarFile" class="form-admin-label">Group image (card/tile)</label>
+                        <input asp-for="AvatarFile" type="file" accept="image/*" class="form-admin-control" />
+                        <small class="text-muted">Shown on the home page group cards and listings</small>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model?.AvatarUrl))
+                    {
+                        <div class="mb-3">
+                            <img src="@Model.AvatarUrl" alt="Group image" style="max-width: 100%; border-radius: 8px;" />
+                        </div>
+                    }
+
+                    <div class="form-admin-group">
+                        <label asp-for="CoverFile" class="form-admin-label">Cover image (group page banner)</label>
+                        <input asp-for="CoverFile" type="file" accept="image/*" class="form-admin-control" />
+                        <small class="text-muted">Wide banner shown at the top of the group's page</small>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model?.CoverImageUrl))
+                    {
+                        <div class="mb-2">
+                            <img src="@Model.CoverImageUrl" alt="Cover image" style="max-width: 100%; border-radius: 8px;" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="hgi-floppy-disk"></i> @(isEdit ? "Update Group" : "Create Group")
+            </button>
+            <a asp-action="Index" class="btn-admin" style="background: #e0e0e0;">
+                <i class="hgi-arrow-left-01"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>

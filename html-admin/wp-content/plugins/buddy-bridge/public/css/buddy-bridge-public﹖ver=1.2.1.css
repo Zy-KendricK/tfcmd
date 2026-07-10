@@ -1,0 +1,838 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+@keyframes loading-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes modal-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.activity-item,
+.activity-reactions-viewer {
+  --like: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/like.svg");
+  --love: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/love.svg");
+  --care: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/care.svg");
+  --haha: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/haha.svg");
+  --wow: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/wow.svg");
+  --sad: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/sad.svg");
+  --angry: url("https://mythemestore.com/beehive-preview/wp-content/plugins/buddy-bridge/public/images/angry.svg");
+}
+
+.activity-item .who-reacted {
+  display: flex;
+  align-items: center;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.activity-item .who-reacted:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.activity-item .who-reacted .top-reactions {
+  display: flex;
+  margin-right: 0.25rem;
+}
+.activity-item .who-reacted .top-reactions > span {
+  background-image: var(--like);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: block;
+  height: calc(1rem + 2px);
+  width: calc(1rem + 2px);
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+.activity-item .who-reacted .top-reactions > span:not(:first-child) {
+  margin-left: -0.25rem;
+}
+.activity-item .who-reacted .top-reactions > span.like {
+  background-image: var(--like);
+}
+.activity-item .who-reacted .top-reactions > span.love {
+  background-image: var(--love);
+}
+.activity-item .who-reacted .top-reactions > span.care {
+  background-image: var(--care);
+}
+.activity-item .who-reacted .top-reactions > span.haha {
+  background-image: var(--haha);
+}
+.activity-item .who-reacted .top-reactions > span.wow {
+  background-image: var(--wow);
+}
+.activity-item .who-reacted .top-reactions > span.sad {
+  background-image: var(--sad);
+}
+.activity-item .who-reacted .top-reactions > span.angry {
+  background-image: var(--angry);
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=like]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--like);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=love]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--love);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=care]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--care);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=haha]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--haha);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=wow]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--wow);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=sad]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--sad);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions a.button.react-to-activity.react-to-activity[data-reaction-type=angry]::before {
+  content: "" !important;
+  font-family: inherit;
+  background-image: var(--angry);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+}
+.activity-item .reactions .pick-reaction {
+  background-color: #fff;
+  position: absolute;
+  padding: 0.25rem 0.25rem;
+  border-radius: 30px;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.06);
+  z-index: 99;
+  display: flex;
+  white-space: nowrap;
+  margin: -1px;
+  transform: translateY(-50%);
+  top: 0;
+  visibility: hidden;
+  opacity: 0;
+}
+.activity-item .reactions .pick-reaction > span {
+  margin: 1px;
+}
+.activity-item .reactions .pick-reaction .reaction {
+  position: relative;
+  flex-shrink: 0;
+}
+.activity-item .reactions .pick-reaction .reaction::before {
+  content: "";
+  background-image: var(--like);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: block;
+}
+.activity-item .reactions .pick-reaction .reaction.like::before {
+  background-image: var(--like);
+}
+.activity-item .reactions .pick-reaction .reaction.love::before {
+  background-image: var(--love);
+}
+.activity-item .reactions .pick-reaction .reaction.care::before {
+  background-image: var(--care);
+}
+.activity-item .reactions .pick-reaction .reaction.haha::before {
+  background-image: var(--haha);
+}
+.activity-item .reactions .pick-reaction .reaction.wow::before {
+  background-image: var(--wow);
+}
+.activity-item .reactions .pick-reaction .reaction.sad::before {
+  background-image: var(--sad);
+}
+.activity-item .reactions .pick-reaction .reaction.angry::before {
+  background-image: var(--angry);
+}
+.activity-item .reactions .pick-reaction .reaction .reaction-tooltip {
+  background-color: #000;
+  border-radius: 1rem;
+  display: block;
+  font-size: 0.875em;
+  line-height: 1;
+  padding: 0.125rem 0.5rem;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, calc(-100% - 0.25rem));
+  visibility: hidden;
+  opacity: 0;
+}
+.activity-item .reactions .pick-reaction .reaction:hover {
+  cursor: pointer;
+}
+.activity-item .reactions .pick-reaction .reaction:hover::before {
+  transform: translateY(-0.5rem) scale(1.1);
+  transition: all 0.5s;
+}
+.activity-item .reactions .pick-reaction .reaction:hover .reaction-tooltip {
+  top: -0.75rem;
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.5s;
+}
+.activity-item .reactions:hover .pick-reaction {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(calc(-100% + 1px));
+  transition: all 0.5s;
+}
+
+.activity-reactions-viewer {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99999;
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  padding: 0 1rem;
+}
+.activity-reactions-viewer.loading:after {
+  content: " ";
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: #ccc #ccc #ccc transparent;
+  animation: loading-ring 1.2s linear infinite;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%, -50%);
+}
+.activity-reactions-viewer .reactions-container {
+  background-color: #fff;
+  max-width: 500px;
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 184px);
+  min-height: 400px;
+  margin: 92px auto;
+  border-radius: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  animation: modal-reveal 0.5s ease-out;
+}
+.activity-reactions-viewer .reactions-container .close {
+  background-color: red;
+  color: #fff;
+  height: 1.5rem;
+  width: 1.5rem;
+  line-height: 1.25rem;
+  text-align: center;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  cursor: pointer;
+  opacity: 1;
+  font-weight: normal;
+  font-size: inherit;
+}
+.activity-reactions-viewer .reactions-container .close:hover {
+  opacity: 1;
+}
+.activity-reactions-viewer .reactions-container span.reaction {
+  background-color: rgba(0, 0, 0, 0.1);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: block;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+}
+.activity-reactions-viewer .reactions-container .like span.reaction {
+  background-image: var(--like);
+}
+.activity-reactions-viewer .reactions-container .love span.reaction {
+  background-image: var(--love);
+}
+.activity-reactions-viewer .reactions-container .care span.reaction {
+  background-image: var(--care);
+}
+.activity-reactions-viewer .reactions-container .haha span.reaction {
+  background-image: var(--haha);
+}
+.activity-reactions-viewer .reactions-container .wow span.reaction {
+  background-image: var(--wow);
+}
+.activity-reactions-viewer .reactions-container .sad span.reaction {
+  background-image: var(--sad);
+}
+.activity-reactions-viewer .reactions-container .angry span.reaction {
+  background-image: var(--angry);
+}
+.activity-reactions-viewer .reactions-container .reaction-tabs {
+  display: flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  list-style: none;
+  padding: 0 1.5rem;
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  -ms-overflow-style: none;
+}
+.activity-reactions-viewer .reactions-container .reaction-tabs::-webkit-scrollbar {
+  display: none;
+}
+@media screen and (max-width: 575.98px) {
+  .activity-reactions-viewer .reactions-container .reaction-tabs {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+.activity-reactions-viewer .reactions-container .reaction-tabs .item {
+  position: relative;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+}
+@media screen and (max-width: 575.98px) {
+  .activity-reactions-viewer .reactions-container .reaction-tabs .item {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
+.activity-reactions-viewer .reactions-container .reaction-tabs .item:hover {
+  cursor: pointer;
+}
+.activity-reactions-viewer .reactions-container .reaction-tabs .item.active::before {
+  content: "";
+  background-color: #000;
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.activity-reactions-viewer .reactions-container .reaction-tabs .item span.reaction {
+  margin-right: 0.125rem;
+}
+.activity-reactions-viewer .reactions-container .reaction-tab-contents {
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  -ms-overflow-style: none;
+}
+.activity-reactions-viewer .reactions-container .reaction-tab-contents::-webkit-scrollbar {
+  display: none;
+}
+@media screen and (max-width: 575.98px) {
+  .activity-reactions-viewer .reactions-container .reaction-tab-contents {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+.activity-reactions-viewer .reactions-container .reaction-tab-contents .tab-content {
+  display: none;
+}
+.activity-reactions-viewer .reactions-container .reaction-tab-contents .tab-content.active {
+  display: block;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user .avatar-wrapper {
+  margin-right: 0.75rem;
+  position: relative;
+  flex-shrink: 0;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user .avatar-wrapper .avatar {
+  width: 40px;
+  height: auto;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user .avatar-wrapper span.reaction {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user .name {
+  white-space: nowrap;
+  width: 100%;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.activity-reactions-viewer .reactions-container .reactions-user-list .reaction-user:hover .name {
+  text-decoration: underline;
+}
+
+.bb-loading-ring {
+  display: inline-block;
+}
+.bb-loading-ring:after {
+  content: " ";
+  display: block;
+  width: 1em;
+  height: 1em;
+  margin: 1px;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: #ccc #ccc #ccc transparent;
+  animation: loading-ring 1.2s linear infinite;
+}
+
+.activity-list .activity-item .generic-button .share-activity-options {
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  position: absolute;
+  z-index: 1000;
+  display: none;
+  min-width: 10rem;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+  text-align: left;
+  list-style: none;
+  border-radius: 0.25rem;
+}
+.activity-list .activity-item .generic-button .share-activity-options .share-item {
+  display: block;
+  display: block;
+  min-height: unset;
+  padding: 0.5rem 1.5rem;
+  text-align: left;
+  color: inherit;
+}
+
+.widget .item-options {
+  font-size: 0.875em;
+  margin: 0 0 0.25rem;
+}
+.widget .item-options a {
+  position: relative;
+}
+.widget .item-options a.selected, .widget .item-options a.current {
+  font-weight: 600;
+}
+.widget ul.item-list {
+  list-style: none;
+  margin: 0;
+}
+
+.buddy-bridge-popular-posts .item-list .item {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.25rem 0;
+}
+.buddy-bridge-popular-posts .item-list .item .post-thumbnail {
+  flex: 0 0 75px;
+  max-width: 75px;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.buddy-bridge-popular-posts .item-list .item .post-thumbnail a {
+  background-color: #ccc;
+  display: block;
+  width: 100%;
+  padding-top: 75px;
+  position: relative;
+}
+.buddy-bridge-popular-posts .item-list .item .post-thumbnail a img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  object-fit: cover;
+  -o-object-fit: cover;
+}
+.buddy-bridge-popular-posts .item-list .item .post-info {
+  flex: 0 0 calc(100% - 75px);
+  max-width: calc(100% - 75px);
+  width: 100%;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.buddy-bridge-popular-posts .item-list .item .post-info .post-title {
+  margin-bottom: 0.25rem;
+  font-size: 1em;
+}
+.buddy-bridge-popular-posts .item-list .item .post-info .post-title a {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.buddy-bridge-popular-posts .item-list .item .post-info .post-title a:hover {
+  text-decoration: underline;
+}
+.buddy-bridge-popular-posts .item-list .item:hover .post-thumbnail a img {
+  transform: scale(1.1);
+  transition: all 0.5s;
+}
+
+.buddy-bridge-hashtags-widget .hashtags::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.buddy-bridge-hashtags-widget .hashtags .hashtag {
+  background-color: #f2f2f2;
+  border-radius: 1.5rem;
+  text-align: center;
+  padding: 0.125rem 0.5rem;
+  text-decoration: none;
+  float: left;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.buddy-bridge-hashtags-widget .hashtags .hashtag .count {
+  background-color: #fff;
+  border: 1px solid #e7edf2;
+  border-radius: 1.5rem;
+  display: inline;
+  font-size: 0.875em;
+  margin-left: 2px;
+  padding: 0 0.5rem;
+  text-align: inherit;
+}
+
+.buddy-bridge-activity-widget .widget-activity-list li a:first-child {
+  font-weight: 600;
+}
+.buddy-bridge-activity-widget .widget-activity-list li a img {
+  border-radius: 50%;
+  margin-right: 0.125rem;
+  display: none;
+}
+
+.buddy-bridge-member-types .types::after,
+.buddy-bridge-group-types .types::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.buddy-bridge-member-types .types a,
+.buddy-bridge-group-types .types a {
+  background-color: #f2f2f2;
+  border-radius: 1.5rem;
+  text-align: center;
+  padding: 0.125rem 0.5rem;
+  text-decoration: none;
+  float: left;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.buddy-bridge-member-types .types a .count,
+.buddy-bridge-group-types .types a .count {
+  background-color: #fff;
+  border: 1px solid #e7edf2;
+  border-radius: 1.5rem;
+  display: inline;
+  font-size: 0.875em;
+  margin-left: 2px;
+  padding: 0 0.5rem;
+  text-align: inherit;
+}
+
+.buddy-bridge-about-member .bio {
+  margin-bottom: 1rem;
+}
+.buddy-bridge-about-member .info-list .item {
+  margin-bottom: 1rem;
+}
+.buddy-bridge-about-member .info-list .item:last-child {
+  margin-bottom: 0;
+}
+.buddy-bridge-about-member .info-list .item .item-title {
+  font-weight: 600;
+}
+
+.buddy-bridge-member-photos .member-photo-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.125rem !important;
+  padding: 0;
+}
+.buddy-bridge-member-photos .member-photo-list li {
+  -ms-flex: 0 0 33.3333333333%;
+  flex: 0 0 33.3333333333%;
+  max-width: 33.3333333333%;
+  width: 100%;
+  padding: 0.125rem !important;
+  list-style: none;
+  min-height: initial;
+}
+.buddy-bridge-member-photos .member-photo-list li .inner {
+  display: block;
+  position: relative;
+}
+.buddy-bridge-member-photos .member-photo-list li .inner::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+  z-index: -1;
+}
+.buddy-bridge-member-photos .member-photo-list a {
+  display: block;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.buddy-bridge-member-photos .member-photo-list a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -o-object-fit: cover;
+}
+.buddy-bridge-member-photos .member-photo-list a:hover img {
+  transform: scale(1.2);
+  transition: all 0.5s;
+}
+
+.buddy-bridge-about-group .about-group {
+  margin-bottom: 1rem;
+}
+.buddy-bridge-about-group .group-item-actions > dl:last-of-type {
+  margin-bottom: 0;
+}
+.buddy-bridge-about-group .moderators-lists .moderators-title {
+  font-weight: normal;
+  margin-bottom: 0.125rem;
+}
+.buddy-bridge-about-group .moderators-lists .user-list {
+  margin: 0;
+}
+.buddy-bridge-about-group .moderators-lists .user-list ul {
+  margin: -1px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.buddy-bridge-about-group .moderators-lists .user-list ul li {
+  padding: 1px;
+}
+.buddy-bridge-about-group .moderators-lists .user-list .avatar {
+  width: 30px;
+}
+
+.buddy-bridge-dynamic-members-list #buddy-bridge-members-list li {
+  position: relative;
+  border-bottom: none !important;
+}
+.buddy-bridge-dynamic-members-list #buddy-bridge-members-list li .item-avatar {
+  float: left;
+  width: 40px;
+}
+.buddy-bridge-dynamic-members-list #buddy-bridge-members-list li .item {
+  margin-left: 50px;
+  line-height: 1.5;
+}
+.buddy-bridge-dynamic-members-list #buddy-bridge-members-list li .item .item-title {
+  font-weight: 600;
+}
+.buddy-bridge-dynamic-members-list #buddy-bridge-members-list li .item .item-title a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+.buddy-bridge-dynamic-members-list #buddy-bridge-members-list li .item .item-meta {
+  font-size: 0.875em;
+  color: #a2a2a2;
+}
+
+.buddy-bridge-new-member-avatars #buddy-bridge-new-member-avatars {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.125rem;
+}
+.buddy-bridge-new-member-avatars #buddy-bridge-new-member-avatars li {
+  padding: 0.125rem;
+}
+.buddy-bridge-new-member-avatars #buddy-bridge-new-member-avatars li img {
+  width: 40px;
+}
+
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li {
+  position: relative;
+  border-bottom: none !important;
+}
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item-avatar {
+  float: left;
+  width: 40px;
+}
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item {
+  margin-left: 50px;
+  line-height: 1.5;
+}
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item .item-title {
+  font-weight: 600;
+}
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item .item-title a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item .item-title a:hover, .buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item .item-title a:focus {
+  text-decoration: underline;
+}
+.buddy-bridge-my-friends #buddy-bridge-my-friends-list li .item .item-meta {
+  font-size: 0.875em;
+  color: #a2a2a2;
+}
+
+.buddy-bridge-dynamic-groups-list #buddy-bridge-groups-list li {
+  position: relative;
+  border-bottom: none !important;
+}
+.buddy-bridge-dynamic-groups-list #buddy-bridge-groups-list li .item-avatar {
+  float: left;
+  width: 40px;
+}
+.buddy-bridge-dynamic-groups-list #buddy-bridge-groups-list li .item {
+  margin-left: 50px;
+  line-height: 1.5;
+}
+.buddy-bridge-dynamic-groups-list #buddy-bridge-groups-list li .item .item-title {
+  font-weight: 600;
+}
+.buddy-bridge-dynamic-groups-list #buddy-bridge-groups-list li .item .item-title a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+.buddy-bridge-dynamic-groups-list #buddy-bridge-groups-list li .item .item-meta {
+  font-size: 0.875em;
+  color: #a2a2a2;
+}
+
+.buddy-bridge-my-groups #buddy-bridge-my-groups-list li {
+  position: relative;
+  border-bottom: none !important;
+}
+.buddy-bridge-my-groups #buddy-bridge-my-groups-list li .item-avatar {
+  float: left;
+  width: 40px;
+}
+.buddy-bridge-my-groups #buddy-bridge-my-groups-list li .item {
+  margin-left: 50px;
+  line-height: 1.5;
+}
+.buddy-bridge-my-groups #buddy-bridge-my-groups-list li .item .item-title {
+  font-weight: 600;
+}
+.buddy-bridge-my-groups #buddy-bridge-my-groups-list li .item .item-title a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+.buddy-bridge-my-groups #buddy-bridge-my-groups-list li .item .item-meta {
+  font-size: 0.875em;
+  color: #a2a2a2;
+}

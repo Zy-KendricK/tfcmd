@@ -1,48 +1,1454 @@
-ï»¿@{
+@using AppCore.Services
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IPermissionService PermissionService
+@{
     Layout = null;
+    var user = await UserManager.GetUserAsync(User);
+    var displayName = user?.DisplayName ?? user?.UserName ?? "Admin";
+    var avatar = user?.AvatarUrl ?? "/wp-content/uploads/2020/07/logo-icon.svg";
+    var userPermissions = ViewBag.UserPermissions as IList<string> ?? new List<string>();
+    var isSuperAdmin = ViewBag.IsSuperAdmin as bool? ?? false;
+    bool HasPermission(string permissionCode)
+    {
+        return isSuperAdmin || userPermissions.Contains(permissionCode);
+    }
+    string GetRelativeTime(DateTime utc)
+    {
+        var span = DateTime.UtcNow - utc;
+        if (span.TotalMinutes < 5) return "right now";
+        if (span.TotalHours < 1) return $"{(int)span.TotalMinutes} minutes ago";
+        if (span.TotalDays < 1) return $"{(int)span.TotalHours} hour{((int)span.TotalHours == 1 ? "" : "s")} ago";
+        if (span.TotalDays < 30) return $"{(int)span.TotalDays} day{((int)span.TotalDays == 1 ? "" : "s")} ago";
+        if (span.TotalDays < 365) return $"{(int)(span.TotalDays / 30)} month{((int)(span.TotalDays / 30) == 1 ? "" : "s")} ago";
+        return $"{(int)(span.TotalDays / 365)} year{((int)(span.TotalDays / 365) == 1 ? "" : "s")} ago";
+    }
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     <title>@ViewData["Title"] - Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Always light mode -->
+    <meta name="color-scheme" content="light" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="~/admin-favicon.svg" />
+    <link rel="alternate icon" href="~/favicon.ico" />
+
+    <!-- Beehive Theme CSS -->
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/animate.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/hiraku.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/assets/css/beehive.min.css' />
+    <!-- WooCommerce (Beehive skin) — product grid, widgets, ordering -->
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/woocommerce/assets/css/woocommerce-layout.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/woocommerce/assets/css/woocommerce.min.css' />
+    <!-- BuddyPress-style sidebar widgets + messenger dock -->
+    <link rel='stylesheet' href='~/wp-content/plugins/buddypress/bp-templates/bp-nouveau/css/bp-tooltips.min.css' />
+    <link rel='stylesheet' href='~/wp-content/themes/beehive/buddypress/css/buddypress.min.css' />
+    <link rel='stylesheet' href='~/wp-content/plugins/buddy-bridge/public/css/buddy-bridge-public.css' />
+    <link rel='stylesheet' href='~/wp-content/plugins/buddy-chat/public/css/buddychat.css' />
+    <!-- Hugeicons (stroke rounded, self-hosted) + legacy icon-class mapping -->
+    <link rel='stylesheet' href='~/fonts/hugeicons/hgi-stroke-left.css' />
+    <link rel='stylesheet' href='~/css/admin-icons.css' />
+    <!-- Beehive-style admin list components (forums rows, cards, grids) -->
+    <link rel='stylesheet' href='~/css/admin-modern.css' />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700|Quicksand:700" rel="stylesheet">
+
+    <style>
+        :root {
+            --theme-body-font-family: Nunito Sans;
+            --theme-body-font-size: 14px;
+            --theme-body-font-weight: 400;
+            --theme-body-line-height: 26px;
+            --theme-heading-font-family: Quicksand;
+            --theme-heading-font-weight: 700;
+            --theme-color-primary: #8224E3;
+            --admin-loading-overlay: rgba(255,255,255,0.78);
+            --admin-loading-border: rgba(130,36,227,0.16);
+            --admin-loading-shadow: 0 16px 40px rgba(130,36,227,0.16);
+            --admin-loading-accent: #8224E3;
+            --admin-loading-accent-2: #a84aff;
+            --theme-color-primary-rgb: 130, 36, 227;
+            --theme-color-primary-lightened: #a84aff;
+            --theme-color-primary-darkened: #7d1fde;
+            --theme-color-text: #626276;
+            --theme-color-heading: #4f515b;
+            --theme-color-anchor: #29292d;
+            --theme-color-border: #e7edf2;
+            --theme-color-success: #2ED573;
+            --theme-color-warn: #FFA500;
+            --theme-color-error: #FF0000;
+            --social-template-top-bg: #3373a8
+             ;
+        }
+
+        /* Website-style admin loader */
+        .admin-global-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2147483647;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .admin-global-loader .preloader-swapping {
+            margin: 30px auto;
+            width: 80px;
+            height: 80px;
+            position: relative;
+            z-index: 999;
+            padding: 15px;
+        }
+
+        .admin-global-loader .preloader-swapping:after {
+            content: "";
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background: transparent;
+            border-top: 4px solid #1b69ab;
+            border-right: 4px solid transparent;
+            border-radius: 50%;
+            animation: 1s preloaderSpin linear infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .admin-global-loader:before,
+        .admin-global-loader:after {
+            content: "";
+            height: 100%;
+            background-color: #fff;
+            width: 50%;
+            position: fixed;
+            top: 0;
+            transition: all 0.8s;
+        }
+
+        .admin-global-loader:before {
+            left: 0;
+        }
+
+        .admin-global-loader:after {
+            right: 0;
+        }
+
+        .admin-global-loader.active:before,
+        .admin-global-loader.active:after {
+            width: 0;
+        }
+
+        @@keyframes preloaderSpin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Force light mode everywhere; ignore OS/browser dark preference */
+        :root,
+        html {
+            color-scheme: light only;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .beehive-preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483647;
+            background: rgba(255, 255, 255, 0.96) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .beehive-preloader .loader-wrapper {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 12px 32px rgba(130, 36, 227, 0.12);
+            border: 1px solid rgba(130, 36, 227, 0.12);
+        }
+
+        /* Force light-mode styling across form controls, selects, dropdowns, and other UI chrome */
+        :root,
+        html,
+        body,
+        input,
+        textarea,
+        select,
+        button,
+        .form-admin-control,
+        .form-control,
+        .form-select,
+        .dropdown-menu,
+        .dropdown-item,
+        .select2-container--default .select2-selection,
+        .select2-dropdown,
+        .select2-results__option {
+            color-scheme: light !important;
+        }
+
+        input,
+        textarea,
+        select,
+        .form-admin-control,
+        .form-control,
+        .form-select,
+        .select2-container--default .select2-selection {
+            background-color: #fff !important;
+            color: #1f2937 !important;
+            border-color: var(--theme-color-border) !important;
+        }
+
+        .dropdown-menu {
+            background-color: #fff !important;
+            color: #1f2937 !important;
+            border: 1px solid var(--theme-color-border) !important;
+        }
+
+        .dropdown-item {
+            color: #1f2937 !important;
+            background-color: transparent !important;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: rgba(130, 36, 227, 0.08) !important;
+            color: var(--theme-color-primary) !important;
+        }
+
+        select option,
+        select optgroup {
+            background-color: #fff !important;
+            color: #1f2937 !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #8b95a5 !important;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+
+        /* old existing block continues below! */
+            --theme-color-primary-rgb: 130, 36, 227;
+            --theme-color-primary-lightened: #a84aff;
+            --theme-color-primary-darkened: #7d1fde;
+            --theme-color-text: #626276;
+            --theme-color-heading: #4f515b;
+            --theme-color-anchor: #29292d;
+            --theme-color-border: #e7edf2;
+            --theme-color-success: #2ED573;
+            --theme-color-warn: #FFA500;
+            --theme-color-error: #FF0000;
+            --social-template-top-bg: #3373a8
+             ;
+        }
+
+        /* Force light mode everywhere; ignore OS/browser dark preference */
+        :root,
+        html {
+            color-scheme: light only;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        /* Force light-mode styling across form controls, selects, dropdowns, and other UI chrome */
+        :root,
+        html,
+        body,
+        input,
+        textarea,
+        select,
+        button,
+        .form-admin-control,
+        .form-control,
+        .form-select,
+        .dropdown-menu,
+        .dropdown-item,
+        .select2-container--default .select2-selection,
+        .select2-dropdown,
+        .select2-results__option {
+            color-scheme: light !important;
+        }
+
+        input,
+        textarea,
+        select,
+        .form-admin-control,
+        .form-control,
+        .form-select,
+        .select2-container--default .select2-selection {
+            background-color: #fff !important;
+            color: #1f2937 !important;
+            border-color: var(--theme-color-border) !important;
+        }
+
+        .dropdown-menu {
+            background-color: #fff !important;
+            color: #1f2937 !important;
+            border: 1px solid var(--theme-color-border) !important;
+        }
+
+        .dropdown-item {
+            color: #1f2937 !important;
+            background-color: transparent !important;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: rgba(130, 36, 227, 0.08) !important;
+            color: var(--theme-color-primary) !important;
+        }
+
+        select option,
+        select optgroup {
+            background-color: #fff !important;
+            color: #1f2937 !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #8b95a5 !important;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus {
+            -webkit-text-fill-color: #1f2937 !important;
+            -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Sidebar: native scrolling (theme's JS scrollbar plugin is not shipped) */
+        .beehive-social-panel .inner-panel {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, .25) transparent;
+        }
+
+            .beehive-social-panel .inner-panel::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .beehive-social-panel .inner-panel::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, .25);
+                border-radius: 3px;
+            }
+
+            .beehive-social-panel .inner-panel::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .beehive-social-panel .inner-panel .panel-block {
+                flex-shrink: 0;
+            }
+
+                .beehive-social-panel .inner-panel .panel-block.light {
+                    flex-grow: 1;
+                }
+
+        .admin-content-wrapper {
+            padding: 20px;
+            background: #fdfdfd;
+            min-height: calc(100vh - 60px);
+        }
+
+        .admin-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 20px 90px rgba(58, 46, 68, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .col-aside .form-aside-panels {
+            padding: 0;
+        }
+
+        .admin-card-header {
+            border-bottom: 1px solid var(--theme-color-border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-card-title {
+            font-family: var(--theme-heading-font-family);
+            font-weight: var(--theme-heading-font-weight);
+            color: var(--theme-color-heading);
+            margin: 0;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--theme-color-heading);
+            border-bottom: 2px solid var(--theme-color-border);
+        }
+
+        .admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--theme-color-border);
+            color: var(--theme-color-text);
+        }
+
+        .admin-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-admin {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-admin-primary {
+            background: var(--theme-color-primary);
+            color: #fff;
+        }
+
+        .btn-admin-primary:hover {
+            background: var(--theme-color-primary-darkened);
+            color: #fff;
+        }
+
+        .btn-admin-success {
+            background: var(--theme-color-success);
+            color: #fff;
+        }
+
+        .btn-admin-warning {
+            background: var(--theme-color-warn);
+            color: #fff;
+        }
+
+        .btn-admin-danger {
+            background: var(--theme-color-error);
+            color: #fff;
+        }
+
+        .btn-admin-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+
+        .form-admin-group {
+            margin-bottom: 20px;
+        }
+
+        .form-admin-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--theme-color-heading);
+        }
+
+        .form-admin-control,
+        .form-admin-control textarea,
+        .form-admin-control select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--theme-color-border);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #fff;
+            color: #1f2937;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .form-admin-control:focus,
+        .form-admin-control textarea:focus,
+        .form-admin-control select:focus {
+            border-color: var(--theme-color-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(130, 36, 227, 0.1);
+            background-color: #fff;
+        }
+
+        select.form-admin-control,
+        textarea.form-admin-control {
+            background-color: #fff;
+            color: #1f2937;
+        }
+
+        select.form-admin-control option {
+            background-color: #fff;
+            color: #1f2937;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-published {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--theme-color-primary), var(--theme-color-primary-lightened));
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, var(--theme-color-success), #48ef8d);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, var(--theme-color-warn), #ffcb26);
+        }
+
+        .stat-card.info {
+            background: linear-gradient(135deg, #17a2b8, #4dc9e6);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            font-family: var(--theme-heading-font-family);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .panel-menu {
+            width: 100%;
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel {
+            list-style: none;
+            margin: 0;
+            padding: 0 1.25rem;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            text-align: center;
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li {
+            list-style: none;
+            width: auto;
+            max-width: none;
+            flex: 0 0 auto;
+            margin: 0;
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            min-height: 76px;
+            padding: 10px 8px;
+            color: var(--theme-color-text);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            line-height: 1.15;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li a:hover {
+            background: rgba(130, 36, 227, 0.08);
+            color: var(--theme-color-primary);
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li.active a {
+            background: var(--theme-color-primary);
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(130, 36, 227, 0.2);
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li.active a .nav-link-text,
+        .beehive-social-panel .panel-menu ul.navbar-panel li.active a i {
+            color: #fff;
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li a i {
+            font-size: 18px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .beehive-social-panel .panel-menu ul.navbar-panel li a .nav-link-text {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        /* ===== Right sidebar (template widget-area) ===== */
+        .col-aside .widget-area {
+            padding: 20px 20px 0 0;
+        }
+
+        .col-aside .widget {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .col-aside .widget .widget-title {
+            font-family: var(--theme-heading-font-family);
+            font-weight: var(--theme-heading-font-weight);
+            color: var(--theme-color-heading);
+            border-bottom: 1px solid var(--theme-color-border);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .col-aside .sticky-sidebar {
+            position: sticky;
+            top: 80px;
+        }
+
+        .col-aside .widget_nav_menu ul.menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .col-aside .widget_nav_menu ul.menu li,
+        .col-aside .widget ul.item-list,
+        .col-aside .widget ul.item-list li {
+            list-style: none;
+        }
+
+        .col-aside .widget ul.item-list {
+            margin: 0;
+            padding: 0;
+        }
+
+        .col-aside .widget ul.item-list li,
+        .col-aside .widget_nav_menu ul.menu li {
+            list-style-type: none;
+        }
+
+        .col-aside .widget_nav_menu ul.menu li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 8px;
+            color: var(--theme-color-text);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .col-aside .widget_nav_menu ul.menu li a:hover {
+            background: rgba(130, 36, 227, 0.08);
+            color: var(--theme-color-primary);
+        }
+
+        .col-aside .widget_nav_menu ul.menu li a i {
+            font-size: 16px;
+        }
+
+        .col-aside .item-list .vcard .item-meta .activity {
+            font-size: 12px;
+            color: #9aa0ac;
+        }
+
+        /* ===== Messenger dock: icon glyphs (hugeicons, self-hosted) ===== */
+        #buddy-chat-app .dashicons,
+        .buddypress-wrap .dashicons {
+            font-family: "hgi-stroke-left" !important;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.beehive #buddy-chat-app .dashicons-format-chat::before {
+            content: "\3e3f";
+            font-family: "hgi-stroke-left";
+        }
+
+        body.beehive #buddy-chat-app .dashicons-admin-generic::before {
+            content: "\46c2";
+            font-family: "hgi-stroke-left";
+        }
+
+        body.beehive #buddy-chat-app .dashicons-search::before,
+        body.beehive .buddypress-wrap .dashicons-search::before {
+            content: "\4695";
+            font-family: "hgi-stroke-left";
+        }
+
+        body.beehive #buddy-chat-app .dashicons-arrow-right-alt2::before {
+            content: "\3b79";
+            font-family: "hgi-stroke-left";
+        }
+
+        body.beehive #buddy-chat-app #buddy-chat-windows .chat_window__close-btn .dashicons::before {
+            content: "\3d42";
+            font-family: "hgi-stroke-left";
+        }
+
+        body.beehive #buddy-chat-app #buddy-chat-windows .chat-window__btn--enter > span .dashicons {
+            transform: none;
+        }
+
+        body.beehive #buddy-chat-app #buddy-chat-windows .chat-window__btn--enter > span .dashicons::before {
+            content: "\46b6";
+            font-family: "hgi-stroke-left";
+        }
+
+        /* ===== Messenger dock: gaps the Vue build handled ===== */
+        #buddy-chat-app .buddy-chat-buddies__scroll {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+        }
+
+        #buddy-chat-app .bpc-buddy-list .bpc-item {
+            cursor: pointer;
+        }
+
+        #buddy-chat-app .bpc-rail-total,
+        #buddy-chat-app .bpc-unread-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            margin-left: 8px;
+            border-radius: 9px;
+            background: var(--theme-color-primary);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        #buddy-chat-app .chat-window__input--field:empty::before {
+            content: attr(data-placeholder);
+            color: #9aa0ac;
+            pointer-events: none;
+        }
+
+        #buddy-chat-app .bpc-send-failed span {
+            color: var(--theme-color-error);
+            font-style: italic;
+        }
+
+        #buddy-chat-app .window-buddy-name {
+            font-weight: 600;
+            margin-left: 8px;
+            flex: 1 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ===== Shop grid: placeholder for products without an image ===== */
+        .products .product-img .bpc-product-placeholder {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f2f5;
+        }
+
+        .products .product-img .bpc-product-placeholder i {
+            font-size: 42px;
+            color: #c3c9d2;
+        }
+
+        /* Admin status badge on product cards (Draft/Pending/Rejected) */
+        .products .item-product .admin-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+        }
+
+        .panel-block .dark{
+            background-image: url(logo.png);
+            background-position: top;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg flex flex-col">
-            <div class="p-6 flex items-center justify-center border-b">
-                <img src="/assets/images/favicon.png" alt="Logo" class="w-10 h-10 mr-2">
-                <span class="font-bold text-lg text-blue-700">TFC Admin</span>
-            </div>
-            <nav class="flex-1 p-4">
-                <a href="/Dashboard"
-                    class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700 font-semibold">Dashboard</a>
-                <a href="/Charity" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Charity</a>
-                <a href="/Post" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Posts</a>
-                <a href="/Contact" class="block py-2 px-4 rounded hover:bg-blue-100 text-gray-700">Contact</a>
-            </nav>
-            <div class="p-4 border-t text-center text-gray-400 text-xs">&copy; 2025 TFC Admin</div>
-        </aside>
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-            <!-- Topbar -->
-            <header class="bg-white shadow p-4 flex items-center justify-between">
-                <div class="font-semibold text-blue-700">@ViewData["Title"]</div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-gray-600">Admin</span>
-                    <img src="/assets/images/favicon.png" class="w-8 h-8 rounded-full" alt="User">
-                </div>
-            </header>
-            <main class="flex-1 p-6">
-                @RenderBody()
-            </main>
+<body
+    class="beehive buddypress bp-nouveau theme-beehive beehive-social-layout panel-expanded has-page-sidebar @(SignInManager.IsSignedIn(User) ? "logged-in beehive-user" : "") @ViewData["BodyClass"]">
+    <!-- Preloader -->
+    <div class="beehive-preloader preloader-2" style="display: none;">
+        <div class="loader-wrapper">
+            <img src="~/wp-content/uploads/2020/07/logo-icon.svg" alt="" />
+            <div class="loader-bar"></div>
+            <div class="loading-text">Loading...</div>
         </div>
     </div>
+
+    <!-- Side Panel -->
+    <div id="beehive-social-panel" class="beehive-social-panel">
+        <div class="inner-panel ass-scrollbar">
+            <div class="panel-block dark">
+                <a href="~/Dashboard" class="panel-logo item" style="color:white; font-size:32px"
+                >
+                    TFCM
+                </a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="my-card item">
+                        <div class="user-avatar" style="text-align: center; margin-bottom: 15px;">
+                            @await Html.PartialAsync("_UserAvatar", user, new ViewDataDictionary(ViewData) { ["size"] = 80, ["cssClass"] = "mx-auto" })
+                        </div>
+                        <h5 style="text-align: center; margin-bottom: 5px;">@displayName</h5>
+                        <p style="text-align: center; font-size: 12px;">
+                            @if (user?.IsSuperAdmin == true)
+                            {
+                                <span class="status-badge" style="background: var(--theme-color-primary); color: white">Super Admin</span>
+                            }
+                            else
+                            {
+                                var primaryGroupName = user?.GroupMemberships?
+                                    .Where(m => m.IsActive && !m.IsDeleted)
+                                    .Select(m => m.UserGroup?.Name)
+                                    .FirstOrDefault();
+
+                                if (!string.IsNullOrWhiteSpace(primaryGroupName))
+                                {
+                                    <span class="status-badge" style="background: var(--theme-color-primary); color: white">@primaryGroupName</span>
+                                }
+                                else
+                                {
+                                    <span>Member</span>
+                                }
+                            }
+                        </p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm">
+                                    <i class="hgi-arrow-right-01"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="panel-block light">
+                <div class="panel-menu item">
+                    <ul class="navbar-panel">
+                        @if (HasPermission("dashboard.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                                <a asp-controller="Dashboard" asp-action="Index">
+                                    <i class="hgi-home-01"></i>
+                                    <span class="nav-link-text">Dashboard</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("users.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Members" ? "active" : "")">
+                                <a asp-controller="Members" asp-action="Index">
+                                    <i class="hgi-user-group"></i>
+                                    <span class="nav-link-text">Members</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("groups.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Groups" ? "active" : "")">
+                                <a asp-controller="Groups" asp-action="Index">
+                                    <i class="hgi-layers-01"></i>
+                                    <span class="nav-link-text">User Groups</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("posts.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Activity" ? "active" : "")">
+                                <a asp-controller="Activity" asp-action="Index">
+                                    <i class="hgi-notebook"></i>
+                                    <span class="nav-link-text">Activity</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("groups.view") || HasPermission("posts.publish") || HasPermission("posts.edit") || HasPermission("posts.create") || HasPermission("posts.delete"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "SocialGroups" ? "active" : "")">
+                                <a asp-controller="SocialGroups" asp-action="Index">
+                                    <i class="hgi-user-add-01"></i>
+                                    <span class="nav-link-text">Social Groups</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("posts.view") || HasPermission("posts.publish") || HasPermission("posts.create") || HasPermission("posts.edit") || HasPermission("posts.delete"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Blog" ? "active" : "")">
+                                <a asp-controller="Blog" asp-action="Index">
+                                    <i class="hgi-stroke-left hgi-note-02"></i>
+                                    <span class="nav-link-text">Blog Posts</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("posts.view") || HasPermission("posts.publish") || HasPermission("posts.create") || HasPermission("posts.edit") || HasPermission("posts.delete"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "News" ? "active" : "")">
+                                <a asp-controller="News" asp-action="Index">
+                                    <i class="hgi-stroke-left hgi-news"></i>
+                                    <span class="nav-link-text">News</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("posts.view") || HasPermission("posts.publish") || HasPermission("posts.create") || HasPermission("posts.edit") || HasPermission("posts.delete"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Announcements" ? "active" : "")">
+                                <a asp-controller="Announcements" asp-action="Index">
+                                    <i class="hgi-stroke-left hgi-megaphone-02"></i>
+                                    <span class="nav-link-text">Announcements</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("photos.view") || HasPermission("videos.view") || HasPermission("photos.upload") || HasPermission("photos.publish") || HasPermission("videos.upload") || HasPermission("videos.publish") || HasPermission("photos.delete") || HasPermission("videos.delete"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Gallery" ? "active" : "")">
+                                <a asp-controller="Gallery" asp-action="Index">
+                                    <i class="hgi-stroke-left hgi-image-02"></i>
+                                    <span class="nav-link-text">Gallery</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("jobs.view"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Jobs" ? "active" : "")">
+                                <a asp-controller="Jobs" asp-action="Index">
+                                    <i class="hgi-briefcase-01"></i>
+                                    <span class="nav-link-text">Jobs</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("adverts.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Adverts" ? "active" : "")">
+                                <a asp-controller="Adverts" asp-action="Index">
+                                    <i class="hgi-tv-01"></i>
+                                    <span class="nav-link-text">Adverts</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("products.view"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Shop" ? "active" : "")">
+                                <a asp-controller="Shop" asp-action="Index">
+                                    <i class="hgi-shopping-basket-01"></i>
+                                    <span class="nav-link-text">Shop</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("posts.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Charity" ? "active" : "")">
+                                <a asp-controller="Charity" asp-action="Index">
+                                    <i class="hgi-heart-add"></i>
+                                    <span class="nav-link-text">Charity</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("posts.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active" : "")">
+                                <a asp-controller="Contact" asp-action="Index">
+                                    <i class="hgi-mail-01"></i>
+                                    <span class="nav-link-text">Messages</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("maintenance.cache"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Maintenance" ? "active" : "")">
+                                <a asp-controller="Maintenance" asp-action="Index">
+                                    <i class="hgi-arrow-reload-horizontal"></i>
+                                    <span class="nav-link-text">Maintenance</span>
+                                </a>
+                            </li>
+                        }
+                        @if (HasPermission("audit.view"))
+                        {
+                            <li
+                                class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Audit" ? "active" : "")">
+                                <a asp-controller="Audit" asp-action="Index">
+                                    <i class="hgi-file-security"></i>
+                                    <span class="nav-link-text">Audit Logs</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="beehive-page" class="site">
+        <div id="admin-global-loader" class="admin-global-loader" aria-hidden="true" style="display:none;">
+            <div class="preloader-swapping">
+                <img src="~/wp-content/uploads/2020/07/logo-icon.svg" alt="" />
+            </div>
+        </div>
+        <!-- Header -->
+        <header id="sochead" class="site-header social-header user-nav-active">
+            <nav class="navbar beehive-navbar social fixed-top">
+                <div class="container">
+                    <div class="admin-header-title" style="color: #fff; font-weight: 600;">
+                        <i class="hgi-layers-01" style="margin-right: 10px;"></i>
+                        @ViewData["Title"]
+                    </div>
+
+                    <ul id="navbar-user" class="navbar-nav navbar-user">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" data-toggle="dropdown">
+                                    @await Html.PartialAsync("_UserAvatar", user, new ViewDataDictionary(ViewData) { ["size"] = 32, ["cssClass"] = "me-2" })
+                                    <span>@displayName</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-end">
+                                    <div class="px-3 py-2 border-bottom">
+                                        <div class="fw-semibold">@displayName</div>
+                                        <div class="small text-muted">@user?.Email</div>
+                                    </div>
+                                    <a class="dropdown-item" asp-controller="Dashboard" asp-action="Profile">
+                                        <i class="hgi-user"></i> Profile
+                                    </a>
+                                    <a class="dropdown-item" asp-controller="Dashboard" asp-action="Settings">
+                                        <i class="hgi-dashboard-square-setting"></i> Settings
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="hgi-arrow-right-01"></i> Sign out
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a href="~/Account/Login" class="nav-link login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div id="content" class="site-content">
+            <div id="primary" class="content-area">
+                <div class="layout social">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-8 col-main">
+                                <main id="main" class="main-content">
+                                    <div class="admin-content-wrapper">
+                                        <!-- Flash Messages -->
+                                        @if (TempData["Success"] != null)
+                                        {
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <i class="hgi-checkmark-circle-01"></i> @TempData["Success"]
+                                                <button type="button" class="close" data-bs-dismiss="alert" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        }
+                                        @if (TempData["Error"] != null)
+                                        {
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <i class="hgi-cancel-circle"></i> @TempData["Error"]
+                                                <button type="button" class="close" data-bs-dismiss="alert" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        }
+
+                                        @RenderBody()
+                                    </div>
+                                </main>
+                            </div>
+                            <div class="col-lg-4 col-aside">
+                                <aside id="admin_sidebar" class="widget-area sidebar-widget-area sticky-sidebar">
+                                    @if (IsSectionDefined("Sidebar"))
+                                    {
+                                        @RenderSection("Sidebar", required: false)
+                                    }
+                                    else
+                                    {
+                                        var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+                                        var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+                                        var isFormScreen = currentAction.StartsWith("Create", StringComparison.OrdinalIgnoreCase) || currentAction.StartsWith("Edit", StringComparison.OrdinalIgnoreCase);
+                                        if (controller == "Dashboard")
+                                        {
+                                            var quickLinks = new[] { ("hgi-user-group", "Manage Members", "Members", "Index"), ("hgi-notebook", "Review Activity", "Activity", "Index"), ("hgi-shopping-basket-01", "Manage Shop", "Shop", "Index"), ("hgi-mail-01", "Read Messages", "Contact", "Index"), ("hgi-file-security", "View Audit Logs", "Audit", "Index") };
+                                            <div class="widget widget_nav_menu">
+                                                <h5 class="widget-title">Quick Actions</h5>
+                                                <ul class="menu">
+                                                    @foreach (var (icon, text, ctrl, action) in quickLinks)
+                                                    {
+                                                        <li class="menu-item">
+                                                            <a asp-controller="@ctrl" asp-action="@action"><i class="@icon"></i> @text</a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                        if (!isFormScreen)
+                                        {
+                                        var sidebarAdmins = UserManager.Users
+                                            .Where(u => u.IsActive && !u.IsDeleted)
+                                            .OrderByDescending(u => u.LastLoginAt ?? u.CreatedAt)
+                                            .Take(6)
+                                            .ToList();
+                                        <div class="widget buddy-bridge-dynamic-members-list buddypress">
+                                            <h5 class="widget-title">Members</h5>
+                                            <div class="item-options">
+                                                <a asp-controller="Members" asp-action="Index">Newest</a>
+                                                <span class="bp-separator" role="separator">|</span>
+                                                <a asp-controller="Members" asp-action="Index" class="selected">Active</a>
+                                            </div>
+                                            <ul class="item-list" aria-live="polite" aria-relevant="all" aria-atomic="true">
+                                                @foreach (var admin in sidebarAdmins)
+                                                {
+                                                    var adminName = admin.DisplayName ?? admin.UserName;
+                                                    <li class="vcard">
+                                                        <div class="item-avatar">
+                                                            <a asp-controller="Members" asp-action="Details" asp-route-id="@admin.Id">
+                                                                @await Html.PartialAsync("_UserAvatar", admin, new ViewDataDictionary(ViewData) { ["size"] = 50 })
+                                                            </a>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="item-title fn">
+                                                                <a asp-controller="Members" asp-action="Details" asp-route-id="@admin.Id">@adminName</a>
+                                                            </div>
+                                                            <div class="item-meta">
+                                                                <span class="activity">
+                                                                    @(admin.LastLoginAt.HasValue
+                                                                        ? $"Active {GetRelativeTime(admin.LastLoginAt.Value)}"
+                                                                        : "Not recently active")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                        }
+                                    }
+                                </aside>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <!-- Messenger dock (Beehive buddy-chat) -->
+        <div id="buddy-chat-app" class="dash" data-current-user="@user?.Id"
+             data-buddies-url="@Url.Action("Buddies", "Chat")"
+             data-history-url="@Url.Action("History", "Chat")"
+             data-send-url="@Url.Action("Send", "Chat")"
+             data-updates-url="@Url.Action("Updates", "Chat")"
+             data-markread-url="@Url.Action("MarkRead", "Chat")">
+            @Html.AntiForgeryToken()
+            <div id="buddy-chat-buddies" class="collapsed">
+                <div class="buddy-chat-buddies__container">
+                    <div class="header-container">
+                        <div class="header-title">
+                            <span class="dashicons dashicons-format-chat"></span>
+                            <div class="window-title">
+                                <h5>Messenger</h5>
+                            </div>
+                        </div>
+                        <div class="dropd-group dropd-dr">
+                            <a class="dropd-control mute" href="#" role="button"><span class="dashicons dashicons-admin-generic"></span></a>
+                            <div class="dropd-menu">
+                                <a class="dropd-item" id="bpc-toggle-sound" href="#">Mute</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buddy-chat-buddies__scroll">
+                        <div class="buddy-chat-buddies__content">
+                            <ul class="buddy-chat-nav-tabs">
+                                <li class="item">
+                                    <a class="item-link active" href="#">Admins</a>
+                                </li>
+                            </ul>
+                            <div class="bpc-tab-content" id="buddy-list">
+                                <div class="bpc-igroup">
+                                    <div class="bpc-igroup-prepend">
+                                        <span class="bpc-igroup-text"><span class="dashicons dashicons-search"></span></span>
+                                    </div>
+                                    <input type="text" class="bpc-form-control" id="bpc-buddy-filter" aria-label="Find admins" placeholder="Find admins" />
+                                </div>
+                                <div class="bpc-buddy-list friends" id="bpc-buddy-items"></div>
+                                <div class="bpc-item bpc-empty" style="display:none;"><span class="bpc-notice">No other administrators yet.</span></div>
+                                <div class="bpc-item bpc-loading"><span class="bpc-notice">Loading...</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="buddy-chat-buddies__collapser" class="buddy-chat-buddies__collapser">
+                        <div class="collapse-icon">
+                            <span class="dashicons dashicons-arrow-right-alt2"></span>
+                        </div>
+                        <div class="action-text">
+                            <h5>Collapse</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="buddy-chat-windows">
+                <ul class="bpc-chat-windows-list"></ul>
+            </div>
+        </div>
+    }
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <script src="~/js/admin-chat.js" asp-append-version="true"></script>
+    }
+
+    <script>
+        // Move Create/Edit form settings panels into the right sidebar.
+        // The HTML5 form attribute keeps the moved inputs bound to the form on submit.
+        (function () {
+            var panels = document.querySelector('.col-main .form-aside-panels');
+            var aside = document.getElementById('admin_sidebar');
+            if (!panels || !aside) return;
+            var form = panels.closest('form');
+            if (form) {
+                if (!form.id) { form.id = 'admin-main-form'; }
+                panels.querySelectorAll('input, select, textarea, button').forEach(function (el) {
+                    if (!el.hasAttribute('form')) { el.setAttribute('form', form.id); }
+                });
+            }
+            aside.insertBefore(panels, aside.firstChild);
+        })();
+
+        var adminLoaderActiveCount = 0;
+
+        function showAdminLoader() {
+            var loader = document.getElementById('admin-global-loader');
+            if (!loader) return;
+            adminLoaderActiveCount = Math.max(0, adminLoaderActiveCount + 1);
+            loader.style.display = 'flex';
+            loader.classList.add('active');
+            loader.setAttribute('aria-hidden', 'false');
+        }
+
+        function hideAdminLoader() {
+            var loader = document.getElementById('admin-global-loader');
+            if (!loader) return;
+            adminLoaderActiveCount = Math.max(0, adminLoaderActiveCount - 1);
+            if (adminLoaderActiveCount > 0) return;
+            loader.classList.remove('active');
+            loader.style.display = 'none';
+            loader.setAttribute('aria-hidden', 'true');
+        }
+
+        $(document).ready(function () {
+            $('.beehive-preloader').fadeOut();
+
+            $(document).on('submit', 'form', function (event) {
+                var form = $(this);
+                if (form.attr('data-no-loader') === 'true') {
+                    return true;
+                }
+                showAdminLoader();
+            });
+
+            $(document).on('click', 'a[href]:not([target=_blank]):not([data-no-loader=true])', function (e) {
+                var href = $(this).attr('href');
+                if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+                    return;
+                }
+                if (href.indexOf('javascript:') === 0) {
+                    return;
+                }
+                if (href.indexOf('http://') === 0 || href.indexOf('https://') === 0) {
+                    var currentOrigin = window.location.origin;
+                    if (href.indexOf(currentOrigin) !== 0) {
+                        return;
+                    }
+                }
+                showAdminLoader();
+            });
+
+            $(document).on('ajaxStart', function () {
+                showAdminLoader();
+            });
+
+            $(document).on('ajaxStop ajaxComplete ajaxError', function () {
+                hideAdminLoader();
+            });
+
+            $(window).on('load pageshow', function () {
+                hideAdminLoader();
+            });
+
+            $(window).on('beforeunload', function () {
+                showAdminLoader();
+            });
+
+            var originalFetch = window.fetch;
+            if (originalFetch) {
+                window.fetch = function () {
+                    showAdminLoader();
+                    return originalFetch.apply(this, arguments).finally(function () {
+                        hideAdminLoader();
+                    });
+                };
+            }
+
+            var originalOpen = window.XMLHttpRequest && window.XMLHttpRequest.prototype.open;
+            if (originalOpen) {
+                window.XMLHttpRequest.prototype.open = function () {
+                    showAdminLoader();
+                    return originalOpen.apply(this, arguments);
+                };
+            }
+
+            var originalSend = window.XMLHttpRequest && window.XMLHttpRequest.prototype.send;
+            if (originalSend) {
+                window.XMLHttpRequest.prototype.send = function () {
+                    var self = this;
+                    var onReadyStateChange = function () {
+                        if (self.readyState === 4) {
+                            hideAdminLoader();
+                        }
+                    };
+                    if (this.addEventListener) {
+                        this.addEventListener('readystatechange', onReadyStateChange);
+                    }
+                    return originalSend.apply(this, arguments);
+                };
+            }
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            $('.alert').fadeOut();
+        }, 5000);
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 
 </html>

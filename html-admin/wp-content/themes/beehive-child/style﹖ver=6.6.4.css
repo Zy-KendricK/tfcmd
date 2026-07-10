@@ -1,0 +1,31 @@
+/*
+Theme Name: Beehive Child
+Description: Child theme for beehive theme
+Author: thunder-team
+Author URI: http://themeforest.net/user/thunder-team
+Template: beehive
+Version: 1.0.0
+Text Domain:  beehive
+*/
+
+.demo-info {
+	background: #262626;
+	padding: .25rem 2rem;
+	border-radius: 100px;
+	position: fixed;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	color: #fff;
+	z-index: 99999;
+	white-space: nowrap;
+}
+
+.demo-info span {
+	margin: 0; 
+	display: inline-block;
+}
+
+.demo-info span:not(:last-child) {
+	margin-right: .25rem;
+}

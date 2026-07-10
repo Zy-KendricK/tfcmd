@@ -1,0 +1,191 @@
+@model IEnumerable<UserGroup>
+@{
+    ViewData["Title"] = "User Groups";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-group-layers"></i> Manage User Groups
+        </h4>
+        <a asp-action="Create" class="btn-admin btn-admin-primary">
+            <i class="hgi-add-square"></i> Create Group
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Group Name</th>
+                    <th>Description</th>
+                    <th>Members</th>
+                    <th>Permissions</th>
+                    <th>System</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var group in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@group.Name</strong>
+                                @if (group.IsSystemGroup)
+                                {
+                                    <span class="status-badge status-approved">System</span>
+                                }
+                            </td>
+                            <td>
+                                <small class="text-muted">@(group.Description ?? "No description")</small>
+                            </td>
+                            <td>
+                                <span class="status-badge status-published">
+                                    <i class="hgi-user-group"></i> @(group.Members?.Count ?? 0)
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-pending">
+                                    <i class="hgi-shield-user"></i> @(group.Permissions?.Count ?? 0)
+                                </span>
+                            </td>
+                            <td>
+                                @if (group.IsSystemGroup)
+                                {
+                                    <span class="text-success"><i class="hgi-checkmark-circle-01"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted"><i class="hgi-minus-sign-circle"></i></span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@group.Id" class="btn-admin btn-admin-sm btn-admin-primary"
+                                    title="Edit">
+                                    <i class="hgi-edit-01"></i>
+                                </a>
+                                <a asp-action="Permissions" asp-route-id="@group.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-warning" title="Manage Permissions">
+                                    <i class="hgi-shield-user"></i>
+                                </a>
+                                <a asp-action="Members" asp-route-id="@group.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-success" title="Manage Members">
+                                    <i class="hgi-user-group"></i>
+                                </a>
+                                @if (!group.IsSystemGroup)
+                                {
+                                    <form asp-action="Delete" asp-route-id="@group.Id" method="post" style="display: inline;"
+                                        onsubmit="return confirm('Delete this group?');">
+                                        <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                            <i class="hgi-delete-01"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <i class="hgi-layers-01" style="font-size: 48px; color: #ddd;"></i>
+                            <p class="text-muted mt-2">No groups found.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Permission Categories Info -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">
+                    <i class="hgi-information-circle"></i> About User Groups
+                </h5>
+            </div>
+            <p class="text-muted">
+                User groups allow you to organize users and assign them specific permissions.
+                Each user can belong to multiple groups, and their permissions are combined.
+            </p>
+            <ul class="mb-0">
+                <li><strong>Administrators</strong> - Full access to all features</li>
+                <li><strong>Reviewers</strong> - Can review and approve content</li>
+                <li><strong>Editors</strong> - Can create and edit content</li>
+                <li><strong>Members</strong> - Basic access to public features</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">
+                    <i class="hgi-shield-user"></i> Permission Categories
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <ul class="mb-0">
+                        <li>User Management</li>
+                        <li>Group Management</li>
+                        <li>Content Management</li>
+                        <li>Blog Posts</li>
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <ul class="mb-0">
+                        <li>Jobs</li>
+                        <li>Adverts</li>
+                        <li>Products</li>
+                        <li>Settings</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: group stats + actions -->
+    <div class="widget">
+        <h5 class="widget-title">Groups Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-layers-01"></i> Total groups</span>
+                <strong>@(((int?)ViewBag.TotalGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-shield-user"></i> System groups</span>
+                <strong>@(((int?)ViewBag.SystemGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-checkmark-circle-01"></i> Active</span>
+                <strong>@(((int?)ViewBag.ActiveGroups ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-user-group"></i> Total memberships</span>
+                <strong>@(((int?)ViewBag.TotalMemberships ?? 0).ToString("N0"))</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Group Actions</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-action="Create"><i class="hgi-add-square"></i> Create Group</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="Members" asp-action="Index"><i class="hgi-user-group"></i> Manage Members</a>
+            </li>
+            <li class="menu-item">
+                <a asp-controller="SocialGroups" asp-action="Index"><i class="hgi-user-add-01"></i> Social Groups</a>
+            </li>
+        </ul>
+    </div>
+}

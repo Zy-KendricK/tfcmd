@@ -1,0 +1,156 @@
+@model ContactListViewModel
+@{
+    ViewData["Title"] = "Contact Messages";
+}
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h4 class="admin-card-title">
+            <i class="hgi-mail-01"></i> Contact Messages
+        </h4>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@Model.Search" class="form-admin-control"
+                    placeholder="Search messages..." />
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-admin-control">
+                    <option value="">All Status</option>
+                    <option value="New">New</option>
+                    <option value="InProgress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                    <option value="Spam">Spam</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-admin btn-admin-primary">
+                    <i class="hgi-filter"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Received</th>
+                    <th style="width: 120px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Messages != null && Model.Messages.Any())
+                {
+                    @foreach (var message in Model.Messages)
+                    {
+                        <tr style="@(message.IsRead ? "" : "font-weight: 600;")">
+                            <td>
+                                <strong>@message.Name</strong><br />
+                                <small class="text-muted">@message.Email</small>
+                            </td>
+                            <td>@(message.Subject ?? "(no subject)")</td>
+                            <td>
+                                @{
+                                    var statusClass = message.Status switch
+                                    {
+                                        ContactMessageStatus.New => "status-pending",
+                                        ContactMessageStatus.InProgress => "status-approved",
+                                        ContactMessageStatus.Resolved => "status-published",
+                                        ContactMessageStatus.Spam => "status-rejected",
+                                        _ => "status-draft"
+                                    };
+                                }
+                                <span class="status-badge @statusClass">@message.Status</span>
+                            </td>
+                            <td><small>@message.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small></td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@message.Id"
+                                    class="btn-admin btn-admin-sm btn-admin-primary" title="View">
+                                    <i class="hgi-eye"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@message.Id" method="post" style="display: inline;"
+                                    onsubmit="return confirm('Delete this message?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                        <i class="hgi-delete-01"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">No contact messages.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@Model.Search">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+@section Sidebar {
+    <!-- Screen-specific sidebar: contact stats + actions -->
+    <div class="widget">
+        <h5 class="widget-title">Messages Overview</h5>
+        <ul class="item-list">
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-mail-01"></i> Total messages</span>
+                <strong>@(((int?)ViewBag.TotalMessages ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-mail-01"></i> Unread</span>
+                <strong>@(((int?)ViewBag.UnreadMessages ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-clock-01"></i> New</span>
+                <strong>@(((int?)ViewBag.NewMessages ?? 0).ToString("N0"))</strong>
+            </li>
+            <li class="vcard" style="display:flex; justify-content:space-between; padding: 8px 0;">
+                <span><i class="hgi-checkmark-circle-01"></i> Resolved</span>
+                <strong>@(((int?)ViewBag.ResolvedMessages ?? 0).ToString("N0"))</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Message Filters</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-action="Index" asp-route-status="New"><i class="hgi-mail-01"></i> New Messages</a>
+            </li>
+            <li class="menu-item">
+                <a asp-action="Index" asp-route-status="InProgress"><i class="hgi-clock-01"></i> In Progress</a>
+            </li>
+            <li class="menu-item">
+                <a asp-action="Index" asp-route-status="Resolved"><i class="hgi-checkmark-circle-01"></i> Resolved</a>
+            </li>
+            <li class="menu-item">
+                <a asp-action="Index" asp-route-status="Spam"><i class="hgi-cancel-circle"></i> Spam</a>
+            </li>
+        </ul>
+    </div>
+}

@@ -1,0 +1,461 @@
+@model CharityPageManagerViewModel
+@{
+    ViewData["Title"] = "Charity Page Manager";
+
+    var sections = new (CharityPageSection? Section, string Name, string Icon, string Hint)[]
+    {
+        (CharityPageSection.Banner, "Banner", "hgi-presentation-01", "Main hero heading, intro text and badges at the top of the page."),
+        (CharityPageSection.Feature, "Feature Cards", "hgi-layers-01", "The three feature cards under the banner (e.g. Become a volunteer)."),
+        (CharityPageSection.History, "Our History", "hgi-work-history", "The history block with heading, text and side images."),
+        (CharityPageSection.Mission, "Our Mission", "hgi-presentation-02", "The mission block with video image and text."),
+        (CharityPageSection.Counter, "Counters", "hgi-calculator", "The statistic counters (volunteers, donations, projects…)."),
+        (null, "Featured Causes", "hgi-heart-add", "Fundraising causes with goal, raised amount and progress bar."),
+        (CharityPageSection.Event, "Upcoming Events", "hgi-calendar-01", "Event cards shown in the events carousel."),
+        (CharityPageSection.Partner, "Partners", "hgi-user-group", "Partner logos shown in the partners carousel.")
+    };
+
+    static string Truncate(string? value, int len) =>
+        string.IsNullOrWhiteSpace(value) ? "—" : (value.Length > len ? value[..len] + "…" : value);
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h4 class="admin-card-title">
+            <i class="hgi-cursor-in-window"></i> Charity Page Manager
+        </h4>
+        <span class="text-muted"><small>Sections appear below in the same order as on the website charity page.</small></span>
+    </div>
+
+    @{ var sectionNumber = 0; }
+    @foreach (var s in sections)
+    {
+        sectionNumber++;
+
+        if (s.Section == null)
+        {
+            <div class="cpm-section" id="section-Causes">
+                <div class="cpm-section-head">
+                    <span class="cpm-section-no">@sectionNumber</span>
+                    <div>
+                        <h5 class="mb-0"><i class="hgi-heart-add"></i> Featured Causes</h5>
+                        <small class="text-muted">@s.Hint</small>
+                    </div>
+                    <span class="cpm-count">@Model.Causes.Count item@(Model.Causes.Count == 1 ? "" : "s")</span>
+                </div>
+                <div class="cpm-scroll">
+                    <button type="button" class="cpm-tile cpm-add"
+                            data-bs-toggle="modal" data-bs-target="#causeModal">
+                        <i class="hgi-add-square"></i>
+                        <span>Add New</span>
+                    </button>
+                    @foreach (var cause in Model.Causes)
+                    {
+                        <div class="cpm-tile @(cause.IsPublishedToWeb ? "" : "cpm-hidden")">
+                            @if (!string.IsNullOrWhiteSpace(cause.ImageUrl))
+                            {
+                                <div class="cpm-thumb" style="background-image:url('@cause.ImageUrl');"></div>
+                            }
+                            else
+                            {
+                                <div class="cpm-thumb cpm-thumb-empty"><i class="hgi-heart-add"></i></div>
+                            }
+                            <div class="cpm-body">
+                                <strong title="@cause.Title">@Truncate(cause.Title, 40)</strong>
+                                <small class="text-muted d-block">
+                                    Raised @((cause.CurrentAmount ?? 0).ToString("C0")) of @((cause.GoalAmount ?? 0).ToString("C0"))
+                                </small>
+                            </div>
+                            <div class="cpm-actions">
+                                <button type="button" class="btn-admin btn-admin-sm btn-admin-primary cpm-edit-cause"
+                                        title="Edit"
+                                        data-bs-toggle="modal" data-bs-target="#causeModal"
+                                        data-id="@cause.Id" data-title="@cause.Title"
+                                        data-description="@cause.Description" data-image="@cause.ImageUrl"
+                                        data-goal="@cause.GoalAmount" data-current="@cause.CurrentAmount"
+                                        data-donors="@cause.DonorCount">
+                                    <i class="hgi-edit-01"></i>
+                                </button>
+                                <form asp-action="ToggleCause" asp-route-id="@cause.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-secondary"
+                                            title="@(cause.IsPublishedToWeb ? "Hide from website" : "Show on website")">
+                                        <i class="@(cause.IsPublishedToWeb ? "hgi-eye" : "hgi-no-internet")"></i>
+                                    </button>
+                                </form>
+                                <form asp-action="DeleteCause" asp-route-id="@cause.Id" method="post" class="d-inline"
+                                      onsubmit="return confirm('Delete this cause?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                        <i class="hgi-delete-01"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            continue;
+        }
+
+        var sectionKey = s.Section.Value;
+        var items = Model.ItemsFor(sectionKey);
+
+        <div class="cpm-section" id="section-@sectionKey">
+            <div class="cpm-section-head">
+                <span class="cpm-section-no">@sectionNumber</span>
+                <div>
+                    <h5 class="mb-0"><i class="@s.Icon"></i> @s.Name</h5>
+                    <small class="text-muted">@s.Hint</small>
+                </div>
+                <span class="cpm-count">@items.Count item@(items.Count == 1 ? "" : "s")</span>
+            </div>
+            <div class="cpm-scroll">
+                <button type="button" class="cpm-tile cpm-add"
+                        data-bs-toggle="modal" data-bs-target="#itemModal"
+                        data-section="@sectionKey" data-section-name="@s.Name">
+                    <i class="hgi-add-square"></i>
+                    <span>Add New</span>
+                </button>
+                @foreach (var item in items)
+                {
+                    <div class="cpm-tile @(item.IsPublishedToWeb ? "" : "cpm-hidden")">
+                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                        {
+                            <div class="cpm-thumb" style="background-image:url('@item.ImageUrl');"></div>
+                        }
+                        else
+                        {
+                            <div class="cpm-thumb cpm-thumb-empty"><i class="@s.Icon"></i></div>
+                        }
+                        <div class="cpm-body">
+                            <strong title="@item.Title">@Truncate(item.Title, 40)</strong>
+                            @if (sectionKey == CharityPageSection.Counter)
+                            {
+                                <small class="text-muted d-block">Value: @(item.Number?.ToString("N0") ?? "—")</small>
+                            }
+                            else if (sectionKey == CharityPageSection.Event)
+                            {
+                                <small class="text-muted d-block">@(item.Date?.ToString("dd MMM yyyy") ?? "No date")</small>
+                            }
+                            else
+                            {
+                                <small class="text-muted d-block">@Truncate(item.Text, 45)</small>
+                            }
+                        </div>
+                        <div class="cpm-actions">
+                            <button type="button" class="btn-admin btn-admin-sm btn-admin-primary cpm-edit"
+                                    title="Edit"
+                                    data-bs-toggle="modal" data-bs-target="#itemModal"
+                                    data-section="@sectionKey" data-section-name="@s.Name"
+                                    data-id="@item.Id"
+                                    data-title="@item.Title" data-highlight="@item.Highlight"
+                                    data-text="@item.Text" data-image="@item.ImageUrl"
+                                    data-link="@item.LinkUrl" data-meta="@item.Meta"
+                                    data-number="@item.Number" data-date="@(item.Date?.ToString("yyyy-MM-dd"))"
+                                    data-order="@item.DisplayOrder">
+                                <i class="hgi-edit-01"></i>
+                            </button>
+                            <form asp-action="ToggleItem" asp-route-id="@item.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-admin btn-admin-sm btn-admin-secondary"
+                                        title="@(item.IsPublishedToWeb ? "Hide from website" : "Show on website")">
+                                    <i class="@(item.IsPublishedToWeb ? "hgi-eye" : "hgi-no-internet")"></i>
+                                </button>
+                            </form>
+                            <form asp-action="DeleteItem" asp-route-id="@item.Id" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete this item?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-admin btn-admin-sm btn-admin-danger" title="Delete">
+                                    <i class="hgi-delete-01"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Generic section item modal -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <form asp-action="SaveItem" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalTitle">Add Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="im-id" value="0" />
+                    <input type="hidden" name="Section" id="im-section" />
+
+                    <div class="mb-3" data-field="Title">
+                        <label class="form-label" id="im-title-label">Title</label>
+                        <input type="text" class="form-control" name="Title" id="im-title" maxlength="200" />
+                    </div>
+                    <div class="mb-3" data-field="Highlight">
+                        <label class="form-label">Highlighted part of title <small class="text-muted">(shown in accent color)</small></label>
+                        <input type="text" class="form-control" name="Highlight" id="im-highlight" maxlength="200" />
+                    </div>
+                    <div class="mb-3" data-field="Text">
+                        <label class="form-label" id="im-text-label">Text</label>
+                        <textarea class="form-control" name="Text" id="im-text" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3" data-field="ImageUrl">
+                        <label class="form-label" id="im-image-label">Image URL</label>
+                        <input type="text" class="form-control" name="ImageUrl" id="im-image" maxlength="500"
+                               placeholder="/uploads/… or https://…" />
+                    </div>
+                    <div class="mb-3" data-field="LinkUrl">
+                        <label class="form-label" id="im-link-label">Link URL</label>
+                        <input type="text" class="form-control" name="LinkUrl" id="im-link" maxlength="500" />
+                    </div>
+                    <div class="mb-3" data-field="Meta">
+                        <label class="form-label" id="im-meta-label">Badges <small class="text-muted">(comma separated)</small></label>
+                        <input type="text" class="form-control" name="Meta" id="im-meta" maxlength="300"
+                               placeholder="Eliminate Poverty, Better Health, Mass Education" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3" data-field="Number">
+                            <label class="form-label" id="im-number-label">Number</label>
+                            <input type="number" class="form-control" name="Number" id="im-number" />
+                        </div>
+                        <div class="col-md-4 mb-3" data-field="Date">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" name="Date" id="im-date" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Display order</label>
+                            <input type="number" class="form-control" name="DisplayOrder" id="im-order" value="0" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-admin btn-admin-primary"><i class="hgi-checkmark-circle-01"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Cause modal -->
+<div class="modal fade" id="causeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <form asp-action="SaveCause" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="causeModalTitle">Add Cause</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="cm-id" value="0" />
+                    <div class="mb-3">
+                        <label class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="Title" id="cm-title" maxlength="200" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="Description" id="cm-description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" class="form-control" name="ImageUrl" id="cm-image" maxlength="500"
+                               placeholder="/uploads/… or https://…" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Goal amount</label>
+                            <input type="number" step="0.01" class="form-control" name="GoalAmount" id="cm-goal" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Raised so far</label>
+                            <input type="number" step="0.01" class="form-control" name="CurrentAmount" id="cm-current" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Donors</label>
+                            <input type="number" class="form-control" name="DonorCount" id="cm-donors" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-admin btn-admin-primary"><i class="hgi-checkmark-circle-01"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Sidebar {
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">Page Sections</h5>
+        <ul class="menu">
+            <li class="menu-item"><a href="#section-Banner"><i class="hgi-presentation-01"></i> Banner</a></li>
+            <li class="menu-item"><a href="#section-Feature"><i class="hgi-layers-01"></i> Feature Cards</a></li>
+            <li class="menu-item"><a href="#section-History"><i class="hgi-work-history"></i> Our History</a></li>
+            <li class="menu-item"><a href="#section-Mission"><i class="hgi-cursor-in-window"></i> Our Mission</a></li>
+            <li class="menu-item"><a href="#section-Counter"><i class="hgi-calculator"></i> Counters</a></li>
+            <li class="menu-item"><a href="#section-Causes"><i class="hgi-heart-add"></i> Featured Causes</a></li>
+            <li class="menu-item"><a href="#section-Event"><i class="hgi-calendar-01"></i> Upcoming Events</a></li>
+            <li class="menu-item"><a href="#section-Partner"><i class="hgi-user-group"></i> Partners</a></li>
+        </ul>
+    </div>
+    <div class="widget widget_nav_menu">
+        <h5 class="widget-title">More</h5>
+        <ul class="menu">
+            <li class="menu-item">
+                <a asp-action="Charities"><i class="hgi-heart-add"></i> Charity organisations</a>
+            </li>
+        </ul>
+    </div>
+}
+
+@section Styles {
+    <style>
+        .cpm-section { margin-bottom: 28px; padding-bottom: 4px; border-bottom: 1px solid #eef0f3; }
+        .cpm-section:last-child { border-bottom: none; }
+        .cpm-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .cpm-section-no {
+            width: 32px; height: 32px; border-radius: 50%; flex: 0 0 32px;
+            background: #34afe6; color: #fff; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cpm-count { margin-left: auto; font-size: 12px; color: #8b93a2; white-space: nowrap; }
+        .cpm-scroll {
+            display: flex; gap: 14px; overflow-x: auto; padding: 4px 2px 14px 2px;
+            scroll-snap-type: x proximity;
+        }
+        .cpm-scroll::-webkit-scrollbar { height: 8px; }
+        .cpm-scroll::-webkit-scrollbar-thumb { background: #d5dae2; border-radius: 4px; }
+        .cpm-tile {
+            flex: 0 0 210px; width: 210px; border: 1px solid #e4e8ee; border-radius: 10px;
+            background: #fff; position: relative; scroll-snap-align: start;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .cpm-tile.cpm-hidden { opacity: .55; }
+        .cpm-add {
+            border: 2px dashed #b9c2cf; background: #f8fafc; color: #6b7484;
+            align-items: center; justify-content: center; cursor: pointer;
+            font-weight: 600; gap: 6px; min-height: 170px; transition: all .15s ease;
+        }
+        .cpm-add:hover { border-color: #34afe6; color: #34afe6; background: #f0f9fe; }
+        .cpm-add i { font-size: 26px; }
+        .cpm-thumb {
+            height: 84px; background-size: cover; background-position: center; flex: 0 0 84px;
+        }
+        .cpm-thumb-empty {
+            display: flex; align-items: center; justify-content: center;
+            background: #eef2f6; color: #aab3c0; font-size: 28px;
+        }
+        .cpm-body { padding: 10px 12px 6px 12px; flex: 1 1 auto; min-height: 48px; }
+        .cpm-body strong { font-size: 13px; display: block; line-height: 1.25; }
+        .cpm-body small { font-size: 11.5px; }
+        .cpm-actions {
+            display: flex; gap: 4px; padding: 8px 10px 10px 10px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            // Which fields each section uses, plus labels/hints for the generic modal.
+            var sectionConfig = {
+                Banner: {
+                    fields: ['Title', 'Highlight', 'Text', 'ImageUrl', 'Meta'],
+                    labels: { Title: 'Heading', Text: 'Intro text', ImageUrl: 'Gallery image URL', Meta: 'Badges (comma separated)' }
+                },
+                Feature: {
+                    fields: ['Title', 'Text', 'ImageUrl'],
+                    labels: { Title: 'Card title', Text: 'Card text', ImageUrl: 'Icon image URL' }
+                },
+                History: {
+                    fields: ['Title', 'Highlight', 'Text', 'ImageUrl', 'LinkUrl'],
+                    labels: { Title: 'Heading', Text: 'Body text', ImageUrl: 'Side image URL', LinkUrl: 'Read-more link' }
+                },
+                Mission: {
+                    fields: ['Title', 'Highlight', 'Text', 'ImageUrl', 'LinkUrl'],
+                    labels: { Title: 'Heading', Text: 'Body text', ImageUrl: 'Video poster image URL', LinkUrl: 'Video URL (YouTube)' }
+                },
+                Counter: {
+                    fields: ['Title', 'Number', 'ImageUrl'],
+                    labels: { Title: 'Counter label', Number: 'Counter value', ImageUrl: 'Icon image URL' }
+                },
+                Event: {
+                    fields: ['Title', 'Text', 'ImageUrl', 'Date', 'LinkUrl'],
+                    labels: { Title: 'Event title', Text: 'Short description', ImageUrl: 'Event image URL', LinkUrl: 'Read-more link' }
+                },
+                Partner: {
+                    fields: ['Title', 'ImageUrl'],
+                    labels: { Title: 'Partner name', ImageUrl: 'Logo image URL' }
+                }
+            };
+
+            var modal = document.getElementById('itemModal');
+            if (modal) {
+                modal.addEventListener('show.bs.modal', function (ev) {
+                    var btn = ev.relatedTarget;
+                    if (!btn) return;
+
+                    var section = btn.getAttribute('data-section');
+                    var sectionName = btn.getAttribute('data-section-name') || section;
+                    var cfg = sectionConfig[section] || { fields: [], labels: {} };
+                    var isEdit = !!btn.getAttribute('data-id');
+
+                    modal.querySelector('#itemModalTitle').textContent =
+                        (isEdit ? 'Edit ' : 'Add ') + sectionName + ' item';
+
+                    // Show only the fields this section uses.
+                    modal.querySelectorAll('[data-field]').forEach(function (wrap) {
+                        var f = wrap.getAttribute('data-field');
+                        wrap.style.display = cfg.fields.indexOf(f) >= 0 ? '' : 'none';
+                    });
+
+                    // Apply per-section labels.
+                    var labelMap = {
+                        Title: 'im-title-label', Text: 'im-text-label', ImageUrl: 'im-image-label',
+                        LinkUrl: 'im-link-label', Meta: 'im-meta-label', Number: 'im-number-label'
+                    };
+                    Object.keys(labelMap).forEach(function (f) {
+                        var el = modal.querySelector('#' + labelMap[f]);
+                        if (el && cfg.labels[f]) el.textContent = cfg.labels[f];
+                    });
+
+                    // Populate values (blank for add-new).
+                    modal.querySelector('#im-id').value = btn.getAttribute('data-id') || '0';
+                    modal.querySelector('#im-section').value = section;
+                    modal.querySelector('#im-title').value = btn.getAttribute('data-title') || '';
+                    modal.querySelector('#im-highlight').value = btn.getAttribute('data-highlight') || '';
+                    modal.querySelector('#im-text').value = btn.getAttribute('data-text') || '';
+                    modal.querySelector('#im-image').value = btn.getAttribute('data-image') || '';
+                    modal.querySelector('#im-link').value = btn.getAttribute('data-link') || '';
+                    modal.querySelector('#im-meta').value = btn.getAttribute('data-meta') || '';
+                    modal.querySelector('#im-number').value = btn.getAttribute('data-number') || '';
+                    modal.querySelector('#im-date').value = btn.getAttribute('data-date') || '';
+                    modal.querySelector('#im-order').value = btn.getAttribute('data-order') || '0';
+                });
+            }
+
+            var causeModal = document.getElementById('causeModal');
+            if (causeModal) {
+                causeModal.addEventListener('show.bs.modal', function (ev) {
+                    var btn = ev.relatedTarget;
+                    if (!btn) return;
+                    var isEdit = !!btn.getAttribute('data-id');
+                    causeModal.querySelector('#causeModalTitle').textContent = isEdit ? 'Edit Cause' : 'Add Cause';
+                    causeModal.querySelector('#cm-id').value = btn.getAttribute('data-id') || '0';
+                    causeModal.querySelector('#cm-title').value = btn.getAttribute('data-title') || '';
+                    causeModal.querySelector('#cm-description').value = btn.getAttribute('data-description') || '';
+                    causeModal.querySelector('#cm-image').value = btn.getAttribute('data-image') || '';
+                    causeModal.querySelector('#cm-goal').value = btn.getAttribute('data-goal') || '';
+                    causeModal.querySelector('#cm-current').value = btn.getAttribute('data-current') || '';
+                    causeModal.querySelector('#cm-donors').value = btn.getAttribute('data-donors') || '';
+                });
+            }
+        })();
+    </script>
+}

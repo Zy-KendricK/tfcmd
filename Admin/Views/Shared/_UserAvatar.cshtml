@@ -1,0 +1,36 @@
+@model ApplicationUser?
+@{
+    var user = Model;
+    var size = ViewData["size"] as int? ?? 40;
+    var cssClass = ViewData["cssClass"] as string ?? string.Empty;
+    var altText = ViewData["alt"] as string ?? (user?.DisplayName ?? user?.UserName ?? user?.Email ?? "User");
+    var displayName = !string.IsNullOrWhiteSpace(user?.DisplayName)
+        ? user.DisplayName
+        : !string.IsNullOrWhiteSpace(user?.FirstName) || !string.IsNullOrWhiteSpace(user?.LastName)
+            ? string.Join(" ", new[] { user?.FirstName, user?.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)))
+            : (user?.UserName ?? user?.Email ?? "User");
+    var initials = string.Join(string.Empty, displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        .Take(2)
+        .Select(part => part[0]))
+        .ToUpperInvariant();
+    if (string.IsNullOrWhiteSpace(initials))
+    {
+        initials = "U";
+    }
+
+    var seed = (user?.Id ?? displayName).GetHashCode();
+    var hue = Math.Abs(seed % 360);
+    var bgColor = $"hsl({hue}, 48%, 92%)";
+    var fgColor = $"hsl({hue}, 60%, 30%)";
+}
+
+<div class="bh-user-avatar @cssClass" style="width: @(size)px; height: @(size)px;">
+    @if (!string.IsNullOrWhiteSpace(user?.AvatarUrl))
+    {
+        <img src="@user.AvatarUrl" alt="@altText" />
+    }
+    else
+    {
+        <div class="bh-user-avatar-fallback" style="background: @bgColor; color: @fgColor;">@initials</div>
+    }
+</div>
