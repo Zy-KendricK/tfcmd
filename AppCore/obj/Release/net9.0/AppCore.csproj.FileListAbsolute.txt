@@ -1,0 +1,15 @@
+/Applications/Projects/Training/IE/tfcmd/AppCore/bin/Release/net9.0/AppCore.deps.json
+/Applications/Projects/Training/IE/tfcmd/AppCore/bin/Release/net9.0/AppCore.runtimeconfig.json
+/Applications/Projects/Training/IE/tfcmd/AppCore/bin/Release/net9.0/AppCore.dll
+/Applications/Projects/Training/IE/tfcmd/AppCore/bin/Release/net9.0/AppCore.pdb
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.csproj.AssemblyReference.cache
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.GeneratedMSBuildEditorConfig.editorconfig
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.AssemblyInfoInputs.cache
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.AssemblyInfo.cs
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.csproj.CoreCompileInputs.cache
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.sourcelink.json
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.dll
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/refint/AppCore.dll
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.pdb
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/AppCore.genruntimeconfig.cache
+/Applications/Projects/Training/IE/tfcmd/AppCore/obj/Release/net9.0/ref/AppCore.dll

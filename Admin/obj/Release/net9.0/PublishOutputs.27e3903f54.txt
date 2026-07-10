@@ -1,0 +1,15 @@
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Admin
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/appsettings.Development.json
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/appsettings.json
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Admin.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Admin.runtimeconfig.json
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Admin.pdb
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Microsoft.EntityFrameworkCore.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Microsoft.EntityFrameworkCore.Relational.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/MySqlConnector.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Pomelo.EntityFrameworkCore.MySql.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/AppCore.dll
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/AppCore.pdb
+/Applications/Projects/Training/IE/tfcmd/Admin/bin/Release/net9.0/publish/Admin.deps.json
